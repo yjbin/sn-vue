@@ -1,0 +1,108 @@
+import {
+  asyncRouterMap,
+  constantRouterMap
+} from '@/router'
+import {
+  pathRole
+} from '@/api/pathRole'
+import store from '../'
+
+/**
+ * 获取path对应的role
+ */
+function getPathRole(username) {
+  return new Promise((resolve, reject) => {
+    pathRole(username).then((res) => {
+      setPathRole(asyncRouterMap, res.data.data);
+      resolve()
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
+/**
+ * 设置path对应的role
+ */
+function setPathRole(asyncRouter, getRouter) {
+  asyncRouter.map(r => {
+    let match = getRouter.filter(p => {
+      return r.path == p.uri
+    })[0];
+    if (match) {
+      r.meta.rid = match.rid
+      if (r.children && match.children.length) {
+        setPathRole(r.children, match.children)
+      }
+    }
+    return r
+  });
+}
+
+/**
+ * 通过meta.role判断是否与当前用户权限匹配
+ * @param rid
+ * @param route
+ */
+function hasPermission(rid, route) {
+  if (route.meta && route.meta.rid) {
+    return route.meta.rid == rid
+  } else {
+    return true
+  }
+}
+
+/**
+ * 递归过滤异步路由表，返回符合用户角色权限的路由表
+ * @param asyncRouterMap
+ * @param rid
+ */
+function filterAsyncRouter(asyncRouterMap, rid) {
+  const accessedRouters = asyncRouterMap.filter(route => {
+    if (hasPermission(rid, route)) {
+      if (route.children && route.children.length) {
+        route.children = filterAsyncRouter(route.children, rid)
+        if (route.children.length) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return true
+      }
+    }
+    return false
+  })
+  return accessedRouters
+}
+
+const permission = {
+  state: {
+    routers: constantRouterMap,
+    addRouters: []
+  },
+  mutations: {
+    SET_ROUTERS: (state, routers) => {
+      state.addRouters = routers
+      state.routers = constantRouterMap.concat(routers)
+    }
+  },
+  actions: {
+    GenerateRoutes({
+      commit
+    }, data) {
+      return new Promise(resolve => {
+        const {
+          tree
+        } = data
+        let accessedRouters;
+        setPathRole(asyncRouterMap, tree);
+        accessedRouters = filterAsyncRouter(asyncRouterMap, store.getters.user.uUser.rId);
+        commit('SET_ROUTERS', accessedRouters);
+        resolve()
+      })
+    }
+  }
+}
+
+export default permission

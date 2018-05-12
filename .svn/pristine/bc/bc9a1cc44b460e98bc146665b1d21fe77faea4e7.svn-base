@@ -1,0 +1,60 @@
+<template>
+  <div class="role-list">
+    <el-table :data="roleTable" stripe border style="width: 100%" @selection-change="handleSelectionChange">>
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="index" label="序号" width="80"></el-table-column>
+      <el-table-column prop="rolename" label="角色名称"></el-table-column>
+      <el-table-column prop="remark" label="角色描述"></el-table-column>
+    </el-table>
+  </div>
+</template>
+<script>
+import { roleSearch } from "@/api/role";
+export default {
+  data() {
+    return {
+      roleTable: [],
+      pageSize: 3,
+      pageNo: 1
+    };
+  },
+  props: {
+    roleTab: {
+      type: Array,
+      default: () => []
+    }
+  },
+  methods: {
+    handleSelectionChange(val) {
+      this.$emit("checkboxChange", val);
+    },
+    roleList(pageSize, pageNo) {
+      roleSearch(pageSize, pageNo).then(res => {
+        let data = res.data;
+        if (data.success) {
+          this.roleTable = data.data;
+        }
+      });
+    }
+  },
+  mounted() {
+    this.roleList(this.pageSize, this.pageNo);
+  },
+  watch: {
+    roleTab(val) {
+      this.roleTable = val;
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+.role-list {
+  th,
+  td {
+    text-align: center;
+  }
+}
+</style>
+
+

@@ -1,0 +1,68 @@
+<template>
+    <div class="accessoryModal">
+        <el-dialog :title="textTit " :visible.sync="newModalToggle" width="50%" top="9vh" :before-close="userClose2">
+            <div class="user-list">
+                <el-table ref="multipleTable" :data="accessoryList" border stripe style="width: 100%">
+
+                    <el-table-column width="50" label="序号" type="index">
+                    </el-table-column>
+                    <el-table-column prop="dwmc" label="附件名称" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="dwbm" label="上传人" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="dwdd" label="上传时间" show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column prop="address" label="操作" width="150">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="primary" @click="accessoryDownload()">下载</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="btn_cancel">取 消</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<script>
+export default {
+    data() {
+        return {
+            accessoryList: [],
+            newModalToggle: false,
+            textTitText: "",
+        };
+    },
+    props: {
+        
+        textTit: String,
+        newModal:Boolean
+    },
+    watch: {
+        newModal(val) {
+            this.newModalToggle = val;
+        },
+        textTit(val) {
+            this.textTitText = val;
+        },
+        
+    },
+
+    methods: {
+        btn_cancel() {
+        this.newModalToggle = false;
+         this.$emit("colseTog",  this.newModalToggle);
+         
+        },
+        userClose2(){
+            this.btn_cancel();
+        }
+    },
+    mounted() {}
+};
+</script>
+<style lang="scss">
+
+</style>
+

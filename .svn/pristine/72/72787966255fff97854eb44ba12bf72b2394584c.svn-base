@@ -1,0 +1,148 @@
+<template>
+  <div id="benefit">
+    <el-form :inline="true" :model="searchMember"  class="demo-form-inline" >
+        <el-form-item label="年度:">
+          <el-input v-model="searchMember.nd" @keyup.enter.native="search" placeholder="请输入..." suffix-icon="el-icon-search"></el-input>
+        </el-form-item>
+        <el-form-item label="项目名称:">
+          <el-input v-model="searchMember.fzr" @keyup.enter.native="search" placeholder="名称..."></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="medium" @click="search">查询</el-button>
+        </el-form-item>
+      </el-form>
+      <div class="tabList">
+        <el-table :data="tableData" stripe border style="width: 100%">
+          <el-table-column type="index" label="序号" width="80"></el-table-column>
+          <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划"></el-table-column>
+          <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室"></el-table-column>
+          <el-table-column prop="xmmc" label="项目名称"></el-table-column>
+          <el-table-column prop="nd" label="年度"></el-table-column>
+          <el-table-column prop="xmbh" label="项目编号"></el-table-column>
+          <el-table-column prop="xmze" label="项目总额(万元)"></el-table-column>
+          <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间"></el-table-column>
+          <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间"></el-table-column>
+          <el-table-column prop="ybf" :formatter="formatterDatejssj" label="已拨付(万元)"></el-table-column>
+          <el-table-column prop="address" label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="detailModel(scope.row)">效益</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="fr">
+          <el-pagination background @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+          </el-pagination>
+        </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import { doCreate, getDicTab } from "@/utils/config";
+import { formatDate } from "@/utils/data";
+
+export default {
+    data() {
+        return {
+            xmgsList: [],
+            xmjdList: [],
+            xmjdFrom: [],
+            seatch_nd: "",
+            seatch_name: "",
+            fistActive: false,
+            secondActive: true,
+            newModal: false,
+            editModal: false,
+            editTitle: "",
+            textTit: "",
+            pageNo: 1,
+            pageSize: 10,
+            totalCount: 1,
+            pageNo2: 1,
+            pageSize2: 4,
+            totalCount2: 10,
+            ndOptions: [],
+            editObj: {}
+        };
+    },
+    methods: {
+        getXzqh(row) {
+            return getDicTab("xzqh", row.xzqh);
+        },
+        getBmbm(row) {
+            return getDicTab("bmbm", row.xzqh + "-" + row.bmbm);
+        },
+        formatterDatekssj(row) {
+            return formatDate(row.kssj, "yyyy-MM-dd");
+        },
+        formatterDatejssj(row) {
+            return formatDate(row.jssj, "yyyy-MM-dd");
+        },
+        handleCurrentChange(val) {
+            this.pageNo = val;
+        },
+        handleCurrentChange2(val) {
+            this.pageNo2 = val;
+        },
+        getList(val) {
+            let obj = {
+                pageSize: this.pageSize,
+                pageNo: this.pageNo
+                // xzqh: this.$store.state.user.user.uUser.xzqh,
+                // bm: this.$store.state.user.user.uUser.bmbm,
+                // fgks: "0"
+            };
+            this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
+            this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
+            xmlbList(obj).then(res => {
+                this.xmgsList = res.data.data.elements;
+                this.totalCount = res.data.data.totalCount;
+            });
+        },
+        searchFun() {
+            this.getList();
+        },
+        changeModal(row) {
+            let obj = {
+                pageNo: this.pageNo2,
+                pageSize: this.pageSize2,
+                xmid: row.id
+            };
+            xmjdSelect(obj).then(res => {
+                this.xmjdList = res.data.msg.data;
+                this.totalCount2 = res.data.msg.totalCount;
+            });
+
+            this.fistActive = true;
+            this.secondActive = false;
+        },
+        backBtn() {
+            this.fistActive = false;
+            this.secondActive = true;
+        }
+    },
+    mounted() {
+        this.getList();
+    }
+};
+</script>
+<style lang="scss" scoped>
+
+
+</style>
+<style lang="scss">
+    .el-form-item {
+        width: 100%;
+    }
+    .el-form-item__content {
+        width: 70%;
+    }
+    .el-date-editor--date {
+        width: 100%;
+    }
+    .el-textarea textarea {
+        width: 67.3vw;
+    }
+</style>
+
+

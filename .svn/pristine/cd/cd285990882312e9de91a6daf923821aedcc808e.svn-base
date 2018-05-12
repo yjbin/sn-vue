@@ -1,0 +1,303 @@
+<template>
+    <div class="capitalSource">
+        <div class="demo-input-suffix">
+            <label>年度
+            </label>
+            <el-select suffix-icon="el-icon-date" v-model="seatch_nd">
+                <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
+            </el-select>
+            <label>资金名称
+            </label>
+            <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seatch_name" style="width:20%">
+            </el-input>
+            <el-button type="primary" style="margin-left:2%" @click="zjlyQuery">查询</el-button>
+            <el-button type="primary" style="margin-left:2%" @click="zjlyAdd">添加</el-button>
+        </div>
+        <div class="capit-tit">
+            <el-row>
+                <el-col :span="12">
+                    <div class="user-left">
+                        <span>资金来源列表</span>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="capit-list">
+            <el-table :data="zjlyList" stripe border style="width: 100%">
+                <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+                <el-table-column prop="xzqh" label="行政区划"></el-table-column>
+                <el-table-column prop="bmbm" label="部门处室"></el-table-column>
+                <el-table-column prop="zjmc" label="资金名称"></el-table-column>
+                <el-table-column prop="zjjb" label="资金级别"></el-table-column>
+                <el-table-column prop="wh" label="资金文号"></el-table-column>
+                <el-table-column prop="sqzj" label="资金金额(万元)"></el-table-column>
+                <el-table-column prop="qrzj" label="已拨付(万元)"></el-table-column>
+                <el-table-column prop="xdsysj" label="限定时间"></el-table-column>
+                <el-table-column prop="zt" label="状态"></el-table-column>
+                <el-table-column prop="address" label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="zjlyEdit">编辑</el-button>
+                        <el-button size="mini" type="danger" @click="zjlyDel">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="user-page fr">
+                <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+                </el-pagination>
+            </div>
+        </div>
+        <div class="role-listdialog">
+            <el-dialog :title="dictTid" :visible.sync="dialogVisible" :before-close="userClose">
+                <div class="dict-content">
+                    <el-form :inline="true" :model="zjlyForm" ref="zjlyForm" class="demo-form-inline" label-width="30%" :rules="rulesDic">
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="资金名称" prop="name">
+                                    <el-input v-model="zjlyForm.zjmc" placeholder="资金名称"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="年度" prop="nd">
+                                    <el-select v-model="zjlyForm.nd" placeholder="请选择" style="width:100%">
+                                        <!-- <el-option v-for="(item,index) in szbmoptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option> -->
+                                    </el-select>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="资金级别" prop="name">
+                                    <el-select v-model="zjlyForm.nd" placeholder="请选择" style="width:100%">
+                                        <!-- <el-option v-for="(item,index) in szbmoptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option> -->
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="资金类别" prop="nd">
+                                    <el-select v-model="zjlyForm.nd" placeholder="请选择" style="width:100%">
+                                        <!-- <el-option v-for="(item,index) in szbmoptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option> -->
+                                    </el-select>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="资金性质" prop="name">
+                                    <el-select v-model="zjlyForm.nd" placeholder="请选择" style="width:100%">
+                                        <!-- <el-option v-for="(item,index) in szbmoptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option> -->
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="使用层级" prop="nd">
+                                    <el-select v-model="zjlyForm.nd" placeholder="请选择" style="width:100%">
+                                        <!-- <el-option v-for="(item,index) in szbmoptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option> -->
+                                    </el-select>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="资金金额(万元)" prop="name">
+                                    <el-input v-model="zjlyForm.xmmc" placeholder="资金金额"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="资金文号" prop="nd">
+                                    <el-input v-model="zjlyForm.xmmc" placeholder="资金金额"></el-input>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="行政区划" prop="nd">
+                                    <el-input v-model="zjlyForm.xmmc" placeholder="行政区划"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="部门科室" prop="nd">
+                                    <el-input v-model="zjlyForm.xmmc" placeholder="部门科室"></el-input>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="录入人" prop="nd">
+                                    <el-input v-model="zjlyForm.xmmc" placeholder="录入人"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="录入时间" prop="nd">
+                                    <el-date-picker id="mmyxsj" v-model="zjlyForm.mmyxsj" type="date" placeholder="密码失效日期"></el-date-picker>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="到位时间" prop="nd">
+                                    <el-date-picker id="mmyxsj" v-model="zjlyForm.mmyxsj" type="date" placeholder="限定使用时间"></el-date-picker>
+
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11">
+                                <el-form-item label="限定使用时间" prop="nd">
+                                    <el-date-picker id="mmyxsj" v-model="zjlyForm.mmyxsj" type="date" placeholder="限定使用时间"></el-date-picker>
+                                </el-form-item>
+
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11">
+                                <el-form-item label="资金用途" prop="nd">
+                                    <el-input type="textarea" :rows="4" v-model="zjlyForm.xmmc" placeholder="资金用途"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
+                    </el-form>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="btn_zjlySave">保 存</el-button>
+                    <el-button type="primary" @click="dialogVisible=false">取 消</el-button>
+                </span>
+            </el-dialog>
+        </div>
+    </div>
+</template>
+<script>
+import { doCreate } from "@/utils/config";
+import {
+    capotalQuery,
+    capotalAdd,
+    capotalUpdate,
+    capotalDel
+} from "@/api/capitalSource";
+export default {
+    data() {
+        return {
+            zjlyList: [],
+            ndoptions:[],
+            dialogVisible: false,
+            zjlyForm: {
+                dictcode: "",
+                dictname: "",
+                dicttype: ""
+            },
+            seatch_nd: "",
+            seatch_name: "",
+            dictTid: "新建",
+            pageNo: 1,
+            pageSize: 10,
+            totalCount: 0,
+            rulesDic: {
+                dicttype: [{ required: true, message: "不能为空" }],
+                dictname: [{ required: true, message: "不能为空" }],
+                dictcode: [
+                    { required: true, message: "不能为空" },
+                    { type: "number", message: "必须为数字值" }
+                ]
+            }
+        };
+    },
+    methods: {
+        userClose() {
+            this.dialogVisible = false;
+        },
+        handleCurrentChange(val) {
+            this.pageNo = val;
+        },
+        indexMethod(index) {
+            let start = (this.pageNo - 1) * this.pageSize;
+            return start + index + 1;
+        },
+        zjlyAdd() {
+            this.dialogVisible = true;
+        },
+        zjlyEdit() {
+            this.dialogVisible = true;
+        },
+        zjlyDel() {},
+        zjlyQuery() {
+            let obj = {
+                pageNo: this.pageNo,
+                pageSize: this.pageSize,
+                zjmc:this.seatch_name,
+                nd:this.seatch_nd
+            };
+            capotalQuery(obj).then(res => {
+                let data = res.data;
+                if (data.success) {
+                    this.zjlyList = data.msg.data;
+                    this.totalCount = data.msg.totalCount;
+                }
+            });
+        },
+        btn_zjlySave() {}
+    },
+    mounted() {
+        this.zjlyQuery();
+        this.ndoptions = doCreate("nd");
+    }
+};
+</script>
+
+
+<style lang="scss" scoped>
+.capitalSource {
+    .el-dialog {
+        .el-dialog__header {
+            background: #307ecc;
+            .el-dialog__title {
+                color: #fff;
+            }
+        }
+    }
+
+    .capit-tit {
+        background: #317ecc;
+        margin: 20px 0 0 0;
+        .user-left {
+            span {
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                margin: 10px 20px;
+            }
+        }
+    }
+}
+</style>
+<style lang="scss">
+.capitalSource {
+    .el-dialog {
+        .el-dialog__header {
+            background: #307ecc;
+            .el-dialog__title {
+                color: #fff;
+            }
+        }
+    }
+    .el-form-item {
+        width: 100%;
+    }
+    .el-form-item__content {
+        width: 70%;
+    }
+    .el-date-editor--date {
+        width: 100%;
+    }
+}
+</style>

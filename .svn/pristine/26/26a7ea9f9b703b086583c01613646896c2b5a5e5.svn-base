@@ -1,0 +1,77 @@
+<template>
+    <div class="detxmxy" >
+        <el-table :data="xmxyList" stripe border  style="width: 100%">
+            <el-table-column type="index" label="序号" width="80" :index="index_xmxy"></el-table-column>
+            <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="jjXzlr" label="新增利润" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="jjXzcn" label="新增产能" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="jjXzjs" label="新增技术" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xzqh" label="行政区划" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="bmbm" label="部门科室" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lrsj" label="录入时间" :formatter="formatterDatelrsj" show-overflow-tooltip></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button size="mini" type="primary">详情</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="user-page fr">
+            <el-pagination @current-change="xmxyChange" :current-page.sync="xmxyFrom.pageNo" :page-size="xmxyFrom.pageSize" layout="total, prev, pager, next" :total="totalCount">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+
+
+<script>
+import { xmxySelect } from "@/api/projectBenefit";
+import { formatDate } from "@/utils/data";
+export default {
+  data() {
+    return {
+      xmxyList: [],
+      xmid:"",
+      totalCount: 0,
+      xmxyFrom: {
+        pageNo: 1,
+        pageSize: 5
+      }
+    };
+  },
+  props: {
+      xmxyid: String,
+  },
+  watch: {
+      xmxyid(val) {
+         this.xmid = val;
+         this.xmxySearch(this.xmxyFrom.pageNo,this.xmxyFrom.pageSize,this.xmid);
+      },
+  },
+  methods: {
+    xmxySearch(pageNo,pageSize,option){
+       let obj = {
+            pageNo: pageNo,
+            pageSize: pageSize,
+        };
+        option ? obj.xmid = option : "";
+        xmxySelect(obj).then(res => {
+            this.xmxyList = res.data.msg.data;
+            this.totalCount = res.data.msg.totalCount;
+        });
+    },
+    xmxyChange(val) {
+      this.xmxyFrom.pageNo = val;
+      this.xmysSearch(this.xmxyFrom.pageNo,this.xmxyFrom.pageSize,this.xmid);
+    },
+    index_xmxy(index) {
+        let start = (this.xmxyFrom.pageNo - 1) * this.xmxyFrom.pageSize;
+        return start + index + 1;
+    },
+    formatterDatelrsj(row){
+        return formatDate(row.lrsj, "yyyy-MM-dd");
+    }
+  }
+};
+</script>

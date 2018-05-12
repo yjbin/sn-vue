@@ -1,0 +1,42 @@
+import request from '@/utils/request'
+
+//查询历史设置
+export function searchData(obj) {
+  return request({
+    url: '/deptNumber/select',
+    method: 'post',
+    data: obj
+  })
+}
+//设置
+export function setData(obj) {
+  return request({
+    url: '/deptNumber/select',
+    method: 'post',
+    data: obj
+  })
+}
+//实施单位查询
+export function searchUnit(obj) {
+  return request({
+    url: '/ssdw/select',
+    method: 'post',
+    data: obj
+  })
+}
+//单位添加，修改
+export function addUnit(method,obj){
+  return request({
+    url:'/ssdw/' + method,
+    method:'post',
+    data:obj
+  })
+}
+//删除单位
+export function delUnit(obj){
+  return request({
+    url:'/ssdw/delete',
+    method:'post',
+    data:obj
+  })
+}

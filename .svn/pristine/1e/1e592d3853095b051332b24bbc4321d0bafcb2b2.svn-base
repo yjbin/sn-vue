@@ -1,0 +1,99 @@
+<template>
+  <div class="user-list">
+    <el-table :data="userTable" stripe border style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+      <el-table-column prop="nickname" label="用户名称" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="username" label="登录名称" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="rId" :formatter="usertypeDic" label="用户角色" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="userstatus" :formatter="StatusDic" label="用户状态" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="zhdlsj" :formatter="formatterData" label="最后登录时间" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="cjr" label="创建人" show-overflow-tooltip></el-table-column>
+    </el-table>
+    <div class="user-page fr">
+      <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+      </el-pagination>
+    </div>
+  </div>
+</template>
+<script>
+import { userSearch } from "@/api/user";
+import { formatDate } from "@/utils/data";
+import { getDicTab } from "@/utils/config";
+export default {
+  data() {
+    return {
+      userTable: [],
+      pageSize: 10,
+      pageNo: 1,
+      totalCount: 0
+    };
+  },
+  props: {
+    listObj: {
+      type: Object,
+      default: () => {}
+    },
+    userDelP:0
+  },
+  methods: {
+    handleCurrentChange(val) {
+      this.pageNo = val;
+      this.userList(this.pageSize, this.pageNo);
+    },
+    handleSelectionChange(val) {
+      this.$emit("checkboxChange", val);
+    },
+    userList(pageSize, pageNo) {
+      let _this = this;
+      userSearch(pageSize, pageNo).then(res => {
+        let data = res.data;
+        if (data.success) {
+          _this.userTable = data.data;
+          _this.totalCount = data.totalCount;
+        }
+      });
+    },
+    formatterData(row) {
+      return formatDate(row.zhdlsj, "yyyy-MM-dd");
+    },
+    usertypeDic(row) {
+      return getDicTab("role", row.rId);
+    },
+    StatusDic(row) {
+      // return getDicTab("yhzt", row.userstatus);
+    },
+    indexMethod(index) {
+      let start = (this.pageNo - 1) * this.pageSize;
+      return start + index + 1;
+    }
+  },
+  watch: {
+    listObj: {
+      handler: function(val) {
+        this.userTable = val.userTab;
+        this.totalCount = val.total;
+        this.pageNo = val.pageNo;
+      },
+      deep: true
+    },
+    userDelP(val){
+      this.userList(this.pageSize, this.pageNo);
+    }
+  },
+  mounted() {
+    this.userList(this.pageSize, this.pageNo);
+  }
+};
+</script>
+
+<style lang="scss">
+.user-list {
+  th,
+  td {
+    text-align: center;
+  }
+}
+</style>
+
+

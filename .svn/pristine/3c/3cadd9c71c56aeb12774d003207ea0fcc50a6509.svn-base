@@ -1,0 +1,320 @@
+<template>
+  <div class="exploit">
+    <div class="source_form">
+        <el-form :inline="true" :model="searchMember"  class="demo-form-inline" >
+              <el-form-item label="单位名称:">
+                <el-input v-model="searchMember.dwmc" @keyup.enter.native="search" placeholder="单位名称" prefix-icon="el-icon-search"></el-input>
+              </el-form-item>
+              <el-form-item label="负责人:">
+                <el-input v-model="searchMember.fzr" @keyup.enter.native="search" placeholder="负责人" prefix-icon="el-icon-search"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="medium" @click="search">查询</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="success" size="medium" @click="addCompany">添加单位</el-button>
+              </el-form-item>
+        </el-form>
+        <el-row>
+          <el-col>
+            <div class="capit-tit">
+              <el-row>
+                  <el-col :span="12">
+                      <div class="user-left">
+                          <span>实施单位</span>
+                      </div>
+                  </el-col>
+              </el-row>
+            </div>
+            <el-table :data="tableData" border stripe style="width: 100%">
+              <el-table-column width="50" label="序号" type="index" :index="indexMethod">
+              </el-table-column>
+              <el-table-column prop="dwmc" label="单位名称" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column prop="dwbm" label="营业执照号" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column prop="dwdd" label="单位地址" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column prop="fzr" label="负责人" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column prop="zjh" label="证件号" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column prop="lxdh" label="联系电话" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column label="操作" width="160">
+                <template slot-scope="scope">
+                  <el-button @click="handleClick(scope.row)" type="primary" size="mini">修改</el-button>
+                  <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
+        <el-pagination layout="total,prev, pager, next" :total="totalCount" class="fr mar10" @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize"></el-pagination>
+      
+    </div>
+
+    <!-- 模态框 -->
+    <div class="explot-model">
+      <el-dialog :title="text_Tit" :visible.sync="modelShow"  :before-close="btn_cancel">
+          <el-form :inline="true" class="demo-form-inline" label-width="100px" :model="formData" ref="userForm" :rules="rulesform">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="单位名称" prop="dwmc">
+                    <el-input v-model="formData.dwmc" placeholder="单位名称"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="单位类型" prop="dwlx" >
+                      <el-select v-model="formData.dwlx" placeholder="单位类型" style="display: block">
+                        <el-option v-for="(item,index) in dwlx" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                  </el-form-item>
+               </el-col>
+              </el-row>
+               <el-row>
+                <el-col :span="12">
+                  <el-form-item label="单位编码" prop="dwbm">
+                    <el-input v-model="formData.dwbm" placeholder="单位编码"></el-input>
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item label="单位地址" prop="dwdd">
+                    <el-input v-model="formData.dwdd" type="tel" placeholder="单位地址"></el-input>
+                  </el-form-item>
+               </el-col>
+              </el-row>
+              <el-row>
+              <el-col :span="12">
+                <el-form-item label="负责人" prop="fzr">
+                  <el-input v-model="formData.fzr" placeholder="负责人"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="证件号" prop="zjh">
+                  <el-input v-model="formData.zjh" placeholder="证件号"></el-input>
+                </el-form-item>
+               </el-col>
+              </el-row>
+              <el-row>
+                 <el-col :span="12">
+                  <el-form-item label="联系电话" prop="lxdh">
+                    <el-input v-model="formData.lxdh" placeholder="联系电话"></el-input>
+                  </el-form-item>
+                  </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+              <el-form-item label="备注" prop="bz">
+                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="formData.bz" placeholder="备注" ></el-input>
+              </el-form-item>
+               </el-col>
+              </el-row>
+              <el-row>
+              <el-col :span="12">
+                <el-form-item label="录入人" prop="lrr">
+                  <el-input v-model="formData.lrr" placeholder="录入人" disabled></el-input>
+                </el-form-item>
+              </el-col>
+                <el-col :span="12">
+                  <el-form-item label="录入时间" prop="lrsj">
+                     <el-date-picker v-model="formData.lrsj" type="datetime" placeholder="录入时间" disabled></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="userbtn_save">保 存</el-button>
+          <el-button @click="btn_cancel">取 消</el-button>
+        </span>
+      </el-dialog>
+      </div>
+  </div>
+</template>
+<script>
+import { searchUnit, addUnit, delUnit } from "@/api/systemManage";
+import { doCreate, getDicTab } from "@/utils/config";
+import { card,validContact } from "@/utils/validate"
+export default {
+  data() {
+     const isCard = (rule, value, callback) => {
+            if (!card(value)) {
+                callback(new Error("请输入合法的身份信息"));
+            } else {
+                callback();
+            }
+        };
+    const checkTel = (rule, value, callback) => {
+            if (validContact(value)) {
+                callback();
+            } else {
+                callback(new Error("请输入正确的联系方式"));
+            }
+        };
+    return {
+      formData: {},
+      tableData: [],
+      modelShow: false,
+      text_Tit: "",
+      dwlx: [],
+      pageNo: 1,
+      pageSize: 10,
+      totalCount: 0,
+      searchMember: {
+        dwmc: "",
+        fzr: ""
+      },
+      rulesform: {
+        dwmc: [{ required: true, message: '不能为空', trigger: 'blur'}],
+        dwbm: [{ required: true, message: "不能为空" },
+                { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
+        dwlx: [{ required: true, message: "不能为空" }],
+        dwdd: [{ required: true, message: "不能为空" }],
+        fzr: [{ required: true, message: "不能为空" }],
+        zjh: [ {required: true,validator: isCard,trigger: "blur"}],
+        lxdh: [{ required: true,validator: checkTel,trigger: "blur"}],
+        bz: [{ required: true, message: "不能为空" }],
+        lrr: [{ required: true, message: "不能为空" }],
+        lrsj: [{ required: true, message: "不能为空", }]
+      }
+    };
+  },
+  methods: {
+    addCompany() {
+      this.text_Tit = "添加单位";
+      this.modelShow = true;
+      if (this.$refs.userForm) {
+        this.$refs.userForm.resetFields();
+      }
+      this.formData = {};
+      var data = new Date();
+      this.formData.lrsj = data.getTime();
+      this.formData.lrr = this.$store.state.user.user.uUser.username;
+    },
+    btn_cancel() {
+      this.modelShow = false;
+    },
+    indexMethod(index) {
+      let start = (this.pageNo - 1) * this.pageSize;
+      return start + index + 1;
+    },
+    search() {
+      this.tabList(this.pageSize, this.pageNo, this.searchMember);
+    },
+    currentPage(val) {
+      this.pageNo = val;
+      this.tabList(this.pageSize, this.pageNo, this.searchMember);
+    },
+    handleClick(row) {
+      this.modelShow = true;
+      this.text_Tit = "修改";
+       if (this.$refs.userForm) {
+        this.$refs.userForm.resetFields();
+      }
+      this.formData = Object.assign({}, row);
+    },
+    tabList(pageSize, pageNo, option) {
+      let _this = this;
+      let obj = Object.assign(
+        {},
+        {
+          pageNo: pageNo,
+          pageSize: pageSize
+        }
+      );
+      option ? ((obj.dwmc = option.dwmc), (obj.fzr = option.fzr)) : "";
+      searchUnit(obj).then(res => {
+        let data = res.data;
+        if (data.success) {
+          _this.tableData = data.msg.data;
+          _this.totalCount = data.msg.totalCount;
+        }
+      });
+    },
+    deleteData(row) {
+      this.$confirm("你确定删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          delUnit({ id: row.id }).then(res =>{
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.tabList(this.pageSize, this.pageNo);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    userbtn_save() {
+      this.$refs.userForm.validate(valid => {
+        if (valid) {
+          let _this = this;
+          let url = "update";
+          let obj = Object.assign({}, this.formData);
+          if (!obj.id) {
+            url = "add";
+          }
+          addUnit(url, obj).then(res => {
+            let data = res.data;
+            if (data.success) {
+               if (_this.$refs.userForm) {
+                  _this.$refs.userForm.resetFields();
+              }
+              _this.modelShow = false;
+              _this.tabList(_this.pageSize, _this.pageNo);
+              _this.$message({
+                message: data.msg,
+                type: "success"
+              });
+            }
+          });
+        }
+      });
+    }
+  },
+  mounted() {
+    this.tabList(this.pageSize, this.pageNo);
+    this.dwlx = doCreate("dwlx");
+  }
+};
+</script>
+<style lang="scss" scoped>
+.exploit {
+  .source_form {
+    width: 100%;
+    .capit-tit {
+      background: #317ecc;
+      .user-left {
+        span {
+          color: #fff;
+          display: inline-block;
+          text-align: center;
+          cursor: pointer;
+          margin: 10px 20px;
+        }
+      }
+    }
+  }
+  
+}
+</style>
+<style  lang="scss">
+.explot-model{
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
+    }
+  }
+</style>
+

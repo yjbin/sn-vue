@@ -1,0 +1,219 @@
+<template>
+  <div class="navHead">
+    <span class="headName">
+      山西省涉农资金监督管理平台
+    </span>
+    <span class="headSelect">
+      <el-dropdown>
+        <el-button type="primary" style="background: #d11523;border-color:#fff">
+          欢迎您, {{username}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click.native="revamp_password">修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="out_btn">退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </span>
+    <div class="info">
+      <el-dialog title="修改密码" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+        <div class="info-content">
+          <el-form :inline="true" class="demo-form-inline" :model="infoForm" ref="infoForm" :rules="infoRules">
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-row :gutter="20" style="margin:0 0 10px 0">
+                  <el-col :span="7" style="padding:0">
+                    <span>旧密码：</span>
+                  </el-col>
+                  <el-col :span="17" style="padding:0">
+                    <el-form-item prop="oldPassWord">
+                      <el-input type="password" v-model="infoForm.oldPassWord"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <el-row :gutter="20" style="margin:0 0 10px 0">
+                  <el-col :span="7" style="padding:0">
+                    <span>新密码：</span>
+                  </el-col>
+                  <el-col :span="17" style="padding:0">
+                    <el-form-item prop="newPassWord">
+                      <el-input type="password" v-model="infoForm.newPassWord"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="info_btn">确 定</el-button>
+        </span>
+      </el-dialog>
+    </div>
+  </div>
+</template>
+<script>
+import { validPassword } from "@/utils/validate";
+import { revampPassword } from "@/api/user"
+export default {
+  data() {
+    const oldPassWord = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error("请输入旧密码"));
+      } else {
+        callback();
+      }
+    };
+    const newPassWord = (rule, value, callback) => {
+      if (!validPassword(value)) {
+        callback(new Error("密码由6-20字母和数字组成"));
+      } else {
+        if (value === this.infoForm.oldPassWord) {
+          callback(new Error("旧密码不能和新密码一样"));
+        } else {
+          callback();
+        }
+      }
+    };
+    return {
+      username: "",
+      dialogVisible: false,
+      userId:"",
+      infoForm: {
+        oldPassWord: "",
+        newPassWord: "",
+        id: ""
+      },
+      infoRules: {
+        oldPassWord: [{ required: true, validator: oldPassWord }],
+        newPassWord: [{ required: true, validator: newPassWord }]
+      }
+    };
+  },
+  methods: {
+    handleClose() {
+      this.dialogVisible = false;
+    },
+    revamp_password() {
+      this.dialogVisible = true;
+    },
+    info_btn() {
+      let _this = this;
+      this.$refs.infoForm.validate(valid => {
+        if (valid) {
+          let obj = {
+            id : _this.userId,
+            oldPassWord: _this.infoForm.oldPassWord,
+            newPassWord: _this.infoForm.newPassWord
+          }
+          revampPassword(obj).then(res=>{
+            let data = res.data;
+            if(data.success){
+              this.handleClose();
+              this.$message({
+                 message: data.msg,
+                 type: 'success'
+              });
+            }
+          })
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    out_btn() {
+      this.$store.dispatch("LogOut").then(() => {
+        location.reload();
+      });
+    }
+  },
+  mounted() {
+     this.username = this.$store.getters.user.uUser.nickname;
+     this.userId = this.$store.getters.user.uUser.id;
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.navHead {
+  height: 62px;
+  background: #464C5B;
+  padding-left: 23px;
+
+  .headName {
+    height: 62px;
+    line-height: 62px;
+    display: inline-block;
+    font-size: 30px;
+    color: #ffffff;
+  }
+  .headSelect {
+    float: right;
+    width: 173px;
+    height: 30px;
+    margin: 16px 20px 0 0;
+  }
+  .info-content {
+    span {
+      display: block;
+      text-align: center;
+      line-height: 40px;
+    }
+  }
+  .el-button--primary{
+    background: #d11523
+  }
+}
+</style>
+<style lang="scss">
+.navHead {
+  .headSelect .el-dropdown {
+    background: #4c90d4;
+    color: #fff;
+    border-radius: 15px;
+    width: 173px;
+    height: 30px;
+    .el-button {
+      width: 173px;
+      height: 30px;
+      border-radius: 15px;
+      background-color: #4c90d4;
+      border-color: #4c90d4;
+      padding: 0;
+      span {
+        width: 173px;
+        height: 30px;
+        line-height: 30px;
+      }
+    }
+  }
+  .el-dropdown-menu__item {
+    width: 170px;
+  }
+  .el-dialog__header {
+    background: #307ecc;
+    .el-dialog__title {
+      color: #fff;
+    }
+  }
+  .el-dialog__body {
+    padding: 20px 20px 0 20px;
+  }
+  .el-dialog__footer {
+    text-align: center;
+  }
+  .el-form-item {
+    width: 100%;
+    margin-bottom: 0;
+    & > div {
+      width: 100%;
+    }
+  }
+}
+</style>

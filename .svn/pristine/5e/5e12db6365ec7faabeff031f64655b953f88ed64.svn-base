@@ -1,0 +1,98 @@
+<template>
+    <div class="shidialog">
+        <el-dialog :title="shiTit1" :visible.sync="shiModal1" :before-close="btn_cancel">
+            <div class="source_tree">
+                <el-tree :data="treeData" node-key="id" ref="shitree" default-expand-all show-checkbox>
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <span>{{ node.label }}</span>
+                        <span>
+                            <!-- <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                        <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i> -->
+                        </span>
+                    </span>
+                </el-tree>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="shi_save">确 定</el-button>
+                <el-button @click="btn_cancel">取 消</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<script>
+import { treeQueryBm } from "@/api/department";
+export default {
+    data() {
+        return {
+            shiModal1: false,
+            treeData: [],
+            shiTit1: "",
+            shiFgksList: [],
+            shiList:[],
+            shicheckId:[]
+        };
+    },
+    props: {
+        shiModal: Boolean,
+        shiTit: String,
+        shiChecked:Array
+    },
+    watch: {
+        shiModal(val) {
+            this.shiModal1 = val;
+            if(val){
+                this.treeQueryBm();
+            }
+        },
+        shiTit(val) {
+            this.shiTit1 = val;
+        },
+        shiChecked(val){
+            if(val){
+                this.shiList = val;
+            }
+         }
+    },
+    methods: {
+        btn_cancel() {
+            this.shiModal1 = false;
+            this.$emit("shiToggle", this.shiModal1);
+        },
+        treeQueryBm() {
+            let _this = this;
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh.substring(0, 4)
+            };
+            treeQueryBm(obj).then(res => {
+                let data = res.data;
+                if (data) {
+                    _this.treeData = data;
+                    _this.$refs.shitree.setCheckedKeys(_this.shiList);
+                }
+            });
+        },
+        shi_save() {
+            var _this = this;
+            this.shiFgksList = [];
+            this.shiList = [];
+            this.shicheckId = [];
+            this.$refs.shitree.getCheckedNodes().map(function(i, t) {
+                _this.shiFgksList.push(i.xzqh + "-" + i.bm);
+                _this.shicheckId.push(i.id);
+            });
+            this.shiModal1 = false;
+            this.$emit("shiToggle", this.shiModal1);
+            this.$emit("shiFgks", this.shiFgksList.toString() + ",");
+            this.$emit('shichId',this.shicheckId);
+        }
+    }
+};
+</script>
+<style lang="scss">
+.shidialog {
+    .el-dialog__body {
+        height: 600px;
+        overflow-y: auto;
+    }
+}
+</style>

@@ -1,0 +1,383 @@
+<template>
+    <div class="detailsXmgk">
+        <el-form :inline="true" class="demo-form-inline" :model="xmForm" label-width="110px">
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="项目名称">
+                        <el-input v-model="xmForm.xmmc" placeholder="项目名称"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="年度">
+                        <el-select v-model="xmForm.nd" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="项目编号">
+                        <el-input v-model="xmForm.xmbh" placeholder="项目编号"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="产业类别">
+                        <el-select v-model="xmForm.cylx" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in cylxoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="项目类别">
+                        <el-cascader expand-trigger="hover" :options="options" v-model="xmlbArr">
+                        </el-cascader>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="录入时间">
+                        <el-input v-model="xmForm.lrsj" placeholder="录入时间" :disabled="true"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="实施单位">
+                        <el-input v-model="xmForm.ssdw" placeholder="实施单位" auto-complete='ssdw'></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="负责人">
+                        <el-input v-model="xmForm.fzr" placeholder="负责人" :disabled="true"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="开始时间">
+                        <el-date-picker type="date" placeholder="开始时间" v-model="xmForm.kssj" style="width: 100%;"></el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="结束时间">
+                        <el-date-picker type="date" placeholder="结束时间" v-model="xmForm.jssj" style="width: 100%;"></el-date-picker>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="项目总额">
+                        <el-input v-model="xmForm.xmze" placeholder="项目总额"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="中央资金">
+                        <el-input v-model="xmForm.zyZj" placeholder="中央资金"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="省级资金">
+                        <el-input v-model="xmForm.shengZj" placeholder="省级资金" auto-complete='shengZj'></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="市级资金">
+                        <el-input v-model="xmForm.shiZj" placeholder="市级资金" auto-complete='shiZj'></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="县级资金">
+                        <el-input v-model="xmForm.xianZj" placeholder="县级资金"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="乡级资金">
+                        <el-input v-model="xmForm.xiangZj" placeholder="乡级资金"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="行政区划">
+                        <el-select v-model="xmForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                            <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="科室部门">
+                        <el-select v-model="xmForm.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                            <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="录入人">
+                        <el-input v-model="xmForm.lrr" placeholder="录入人" :disabled="true"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="20" :offset="2">
+                    <el-form-item label="项目地址">
+                        <el-input v-model="xmForm.xmdz" placeholder="项目地址" auto-complete='xmdz'></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="20" :offset="2">
+                    <el-form-item label="项目GPS">
+                        <el-input v-model="xmForm.xmGps" placeholder="项目GPS"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="20" :offset="2">
+                    <el-form-item label="建设内容">
+                        <el-input type="textarea" :autosize="{ minRows: 5}" v-model="xmForm.jsnr"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :offset="4" :span="2">
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>2" @click="shengShow">省级分管科室</el-button>
+                </el-col>
+                <el-col :offset="1" :span="2">
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>4" @click="shiShow">市级分管科室</el-button>
+                </el-col>
+                <el-col :offset="1" :span="2">
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>6" @click="xianShow">县级分管科室</el-button>
+                </el-col>
+                <el-col :offset="1" :span="2">
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>9" @click="xiangShow">乡级分管科室</el-button>
+                </el-col>
+            </el-row>
+            <br>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="行政区划">
+                        <el-select v-model="xmForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                            <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="科室部门">
+                        <el-select v-model="xmForm.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                            <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="4" :offset="4">
+                    <el-form-item prop="xzqh">
+                        <el-button type="success" size="small" @click="fileClick">查看附件</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+        <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
+
+        <sheng-Model :shengModal="shengModalShow" @shengToggle="shengToggle" :shengTit="shengTit" :shengChecked="shengChecked"></sheng-Model>
+        <shi-Model :shiModal="shiModalShow" @shiToggle="shiToggle" :shiTit="shiTit" :shiChecked="shiChecked"></shi-Model>
+        <xian-Model :xianModal="xianModalShow" @xianToggle="xianToggle" :xianTit="xianTit" :xianChecked="xianChecked"></xian-Model>
+        <xiang-Model :xiangModal="xiangModalShow" @xiangToggle="xiangToggle" :xiangTit="xiangTit" :xiangChecked="xiangChecked"></xiang-Model>
+    </div>
+</template>
+<script>
+import { doCreate, getDicTab, moreMenu } from "@/utils/config";
+import { treeQuery } from "@/api/multistageDown";
+import shengModel from "./moneyTracking_shengModel";
+import shiModel from "./moneyTracking_shiModel";
+import xianModel from "./moneyTracking_xianModel";
+import xiangModel from "./moneyTracking_xiangModel";
+import accessoryModel from "@/components/accessoryModel";
+export default {
+    components: {
+        shengModel,
+        shiModel,
+        xianModel,
+        xiangModel,
+        accessoryModel
+    },
+    data() {
+        return {
+            showDialog: false,
+            ndoptions: [],
+            cylxoptions: [],
+            bmbmoptions: [],
+            xzqhoptions: [],
+            options: [],
+            xmlbArr: [],
+            xmForm: {
+                xmmc: "",
+                nd: "",
+                xmbh: "",
+                cylx: "",
+                ssdw: "",
+                fzr: "",
+                kssj: "",
+                jssj: "",
+                xmze: "",
+                zyZj: "",
+                shengZj: "",
+                shiZj: "",
+                xianZj: "",
+                xiangZj: "",
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                lrr: this.$store.state.user.user.uUser.nickname,
+                lrsj: "",
+                xmdz: "",
+                xmGps: "",
+                jsnr: "",
+                xmlb: ""
+            },
+            //管理科室
+            shengTit: "",
+            shiTit: "",
+            xianTit: "",
+            xiangTit: "",
+            shengModalShow: false,
+            shiModalShow: false,
+            xianModalShow: false,
+            xiangModalShow: false,
+            accessoryModalInt: false,
+            upShowhide: false,
+            textTitFile: "",
+            fileSrc: "",
+            //省市县乡的选中集合
+            shengChecked: [],
+            shiChecked: [],
+            xianChecked: [],
+            xiangChecked: []
+        };
+    },
+    props: {
+        xmgkList: {
+            default: () => {}
+        }
+    },
+    watch: {
+        xmgkList: {
+            handler: function(val) {
+                debugger;
+                if (val) {
+                    this.xmForm = Object.assign({}, val);
+                    if (val.fj) {
+                        this.fileSrc = {
+                            num: Math.random(),
+                            fileStr: this.xmForm.fj
+                        };
+                    } else {
+                        this.fileSrc = {
+                            num: Math.random(),
+                            fileStr: ""
+                        };
+                    }
+                    this.fileSrc = val.fj;
+                    this.ndoptions = doCreate("nd");
+                    this.cylxoptions = doCreate("cylb");
+                    this.xzqhoptions = doCreate("xzqh");
+                    this.bmbmoptions = doCreate("bmbm");
+                    if (this.xmForm.xmlb) {
+                        this.xmlbArr = this.xmForm.xmlb.split(",");
+                    }
+                    treeQuery({ dicttype: "xmlb" }).then(res => {
+                        let data = res.data;
+                        moreMenu(data);
+                        this.options = data;
+                    });
+                    val.shengFgksIds
+                        ? (this.shengChecked = val.shengFgksIds)
+                        : (this.shengChecked = []);
+                    val.shiFgksIds
+                        ? (this.shiChecked = val.shiFgksIds)
+                        : (this.shiChecked = []);
+                    val.xianFgksIds
+                        ? (this.xianChecked = val.xianFgksIds)
+                        : (this.xianChecked = []);
+                    val.xiangFgksIds
+                        ? (this.xiangChecked = val.xiangFgksIds)
+                        : (this.xiangChecked = []);
+                } else {
+                    this.xmlbArr = [];
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        shengShow() {
+            this.shengModalShow = true;
+            this.shengTit = "省级分管处室";
+        },
+        shiShow() {
+            this.shiModalShow = true;
+            this.shiTit = "市级分管处室";
+        },
+        xianShow() {
+            this.xianModalShow = true;
+            this.xianTit = "县级分管处室";
+        },
+        xiangShow() {
+            this.xiangModalShow = true;
+            this.xiangTit = "乡级分管处室";
+        },
+        shengToggle(val) {
+            this.shengModalShow = val;
+        },
+        shiToggle(val) {
+            this.shiModalShow = val;
+        },
+        xianToggle(val) {
+            this.xianModalShow = val;
+        },
+        xiangToggle(val) {
+            this.xiangModalShow = val;
+        },
+
+        colseTog(val) {
+            this.accessoryModalInt = val;
+        },
+        chileFile(val) {
+            this.xmxyFrom.fj = val;
+        },
+        fileClick() {
+            this.accessoryModalInt = true;
+            this.textTitFile = "附件";
+        }
+    }
+};
+</script>
+<style lang="scss">
+.detailsXmgk {
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
+    }
+    .el-dialog__body {
+        padding: 20px 20px 44px 20px;
+    }
+}
+</style>
+
+

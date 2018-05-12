@@ -1,0 +1,9 @@
+import request from '@/utils/request';
+//项目效益查询
+export function xmxySelect(obj){
+    return request({
+        url: '/xmxy/select',
+        method: 'post',
+        data: obj
+    })
+}

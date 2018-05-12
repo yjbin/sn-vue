@@ -1,0 +1,117 @@
+<template>
+  <div id="instiuTion">
+        <div class="demo-input-suffix">
+            <label>年度
+
+            </label>
+            <el-select suffix-icon="el-icon-date" v-model="seatch_nd">
+            </el-select>
+            <label>组织机构
+
+            </label>
+            <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seatch_name" style="width:20%">
+            </el-input>
+           
+            <el-button type="primary" style="margin-left:2%" @click="searchFun">查询</el-button>
+            <el-button type="success" style="margin-left:4%" @click="newMember">新增</el-button>
+        </div>
+        <div class="user-list">
+            <el-table :data="xmgsList" stripe border style="width: 100%">
+                <el-table-column type="index" label="序号" width="80"></el-table-column>
+                <el-table-column prop="xzqh" label="行政区划"></el-table-column>
+                <el-table-column prop="bmcs" label="部门处室"></el-table-column>
+                <el-table-column prop="xmmc" label="项目名称"></el-table-column>
+                <el-table-column prop="nd" label="年度"></el-table-column>
+                <el-table-column prop="xmbh" label="项目编号"></el-table-column>
+                <el-table-column prop="xmze" label="项目总额(万元)"></el-table-column>
+                <el-table-column prop="kssj" label="开始时间"></el-table-column>
+                <el-table-column prop="jssj" label="结束时间"></el-table-column>
+                <el-table-column prop="address" label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="changeModal(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" type="success" @click="applyform">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="user-page fr">
+                <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+                </el-pagination>
+            </div>
+        </div>
+        <projectOutline-Modal :newModal="newModal" @newToggle="newToggle"  :textTit="textTit"></projectOutline-Modal>
+        <projectOutline-Edit :editModal="editModal" @editToggle="editToggle" :editTitle="editTitle"></projectOutline-Edit>
+        <!-- <institutional-apply :applyModal="applyModal" @applyToggle="applyToggle" :applyTitle="applyTitle"></institutional-apply> -->
+    </div>
+</template>
+<script>
+import projectOutlineModal from './projectOutlineModal';
+import projectOutlineEdit from './projectOutlineEdit'
+export default {
+  components:{
+    projectOutlineModal,
+    projectOutlineEdit
+  },
+    data() {
+      return {
+        xmgsList:[{
+          index:"1",
+          xzqh:"哈哈",
+          bmcs:"ad",
+          xmmc:"ds",
+          nd:"2018",
+          xmbh:"54",
+          xmze:"100",
+          kssj:"2018-01-01",
+          jssj:"2018-02-02"
+        }],
+        seatch_nd:"",
+        seatch_name:"",
+        newModal:false,
+        editModal:false,
+        editTitle:"",
+        textTit: "",
+        pageNo:1,
+        pageSize:10,
+        totalCount:1
+      }
+    },
+    methods:{
+      changeModal(){
+        this.editModal = true;
+        this.editTitle = "修改"
+      },
+      newMember(){
+         this.newModal = true;
+         this.textTit = "新建"
+      },
+      searchFun(){
+
+      },
+      applyform(){
+
+      },
+      handleCurrentChange(){
+
+      },
+       editToggle(val) {
+            this.editModal = val;
+        },
+         newToggle(val) {
+            this.newModal = val;
+        },
+    }
+}
+</script>
+<style lang="scss" scoped>
+#instiuTion {
+    label {
+        display: inline-block;
+        text-align: right;
+    }
+    .user-list {
+        margin-top: 2%;
+    }
+}
+</style>
+
+

@@ -1,0 +1,198 @@
+<template>
+    <div class="source">
+        <div class="source_tree">
+            <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick" :expand-on-click-node="false">
+                <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <span>{{ node.label }}</span>
+                    <span>
+                        <i class="el-icon-plus" @click="() => append(data)"></i>
+                        <i class="el-icon-delete" @click="() => remove(node, data)"></i>
+                    </span>
+                </span>
+            </el-tree>
+        </div>
+        <div class="source_form">
+            <el-form :inline="true" :model="formData" label-width="120px" ref="treeForm" class="demo-form-inline" :rules="rules">
+                <el-row>
+                    <el-col :span="12" :offset="2">
+                        <el-form-item label="行政区划名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="行政区划名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+
+                </el-row>
+                <el-row>
+                    <el-col :span="12" :offset="2">
+                        <el-form-item label="行政区划编码" prop="bm">
+                            <el-input v-model="formData.bm" placeholder="行政区划编码"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12" :offset="2">
+                        <el-form-item label="备注" prop="bz">
+                            <el-input type="textarea" :autosize="{ minRows: 5}" v-model="formData.bz" placeholder="备注"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10" :offset="5">
+                        <el-form-item label="." class="none">
+                            <el-button type="primary" @click="formSave">确定</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+    </div>
+</template>
+<script>
+import { treeQuery, formSave,deleteTree } from "@/api/administrative";
+export default {
+    data() {
+        return {
+            pid: "",
+            pureClick: true,
+            formData: {},
+            treeData: [],
+            rules: {
+                bm: [
+                    { required: true, message: "编码不能为空" },
+                    { type: "number", message: "编码必须为数字值" }
+                ],
+                name: [{ required: true, message: "不能为空" }]
+            }
+        };
+    },
+    methods: {
+        append(data) {
+            this.pid = data.bm;
+            this.pureClick = false;
+            const newChild = { label: "新增节点"};
+            data.children.push(newChild);
+        },
+        remove(node, data) {
+            this.pureClick = false;
+            // const parent = node.parent;
+            // const children = parent.data.children || parent.data;
+            // const index = children.findIndex(d => d.id === data.id);
+            // children.splice(index, 1);
+            this.$confirm("你确定删除吗?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            })
+            .then(()=>{
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+                deleteTree({bm:data.bm})
+                 this.treeQuery();
+            })
+            .catch(() =>{
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });      
+            })
+            
+        },
+        nodeClick(data) {
+            this.$refs.treeForm.resetFields();
+            if (this.pureClick) {
+                this.formData = Object.assign({}, data);
+            } else {
+                
+                this.formData = {};
+                // delete this.formData.id;
+                // delete this.formData.label;
+                // delete this.formData.children;
+                this.pureClick = true;
+            }
+        },
+        treeQuery() {
+            treeQuery().then(res => {
+                let data = res.data;
+                if (data) {
+                    this.treeData = data;
+                    this.formData = Object.assign({}, data[0]);
+                    this.$refs.treeForm.resetFields();
+                }
+            });
+        },
+         formSave() {
+            this.$refs.treeForm.validate(valid => {
+                if (valid) {
+                    let _this = this;
+                    let url = "update";
+                    let obj = Object.assign({}, this.formData);
+                    if (!obj.id) {
+                        url = "add";
+                        obj.parentId = this.pid;
+                    }
+                    if (
+                        obj.parentId !=
+                            (obj.bm+"").substring(0, (obj.parentId + "").length) ||
+                        (obj.bm + "").length != (obj.parentId + "").length + 2
+                    ) {
+                        this.$message({
+                            showClose: true,
+                            message: "请输入正确的行政区划编码~",
+                            duration: 4000,
+                            type: "error"
+                        });
+                        return;
+                    }
+                    formSave(url, obj).then(res => {
+                        let data = res.data;
+                        if (data.success) {
+                            _this.formData = {};
+                            _this.treeQuery();
+                            _this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    },
+    mounted() {
+        this.treeQuery();
+        this.$refs.tree.setCheckedKeys([14]);
+    }
+};
+</script>
+<style lang="scss" scoped>
+.source {
+    height: 100%;
+    .source_tree {
+        float: left;
+        width: 350px;
+    }
+    .source_form {
+        float: left;
+        width: calc(100% - 350px);
+        height: 100%;
+        padding: 20px;
+        border-left: 1px dotted #999;
+    }
+}
+</style>
+<style lang="scss">
+.source {
+    .el-form-item {
+        width: 100%;
+        .el-form-item__content {
+            width: 70%;
+        }
+        &.none {
+            .el-form-item__label {
+                color: transparent;
+            }
+        }
+    }
+}
+</style>

@@ -1,0 +1,50 @@
+<template>
+    <div class="detxmxy">
+        <el-table :data="xmxyList" stripe border style="width: 100%">
+            <el-table-column type="index" label="序号" width="80"></el-table-column>
+            <el-table-column prop="xzqh" label="项目名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="bmcs" label="项目编号" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmmc" label="新增利润" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="nd" label="新增产能" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmbh" label="新增技术" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmze" label="行政区划" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="kssj" label="部门科室" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="kssj" label="录入人" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="kssj" label="录入时间" show-overflow-tooltip></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button size="mini" type="primary">详情</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="user-page fr">
+            <el-pagination @current-change="xmxyChange" :current-page.sync="xmxyFrom.pageNo" :page-size="xmxyFrom.pageSize" layout="total, prev, pager, next" :total="totalCount">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+
+
+<script>
+export default {
+  data() {
+    return {
+      xmxyList: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        }
+      ],
+      totalCount: 0,
+      xmxyFrom: {
+        pageNo: 1,
+        pageSize: 5
+      }
+    };
+  },
+  methods: {
+    xmxyChange() {}
+  }
+};
+</script>

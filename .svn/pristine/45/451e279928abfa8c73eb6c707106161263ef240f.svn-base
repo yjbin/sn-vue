@@ -1,0 +1,424 @@
+<template>
+  <div class="ProcessinstiuTion">
+    <div v-bind:class="{boxFist:fistActive}">
+
+      <div class="demo-input-suffix">
+        <label>年度
+        </label>
+        <el-select suffix-icon="el-icon-date" v-model="seatch_nd">
+          <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <label>项目名称
+
+        </label>
+        <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seatch_name" style="width:20%">
+        </el-input>
+
+        <el-button type="primary" style="margin-left:2%" @click="searchFun">查询</el-button>
+      </div>
+      <div class="user-list">
+        <el-table :data="xmgsList" stripe border style="width: 100%">
+          <el-table-column type="index" label="序号" width="80"></el-table-column>
+          <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划" effect="dark" content="Top Center 提示文字" placement="top"></el-table-column>
+          <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室"></el-table-column>
+          <el-table-column prop="xmmc" label="项目名称"></el-table-column>
+          <el-table-column prop="nd" label="年度"></el-table-column>
+          <el-table-column prop="xmbh" label="项目编号"></el-table-column>
+          <el-table-column prop="xmze" label="项目总额(万元)"></el-table-column>
+          <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间"></el-table-column>
+          <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间"></el-table-column>
+          <el-table-column prop="address" label="操作" width="150">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="changeModal(scope.row)">进度</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="user-page fr">
+          <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+          </el-pagination>
+        </div>
+      </div>
+    </div>
+    <div v-bind:class="{boxSecond:secondActive}">
+      <div class="capit-tit">
+        <el-row>
+          <el-col :span="12">
+            <div class="user-left">
+              <span>进度列表</span>
+
+            </div>
+          </el-col>
+          <el-button class="backBtn" size="mini" type="primary" @click="backBtn()">返回</el-button>
+        </el-row>
+
+      </div>
+      <div class="capit-list">
+        <el-table :data="xmjdList" stripe border style="width: 100%">
+          <el-table-column type="index" :index="indexMethod2" label="序号" width="80"></el-table-column>
+          <el-table-column prop="xmmc" label="项目名称"></el-table-column>
+          <el-table-column prop="xmbh" label="项目编号"></el-table-column>
+          <el-table-column prop="xmjd" label="项目进度"></el-table-column>
+          <el-table-column prop="kssj" label="开始时间" :formatter="ksformatterData"></el-table-column>
+          <el-table-column prop="jssj" label="结束时间" :formatter="jsformatterData"></el-table-column>
+          <el-table-column prop="lrr" label="录入人"></el-table-column>
+          <el-table-column prop="lrsj" label="录入时间" :formatter="lrformatterData"></el-table-column>
+          <el-table-column prop="wgnr" label="完工内容"></el-table-column>
+          <el-table-column prop="address" label="操作" width="150">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="xmjdEdit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="xmjdDel(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="user-page fr">
+          <el-pagination @current-change="handleCurrentChange2" :current-page.sync="pageNo2" :page-size="pageSize2" layout="total, prev, pager, next" :total="totalCount2">
+          </el-pagination>
+        </div>
+      </div>
+      <div class="capit-tit" style="margin:44px 0 20px 0">
+        <el-row>
+          <el-col :span="12">
+            <div class="user-left">
+              <span>进度详情</span>
+            </div>
+          </el-col>
+          <el-button class="backBtn" size="mini" type="primary" @click="xmjdAddInt()">新增</el-button>
+        </el-row>
+      </div>
+      <el-form :inline="true" :model="xmjdFrom" ref="zjlyForm" class="demo-form-inline" label-width="30%" :rules="rulesDic">
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="项目名称" prop="xmmc">
+              <el-input v-model="xmjdFrom.xmmc" placeholder="项目名称" :disabled="true"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="项目编号" prop="xmbh">
+              <el-input v-model="xmjdFrom.xmbh" placeholder="项目编号" :disabled="true"></el-input>
+
+            </el-form-item>
+
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="进度" prop="xmjd">
+              <el-input v-model="xmjdFrom.xmjd" placeholder="进度"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="开始时间" prop="kssj">
+              <el-date-picker v-model="xmjdFrom.kssj" type="date" placeholder="开始时间"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="结束时间" prop="jssj">
+              <el-date-picker v-model="xmjdFrom.jssj" type="date" placeholder="结束时间"></el-date-picker>
+            </el-form-item>
+
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="录入人" prop="lrr">
+              <el-input v-model="xmjdFrom.lrr" placeholder="录入人" :disabled="true"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="录入时间" prop="lrsj">
+              <el-date-picker id="xdsysj" v-model="xmjdFrom.lrsj" type="date" placeholder="录入时间" :disabled="true"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="完工内容" prop="wgnr">
+              <el-input type="textarea" :rows="4" v-model="xmjdFrom.wgnr" placeholder="完工内容"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+      </el-form>
+      <span slot="footer" class="dialog-footer" style="margin-left:50%;">
+        <el-button type="primary" @click="btn_xmjdSave">保 存</el-button>
+        <el-button @click="dialogVisible=false">取 消</el-button>
+      </span>
+    </div>
+  </div>
+</template>
+<script>
+import { xmlbList } from "@/api/projectOutline";
+import {
+    xmjdSelect,
+    xmjdAdd,
+    xmjdUpdate,
+    xmjdDell
+} from "@/api/projectProcess";
+import { doCreate, getDicTab } from "@/utils/config";
+import { formatDate } from "@/utils/data";
+
+export default {
+    data() {
+        return {
+            xmgsList: [],
+            xmjdList: [],
+            xmjdFrom: {},
+            seatch_nd: "",
+            seatch_name: "",
+            fistActive: false,
+            secondActive: true,
+            newModal: false,
+            editModal: false,
+            addUpdatePd: true,
+            editTitle: "",
+            textTit: "",
+            pageNo: 1,
+            pageSize: 10,
+            totalCount: 1,
+            pageNo2: 1,
+            pageSize2: 4,
+            totalCount2: 10,
+            ndOptions: [],
+            editObj: {},
+            xmid: "",
+            xmmc: "",
+            xmbh: "",
+            rulesDic: {}
+        };
+    },
+    methods: {
+        ksformatterData(row) {
+            return formatDate(row.kssj, "yyyy-MM-dd");
+        },
+        jsformatterData(row) {
+            return formatDate(row.jssj, "yyyy-MM-dd");
+        },
+        lrformatterData(row) {
+            return formatDate(row.lrsj, "yyyy-MM-dd");
+        },
+        getXzqh(row) {
+            return getDicTab("xzqh", row.xzqh);
+        },
+        getBmbm(row) {
+            return getDicTab("bmbm", row.bmbm);
+        },
+        formatterDatekssj(row) {
+            return formatDate(row.kssj, "yyyy-MM-dd");
+        },
+        formatterDatejssj(row) {
+            return formatDate(row.jssj, "yyyy-MM-dd");
+        },
+        handleCurrentChange(val) {
+            this.pageNo = val;
+        },
+        handleCurrentChange2(val) {
+            this.pageNo2 = val;
+            this.changeModal();
+        },
+        indexMethod(index) {
+            let start = (this.pageNo - 1) * this.pageSize;
+            return start + index + 1;
+        },
+        indexMethod2(index) {
+            let start = (this.pageNo2 - 1) * this.pageSize2;
+            return start + index + 1;
+        },
+        getList(val) {
+            let obj = {
+                pageSize: this.pageSize,
+                pageNo: this.pageNo
+                // xzqh: this.$store.state.user.user.uUser.xzqh,
+                // bm: this.$store.state.user.user.uUser.bmbm,
+                // fgks: "0"
+            };
+            this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
+            this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
+            xmlbList(obj).then(res => {
+                this.xmgsList = res.data.data.elements;
+                this.totalCount = res.data.data.totalCount;
+            });
+        },
+        searchFun() {
+            this.getList();
+        },
+        btn_xmjdSave(row) {
+            if (this.addUpdatePd === true) {
+                let obj = Object.assign({}, this.xmjdFrom);
+                obj.xmid = this.xmid;
+                xmjdAdd(obj).then(res => {
+                    let data = res.data;
+                    if (data.success) {
+                        this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+                        this.addUpdatePd = true;
+                        this.xmjdFrom = {};
+                        this.changeModal();
+                        this.xmjdFromInt();
+                    } else {
+                        this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+                    }
+                });
+            } else {
+                let obj = Object.assign({}, this.xmjdFrom);
+                obj.xmid = this.xmid;
+                xmjdUpdate(obj).then(res => {
+                    let data = res.data;
+                    if (data.success) {
+                        this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+                        this.addUpdatePd = true;
+                        this.xmjdFrom = {};
+                        this.changeModal();
+                        this.xmjdFromInt();
+                    } else {
+                        this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+                    }
+                });
+            }
+        },
+        xmjdEdit(row) {
+            let obj = Object.assign({}, row);
+            this.xmjdFrom = obj;
+            this.addUpdatePd = false;
+        },
+        xmjdDel(row) {
+            xmjdDell({ id: row.id }).then(res => {
+                let data = res.data;
+                this.$message({
+                    message: data.msg,
+                    type: "success"
+                });
+                this.xmjdFrom = {};
+                this.changeModal();
+                this.xmjdFromInt();
+                this.addUpdatePd = true;
+            });
+        },
+        xmjdAddInt() {
+            this.xmjdFrom = {};
+            this.addUpdatePd = true;
+            this.xmjdFromInt();
+        },
+        changeModal(row) {
+            if (row) {
+                this.xmid = row.id;
+                this.xmmc = row.xmmc;
+                this.xmbh = row.xmbh;
+                this.xmjdFrom = {};
+                this.xmjdFromInt();
+            }
+            let obj = {
+                pageNo: this.pageNo2,
+                pageSize: this.pageSize2,
+                xmid: this.xmid
+            };
+
+            xmjdSelect(obj).then(res => {
+                this.xmjdList = res.data.msg.data;
+                this.totalCount2 = res.data.msg.totalCount;
+            });
+
+            this.fistActive = true;
+            this.secondActive = false;
+        },
+        backBtn() {
+            this.fistActive = false;
+            this.secondActive = true;
+        },
+        getNowDate() {
+            let d = new Date();
+            this.xmjdFrom.lrsj =
+                d.getFullYear() +
+                "-" +
+                (d.getMonth() + 1 < 10
+                    ? "0" + (d.getMonth() + 1)
+                    : d.getMonth() + 1) +
+                "-" +
+                (d.getDate() < 10 ? "0" + d.getDate() : d.getDate());
+        },
+        xmjdFromInt() {
+            this.getNowDate();
+            this.xmjdFrom.xmmc = this.xmmc;
+            this.xmjdFrom.xmbh = this.xmbh;
+            this.xmjdFrom.lrr = this.$store.state.user.user.uUser.username;
+        }
+    },
+    mounted() {
+        this.ndOptions = doCreate("nd");
+        this.getList();
+        this.addUpdatePd = true;
+    }
+};
+</script>
+<style lang="scss" scoped>
+.ProcessinstiuTion {
+    label {
+        display: inline-block;
+        text-align: right;
+    }
+    .user-list {
+        margin-top: 2%;
+    }
+    .boxFist {
+        display: none;
+    }
+    .boxSecond {
+        display: none;
+    }
+    .capit-tit {
+        background: #317ecc;
+        margin: 20px 0 0 0;
+        .user-left {
+            span {
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                margin: 10px 20px;
+            }
+        }
+        .backBtn {
+            float: right;
+            margin-top: 5px;
+
+            margin-right: 20px;
+        }
+    }
+}
+</style>
+<style lang="scss">
+.ProcessinstiuTion {
+    .el-form-item {
+        width: 100%;
+    }
+    .el-form-item__content {
+        width: 70%;
+    }
+    .el-date-editor--date {
+        width: 100%;
+    }
+    .el-textarea textarea {
+        width: 67.3vw;
+    }
+    .cell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+</style>
+
+

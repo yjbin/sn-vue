@@ -1,0 +1,141 @@
+<template>
+  <div class="money_details">
+    <el-tabs type="border-card" v-model="activeName">
+      <el-tab-pane label="资金详情" name="first">
+        <details-zjxq :zjxqDel="zjxqDeil"></details-zjxq>
+      </el-tab-pane>
+      <el-tab-pane label="项目概况" name="second">
+        <details-xmgk></details-xmgk>
+      </el-tab-pane>
+      <el-tab-pane label="项目进度" name="third">
+        <el-table :data="xmjdList" stripe border style="width: 100%">
+          <el-table-column type="index" label="序号" width="80"></el-table-column>
+          <el-table-column prop="xzqh" label="项目名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="bmcs" label="项目编号" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xmmc" label="项目进度(%)" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="nd" label="开始时间" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xmbh" label="结束时间" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xmze" label="录入人" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="kssj" label="录入时间" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="jssj" label="完工内容" show-overflow-tooltip></el-table-column>
+        </el-table>
+        <div class="user-page fr">
+          <el-pagination @current-change="xmjdChange" :current-page.sync="xmjdFrom.pageNo" :page-size="xmjdFrom.pageSize" layout="total, prev, pager, next" :total="xmjdtotalCount">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="项目拨付" name="fourth">
+        <el-table :data="xmbfList" stripe border style="width: 100%">
+          <el-table-column type="index" label="序号" width="80"></el-table-column>
+          <el-table-column prop="xzqh" label="项目名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="bmcs" label="项目编号" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xmmc" label="资金名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="nd" label="拨付金额(万元)" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xmbh" label="拨付人" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xmze" label="拨付时间" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="kssj" label="拨付说明" show-overflow-tooltip></el-table-column>
+        </el-table>
+        <div class="user-page fr">
+          <el-pagination @current-change="xmbfChange" :current-page.sync="xmbfFrom.pageNo" :page-size="xmbfFrom.pageSize" layout="total, prev, pager, next" :total="xmbftotalCount">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+
+<script>
+import { doCreate, moreMenu } from "@/utils/config";
+import { treeQuery } from "@/api/multistageDown";
+import detailsXmgk from "./moneyQuery_detXmgk";
+import detailsZjxq from "./moneyQuery_detZjxq";
+export default {
+    components: {
+        detailsXmgk,
+        detailsZjxq
+    },
+    data() {
+        return {
+            activeName: "first",
+            xmjdList: [],
+            xmjdtotalCount: 0,
+            xmjdFrom: {
+                pageNo: 1,
+                pageSize: 5
+            },
+
+            xmbfList: [],
+            xmbftotalCount: 0,
+            xmbfFrom: {
+                pageNo: 1,
+                pageSize: 5
+            }
+        };
+    },
+    props: {
+        zjxqDeil: {
+            default: () => {}
+        }
+    },
+    methods: {
+        xmjdChange() {},
+        xmbfChange() {}
+    }
+};
+</script>
+
+
+<style lang="scss">
+.money_details {
+    .el-form-item {
+        width: 100%;
+        .el-form-item__content {
+            width: 70%;
+            .el-cascader {
+                width: 100%;
+            }
+        }
+        & > div {
+            width: 100%;
+        }
+    }
+    .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+        color: #fff;
+    }
+    .el-tabs--border-card > .el-tabs__header {
+        background-color: #317ecc;
+    }
+    .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+        background-color: #317ecc;
+        border: 0;
+        opacity: 0.8;
+    }
+    .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+        border: 0;
+        margin: 0;
+    }
+    .el-tabs--border-card
+        > .el-tabs__header
+        .el-tabs__item:not(.is-disabled):hover {
+        color: #fff;
+        opacity: 0.8;
+    }
+
+    .el-tabs__nav {
+        display: flex;
+    }
+    .el-tabs__item {
+        flex: 1;
+        text-align: center;
+    }
+    .el-tabs__nav {
+        width: 100%;
+    }
+    .el-date-editor.el-input,
+    .el-date-editor.el-input__inner {
+        width: 100%;
+    }
+}
+</style>
+

@@ -1,0 +1,365 @@
+<template>
+  <div class="projecOutlin">
+    <el-dialog :title="editTitleText " :visible.sync="editModal" width="50%" top="9vh" :before-close="userClose">
+      <div class="user-content">
+
+        <el-form :inline="true" class="demo-form-inline" :model="editForm" ref="editForm" label-width="80px">
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="项目名称" prop="xmmc">
+                <el-input v-model="editForm.xmmc" placeholder="项目名称"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="年度" prop="nd">
+                <el-select v-model="editForm.nd" placeholder="请选择" style="width:100%">
+                  <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="项目编号" prop="xmbh">
+                <el-input v-model="editForm.xmbh" placeholder="项目编号"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="产业类别" prop="cylx">
+                <el-select v-model="editForm.cylx" placeholder="请选择" style="width:100%">
+                  <el-option v-for="(item,index) in cylxoptions" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="实施单位" prop="ssdw">
+                <el-input v-model="editForm.ssdw" placeholder="实施单位"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="负责人" prop="fzr">
+                <el-input v-model="editForm.fzr" placeholder="负责人"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="开始时间" prop="kssj">
+                <el-date-picker type="date" placeholder="开始时间" v-model="editForm.kssj" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="结束时间" prop="jssj">
+                <el-date-picker type="date" placeholder="结束时间" v-model="editForm.jssj" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="项目总额" prop="xmze">
+                <el-input v-model="editForm.xmze" placeholder="项目总额"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="中央资金" prop="zyZj">
+                <el-input v-model="editForm.zyZj" placeholder="中央资金"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="省级资金" prop="shengZj">
+                <el-input v-model="editForm.shengZj" placeholder="省级资金"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="市级资金" prop="shiZj">
+                <el-input v-model="editForm.shiZj" placeholder="市级资金"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="县级资金" prop="xianZj">
+                <el-input v-model="editForm.xianZj" placeholder="县级资金"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="乡级资金" prop="xiangZj">
+                <el-input v-model="editForm.xiangZj" placeholder="乡级资金"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="行政区划" prop="xzqh">
+                <el-select v-model="editForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                  <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="科室部门" prop="fzz">
+                <el-select v-model="editForm.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                  <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="录入人" prop="zz">
+                <el-input v-model="editForm.lrr" placeholder="录入人" readonly=""></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11" :offset="1">
+              <el-form-item label="录入时间" prop="fzz" :disabled="true">
+                <el-date-picker type="date" v-model="editForm.lrsj" placeholder="录入时间" readonly="" style="width:100%"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22" :offset="1">
+              <el-form-item label="项目地址" prop="cy">
+                <el-input v-model="editForm.xmdz" placeholder="项目地址"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22" :offset="1">
+              <el-form-item label="项目GPS" prop="cy">
+                <el-input v-model="editForm.xmGps" placeholder="项目GPS"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="23" :offset="1">
+              <el-form-item label="建设内容" prop="bt">
+                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="editForm.jsnr"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>2" @click="shengShow">省级分管科室</el-button>
+        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>4" @click="shiShow">市级分管科室</el-button>
+        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>6" @click="xianShow">县级分管科室</el-button>
+        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>9" @click="xianShow">乡级分管科室</el-button>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="userbtn_save">保 存</el-button>
+        <el-button type="primary" @click="btn_cancel">取 消</el-button>
+      </span>
+    </el-dialog>
+    <xian-Modal :xianModal="xianModal" @xianToggle="xianToggle" @xianFgks="xianFgks" :xianTit="xianTit"></xian-Modal>
+    <shi-Modal :shiModal="shiModal" @shiToggle="shiToggle" @shiFgks="shiFgks" :shiTit="shiTit"></shi-Modal>
+    <sheng-Modal :shengModal="shengModal" @shengToggle="shengToggle" @shengFgks="shengFgks" :shengTit="shengTit"></sheng-Modal>
+    <xiang-Modal :xiangModal="xiangModal" @xiangToggle="xiangToggle" @xiangFgks="xiangFgks" :xiangTit="xiangTit"></xiang-Modal>
+  </div>
+</template>
+<script>
+import { doCreate, getDicTab } from "@/utils/config";
+import xianModal from "./xianModal";
+import shiModal from "./shiModal";
+import shengModal from "./shengModal";
+import xiangModal from "./xiangModal";
+import { xmmsChange } from "@/api/projectOutline";
+export default {
+    components: {
+        xianModal,
+        shiModal,
+        shengModal,
+        xiangModal
+    },
+    data() {
+        return {
+            editModalToggle: false,
+            editTitleText: "",
+            ndoptions: [""],
+            cylxoptions: [""],
+            xzqhoptions: [],
+            bmbmoptions: [],
+            xianModal: false,
+            xiangModal: false,
+            shiModal: false,
+            shengModal: false,
+            xianTit: "",
+            xiangTit: "",
+            shiTit: "",
+            shengTit: "",
+            editForm: {
+                xmmc: "",
+                nd: "",
+                xmbh: "",
+                xmlb: "",
+                ssdw: "",
+                fzr: "",
+                kssj: "",
+                jssj: "",
+                xmze: "",
+                zyZj: "",
+                cylx:"",
+                shengZj: "",
+                shiZj: "",
+                xianZj: "",
+                xiangZj: "",
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                // xzqh1: getDicTab(
+                //     "xzqh",
+                //     this.$store.state.user.user.uUser.xzqh
+                // ),
+                // bmbm1: getDicTab(
+                //     "bmbm",
+                //     this.$store.state.user.user.uUser.xzqh +
+                //         "-" +
+                //         this.$store.state.user.user.uUser.bmbm
+                // ),
+                lrr: this.$store.state.user.user.uUser.username,
+                lrsj: "",
+                xmdz: "",
+                xmGps: "",
+                jsnr: "",
+                shengFgks: "",
+                shiFgks: "",
+                xianFgks: "",
+                xiangFgks: ""
+            }
+        };
+    },
+    props: {
+        editModal: Boolean,
+        editTitle: String,
+        editObj: {
+            default: () => {}
+        }
+    },
+    watch: {
+        editModal(val) {
+            this.editModalToggle = val;
+        },
+        editTitle(val) {
+            this.editTitleText = val;
+        },
+        editObj(val) {
+            for (let attr in val) {
+                this.editForm[attr] = val[attr];
+            }
+        }
+    },
+    methods: {
+        xianToggle(val) {
+            this.xianModal = val;
+        },
+        xiangToggle(val) {
+            this.xiangModal = val;
+        },
+        shiToggle(val) {
+            this.shiModal = val;
+        },
+        shengToggle(val) {
+            this.shengModal = val;
+        },
+        shengShow() {
+            this.shengModal = true;
+            this.shengTit = "省级分管处室";
+        },
+        shiShow() {
+            this.shiModal = true;
+            this.shiTit = "市级分管处室";
+        },
+        xianShow() {
+            this.xianModal = true;
+            this.xianTit = "县级分管处室";
+        },
+        xiangShow() {
+            this.xiangModal = true;
+            this.xiangTit = "县级分管处室";
+        },
+        shengFgks(val) {
+            this.editForm.shengFgks = val;
+        },
+        shiFgks(val) {
+            this.editForm.shiFgks = val;
+        },
+        xianFgks(val) {
+            this.editForm.xianFgks = val;
+        },
+        xiangFgks(val) {
+            this.editForm.xiangFgks = val;
+        },
+        btn_cancel() {
+            this.editModalToggle = false;
+            this.$emit("editToggle", this.editModalToggle);
+        },
+        userClose() {
+            this.btn_cancel();
+        },
+        userbtn_save() {
+            let _this = this;
+            xmmsChange(_this.editForm).then(res => {
+                let data = res.data;
+                if (data.success) {
+                    _this.btn_cancel();
+
+                    this.$message({
+                        message: data.msg,
+                        type: "success"
+                    });
+                    let obj = {
+                        pageNo: this.pageNo,
+                        pageSize: this.pageSize
+                    };
+                    this.$emit("getList", obj);
+                }
+            });
+        },
+        getNowDate() {
+            let d = new Date();
+            this.editForm.lrsj =
+                d.getFullYear() +
+                "-" +
+                (d.getMonth() + 1 < 10
+                    ? "0" + (d.getMonth() + 1)
+                    : d.getMonth() + 1) +
+                "-" +
+                (d.getDate() < 10 ? "0" + d.getDate() : d.getDate());
+        }
+    },
+    mounted() {
+        this.ndoptions = doCreate("nd");
+        this.cylxoptions = doCreate("cylb");
+        this.xzqhoptions = doCreate("xzqh");
+        this.bmbmoptions = doCreate("bmbm");
+    }
+};
+</script>
+<style lang="scss">
+.projecOutlin {
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
+    }
+    .el-dialog__body {
+        padding: 20px 20px 0 20px;
+    }
+    .el-form-item {
+        width: 100%;
+        .el-form-item__content {
+            width: 70%;
+        }
+        & > div {
+            width: 100%;
+        }
+    }
+}
+</style>
+

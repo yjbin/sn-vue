@@ -1,0 +1,87 @@
+<template>
+    <div class="xiandialog">
+        <el-dialog :title="xianTit1" :visible.sync="xianModal1" :before-close="btn_cancel">
+            <div class="source_tree">
+                <el-tree :data="treeData" node-key="id" ref="xiantree" default-expand-all show-checkbox>
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <span>{{ node.label }}</span>
+                        <span>
+                            <!-- <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                        <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i> -->
+                        </span>
+                    </span>
+                </el-tree>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="xian_save">确 定</el-button>
+                <el-button @click="btn_cancel">取 消</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<script>
+import { treeDel } from "@/api/source";
+import { treeQueryBm } from "@/api/department";
+export default {
+    data() {
+        return {
+            xianModal1: false,
+            treeData: [],
+            xianTit1: "",
+            xianFgksList: []
+        };
+    },
+    props: {
+        xianModal: Boolean,
+        xianTit: String,
+        xianChecked:Array
+    },
+    watch: {
+        xianModal(val) {
+            this.xianModal1 = val;
+        },
+        xianTit(val) {
+            this.xianTit1 = val;
+        },
+        xianChecked(val){
+            if(val.length){
+                this.$refs.xiantree.setCheckedKeys(val);
+            }
+        }
+    },
+    methods: {
+        btn_cancel() {
+            this.xianModal1 = false;
+            this.$emit("xianToggle", this.xianModal1);
+        },
+        treeQueryBm() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            treeQueryBm(obj).then(res => {
+                let data = res.data;
+                if (data) {
+                    this.treeData = data;
+                }
+            });
+        },
+        xian_save() {
+            let _this = this;
+            this.xianFgksList = [];
+            this.$refs.xiantree.getCheckedNodes().map(function(i, t) {
+                _this.xianFgksList.push(i.xzqh + ":" + i.bm);
+            });
+            this.$emit("xianToggle", this.xianModal1);
+            this.$emit("xianFgks",this.xianFgksList.toString() + ",");
+        }
+    }
+};
+</script>
+<style lang="scss">
+.xiandialog {
+    .el-dialog__body {
+        height: 600px;
+        overflow-y: auto;
+    }
+}
+</style>

@@ -1,0 +1,126 @@
+<template>
+    <div class="xiangdialog">
+        <el-dialog :title="xiangTit1" :visible.sync="xiangModal1">
+            <div class="source_tree">
+                <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all show-checkbox>
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <span>{{ node.label }}</span>
+                        <span>
+                            <!-- <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                        <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i> -->
+                        </span>
+                    </span>
+                </el-tree>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="xiang_save">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<script>
+import { treeDel } from "@/api/source";
+import { treeQuery } from "@/api/department";
+export default {
+    data() {
+        return {
+            xiangModal1: false,
+            treeData: [],
+            xiangTit1: "",
+            xiangToggle: false,
+            xiangFgks: []
+        };
+    },
+    props: {
+        xiangModal: Boolean,
+        xiangTit: String
+    },
+    watch: {
+        xiangModal(val) {
+            this.xiangModal1 = val;
+        },
+        xiangTit(val) {
+            this.xiangTit1 = val;
+        }
+    },
+    methods: {
+        append(data) {
+            this.pid = data.id;
+            this.pureClick = false;
+            const newChild = { label: "新增节点" };
+            data.children.push(newChild);
+        },
+        remove(node, data) {
+            this.pureClick = false;
+            // const parent = node.parent;
+            // const children = parent.data.children || parent.data;
+            // const index = children.findIndex(d => d.id === data.id);
+            // children.splice(index, 1);
+            this.$confirm("你确定删除吗?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    treeDel({ id: data.id }).then(() => {
+                        this.$message({
+                            type: "success",
+                            message: "删除成功!"
+                        });
+                        this.treeQuery();
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
+                });
+        },
+        nodeClick(data) {
+            if (this.pureClick) {
+                this.formData = Object.assign({}, data);
+            } else {
+                // this.$refs.treeForm.resetFields();
+                delete this.formData.id;
+                delete this.formData.children;
+                this.pureClick = true;
+            }
+        },
+        treeQuery() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            treeQuery(obj).then(res => {
+                let data = res.data;
+                if (data) {
+                    this.treeData = data;
+                }
+            });
+        },
+        xiang_save() {
+            let _this = this;
+            this.xiangToggle = false;
+            this.xiangFgks = [];
+            this.$emit("xiangToggle", this.xiangToggle);
+            this.$refs.tree.getCheckedNodes().map(function(i, t) {
+                _this.xiangFgks.push(i.xzqh + ":" + i.bm);
+            });
+            this.$emit("xiangFgks", "," + _this.xiangFgks.toString() + ",");
+        }
+    },
+    mounted() {
+        this.treeQuery();
+    }
+};
+</script>
+<style lang="scss">
+.xiangdialog {
+    .el-dialog__body {
+        height: 600px;
+        overflow-y: auto;
+    }
+}
+</style>
+
+

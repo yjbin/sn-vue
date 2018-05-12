@@ -1,0 +1,187 @@
+<template>
+    <div class="fileModal">
+        <el-dialog :title="textTit" :visible.sync="newModal" :before-close="btn_cancel">
+            <div class="dict-content">
+                <el-form :inline="true" :model="fileForm" ref="fileForm" class="demo-form-inline" label-width="120px" :rules="rulesFile">
+                    <el-row>
+                        <el-col :span="11">
+                            <el-form-item label="文件名称" prop="name">
+                                <el-input v-model="fileForm.name" placeholder="文件名称"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="年度" prop="nd">
+                                <el-select v-model="fileForm.nd" placeholder="请选择" style="width:100%">
+                                    <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="11">
+                            <el-form-item label="文件级别" prop="wjjb">
+                                <el-select v-model.number="fileForm.jb" placeholder="请选择" style="width:100%">
+                                    <el-option v-for="(item,index) in wjjboptions" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="发文文号" prop="wh">
+                                <el-input v-model="fileForm.wh" placeholder="文件名称"></el-input>
+                            </el-form-item>
+
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="11">
+                            <el-form-item label="行政区划" prop="xzqh">
+                                <el-select v-model="fileForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                                    <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+
+                            <el-form-item label="部门科室" prop="bmbm">
+                                <el-select v-model="fileForm.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                                    <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="11">
+                            <el-form-item label="发布人" prop="lrr">
+                                <el-input v-model="fileForm.lrr" placeholder="发布人" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="发布时间" prop="lrsj">
+                                <el-date-picker v-model="fileForm.lrsj" type="datetime" placeholder="发布时间" :disabled="true"></el-date-picker>
+                            </el-form-item>
+
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="22">
+                            <el-form-item label="发文说明" prop="by1">
+                                <el-input type="textarea" :rows="4" v-model="fileForm.by1" placeholder="发文说明"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="btn_fileSave">保 存</el-button>
+                <el-button @click="btn_cancel">取 消</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<script>
+import {
+    fileQuery,
+    fileAdd,
+    fileUpdate,
+    fileDel,
+    pageQuery
+} from "@/api/postManagemen/fileManagement";
+import { doCreate, getDicTab, moreMenu } from "@/utils/config";
+export default {
+    data() {
+        return {
+            newModalToggle: false,
+            fileForm: {},
+            ndoptions: [],
+            wjjboptions: [],
+            xzqhoptions: [],
+            bmbmoptions: [],
+            rulesFile: {}
+        };
+    },
+    methods: {
+        btn_cancel() {
+            this.newModalToggle = false;
+            this.$emit("newToggle", this.newModalToggle);
+        },
+        btn_fileSave() {
+            let _this = this;
+            let obj = Object.assign({}, this.fileForm);
+            obj.lx = "1";
+            if (this.fileForm.id) {
+                fileUpdate(obj).then(res => {
+                    let data = res.data;
+                    if (data.success) {
+                        _this.btn_cancel();
+                        _this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+                        let objD = {
+                            pageNo: 1,
+                            pageSize: 10
+                        };
+                        _this.$emit("ListQuery", objD);
+                    }
+                });
+            } else {
+                fileAdd(obj).then(res => {
+                    let data = res.data;
+                    if (data.success) {
+                        _this.btn_cancel();
+                        this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+
+                        let objD = {
+                            pageNo: 1,
+                            pageSize: 10
+                        };
+                        _this.$emit("ListQuery", objD);
+                    }
+                });
+            }
+        }
+    },
+    props: {
+        newModal: Boolean,
+        textTit: "",
+        editObj: {
+            default: () => {}
+        }
+    },
+    watch: {
+        editObj(val) {
+            if (val) {
+                this.fileForm = Object.assign({}, val);
+            }
+        }
+    },
+    mounted() {
+        this.xzqhoptions = doCreate("xzqh");
+        this.bmbmoptions = doCreate("bmbm");
+        this.ndoptions = doCreate("nd");
+        this.wjjboptions = doCreate("wjjb");
+    }
+};
+</script>
+<style lang="scss">
+.fileModal {
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
+    }
+    .el-dialog__body {
+        padding: 20px 20px 0 20px;
+    }
+}
+</style>

@@ -1,0 +1,275 @@
+<template>
+  <div class="money_details">
+    <div v-show="secondPage">
+      <el-row>
+        <el-col>
+          <el-button class="fr mar10" size="mini" type="primary" @click="backBtn()">返回</el-button>
+        </el-col>
+      </el-row>
+      <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="项目概况" name="first">
+          <details-xmgk :xmgkList="xmgkList"></details-xmgk>
+        </el-tab-pane>
+        <el-tab-pane label="项目进度" name="second">
+          <el-table :data="xmjdList" stripe border style="width: 100%">
+            <el-table-column type="index" label="序号" width="80" :index="index_xmjd"></el-table-column>
+            <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmjd" label="项目进度(%)" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="kssj" label="开始时间" :formatter="formatterDatekssj" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="jssj" label="结束时间" :formatter="formatterDatejssj" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lrsj" label="录入时间" :formatter="formatterDatelrsj" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="wgnr" label="完工内容" show-overflow-tooltip></el-table-column>
+          </el-table>
+          <div class="mar10 fr">
+            <el-pagination @current-change="xmjdChange" :current-page.sync="xmjdFrom.pageNo" :page-size="xmjdFrom.pageSize" layout="total, prev, pager, next" :total="xmjdtotalCount">
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="项目拨付" name="third">
+          <el-table :data="xmbfList" stripe border style="width: 100%">
+            <el-table-column type="index" label="序号" width="80" :index="index_xmbf"></el-table-column>
+            <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="bfje" label="拨付金额(万元)" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="bfr" label="拨付人" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="bfsj" label="拨付时间" :formatter="formatterDatebfsj" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="bfsm" label="拨付说明"  show-overflow-tooltip></el-table-column>
+          </el-table>
+          <div class="mar10 fr">
+            <el-pagination @current-change="xmbfChange" :current-page.sync="xmbfFrom.pageNo" :page-size="xmbfFrom.pageSize" layout="total, prev, pager, next" :total="xmbftotalCount">
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="项目验收" name="fourth">
+          <details-xmys></details-xmys>
+        </el-tab-pane>
+        <el-tab-pane label="项目效益" name="five">
+          <details-xmxy></details-xmxy>
+        </el-tab-pane>
+        <el-tab-pane label="项目考核" name="six">
+          <details-xmkh></details-xmkh>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </div>
+</template>
+
+
+<script>
+import { doCreate, moreMenu } from "@/utils/config";
+import { treeQuery } from "@/api/multistageDown";
+import detailsXmgk from "./moneyTracking_detXmgk";
+import detailsXmys from "./moneyTracking_detXmys";
+import detailsXmxy from "./moneyTracking_detXmxy";
+import detailsXmkh from "./moneyTracking_detXmkh";
+import { xmlbList } from "@/api/projectOutline";
+import { appropRecord } from "@/api/projectAppropriation";
+import { xmjdSelect } from "@/api/projectProcess";
+import { formatDate } from "@/utils/data";
+export default {
+  components: {
+    detailsXmgk,
+    detailsXmys,
+    detailsXmxy,
+    detailsXmkh
+  },
+  data() {
+    return {
+      activeName: "first",
+      secondPage:false,
+      searchList:{
+         zjId:"",
+         bmbm:"",
+      },
+      xmgkList:{}, //概况
+      xmysList:[],  //验收
+      xmxyList:[],  //效益  
+      xmkhList:[],  //考核
+      xmjdList: [], //进度
+      xmjdtotalCount: 0,
+      xmid:"",
+      xmjdFrom: {
+        pageNo: 1,
+        pageSize: 5
+      },
+      xmbfList: [], //拨付
+      xmbftotalCount: 0,
+      xmbfFrom: {
+        pageNo: 1,
+        pageSize: 5
+      }
+    };
+  },
+  props: {
+      isActive: Boolean,
+      propFrom:{
+          default: () => {}
+      }
+  },
+  watch: {
+      isActive(val) {
+          this.secondPage = !val;
+      },
+      propFrom: {
+          handler:function(val){
+              if(val){
+                  this.searchList.zjId = val.zjId;
+                  this.searchList.bmbm = val.bmbm;
+                  this.getXmgkDate(this.xmbfFrom.pageNo,this.xmbfFrom.pageSize,this.searchList);
+              }
+          },
+          deep: true
+      }
+  },
+  methods: {
+    //项目概述查询xmid
+    getXmgkDate(pageNo,pageSize,option){
+        let _this = this;
+        let obj = {
+            pageNo: pageNo,
+            pageSize: pageSize
+        };
+        option.zjId ? obj.zjId = option.zjId : "";
+        option.bmbm? obj.bmbm = option.bmbm :"";
+        xmlbList(obj).then(res => {
+           let data = res.data.data.elements;
+           _this.xmgkList = Object.assign({}, data[0]);
+           if(data.length){
+              _this.xmid = res.data.data.elements[0].id;
+           }else{
+             return false
+           }
+        });
+    },
+    //选项卡点击事件
+    handleClick(tab) {
+        if(tab.name == "first"){
+          this.xmgkList = {};
+          this.getXmgkDate(this.xmbfFrom.pageNo,this.xmbfFrom.pageSize,this.searchList);
+        }else if(tab.name == "second"){
+          this.xmjdSearch(this.xmbfFrom.pageNo,this.xmbfFrom.pageSize,this.xmid);
+        }else if(tab.name == "third"){
+          this.xmbfSearch(this.xmbfFrom.pageNo,this.xmbfFrom.pageSize,this.xmid);
+        }
+    },
+    //返回
+    backBtn() {
+      this.secondPage = false;
+      this.$emit("secondPage",this.secondPage);
+        if(this.$refs.bfFrom){
+            this.$refs.bfFrom.resetFields();
+        };
+      this.searchList = {};
+    },
+    //项目拨付查询
+   xmbfSearch(pageNo,pageSize,option) {
+        let obj = {
+            pageNo: pageNo || this.xmbfFrom.pageNo,
+            pageSize: pageSize || this.xmbfFrom.pageSize
+        };
+        option ? obj.xmId = option : "";
+        appropRecord(obj).then(res => {
+            this.xmbfList = res.data.msg.data;
+            this.xmbftotalCount = res.data.msg.totalCount;
+        });
+    },
+    xmbfChange(val) {
+      this.xmbfFrom.pageNo = val;
+      this.xmbfSearch(this.xmbfFrom.pageNo,this.xmbfFrom.pageSize,this.xmid);
+    },
+    //项目进度查询
+    xmjdSearch(pageNo,pageSize,option){
+       let obj = {
+            pageNo: pageNo || this.xmjdFrom.pageNo,
+            pageSize: pageSize || this.xmjdFrom.pageSize
+        };
+        option ? obj.xmId = option : "";
+        xmjdSelect(obj).then(res => {
+            this.xmjdList = res.data.msg.data;
+            this.xmjdtotalCount = res.data.msg.totalCount;
+        });
+    },
+    xmjdChange(val) {
+      this.xmjdFrom.pageNo = val;
+      this.xmjdSearch(this.xmjdFrom.pageNo,this.xmjdFrom.pageSize,this.xmid);
+    },
+    index_xmjd(index) {
+        let start = (this.xmjdFrom.pageNo - 1) * this.xmjdFrom.pageSize ;
+        return start + index + 1;
+    },
+    index_xmbf(index) {
+        let start = (this.xmbfFrom.pageNo - 1) * this.xmbfFrom.pageSize ;
+        return start + index + 1;
+    },
+    formatterDatekssj(row){
+        return formatDate(row.kssj, "yyyy-MM-dd");
+    },
+    formatterDatejssj(row){
+        return formatDate(row.jssj, "yyyy-MM-dd");
+    },
+    formatterDatelrsj(row){
+        return formatDate(row.lrsj, "yyyy-MM-dd");
+    },
+    formatterDatebfsj(row){
+        return formatDate(row.bfsj, "yyyy-MM-dd");
+    },
+  }
+};
+</script>
+
+
+<style lang="scss">
+.money_details {
+  .el-form-item {
+    width: 100%;
+    .el-form-item__content {
+      width: 70%;
+      .el-cascader {
+        width: 100%;
+      }
+    }
+    & > div {
+      width: 100%;
+    }
+  }
+  .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+    color: #fff;
+  }
+  .el-tabs--border-card > .el-tabs__header {
+    background-color: #317ecc;
+  }
+  .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+    background-color: #317ecc;
+    border: 0;
+    opacity: 0.8;
+  }
+  .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+    border: 0;
+    margin: 0;
+  }
+  .el-tabs--border-card
+    > .el-tabs__header
+    .el-tabs__item:not(.is-disabled):hover {
+    color: #fff;
+    opacity: 0.8;
+  }
+  .el-tabs__nav {
+    display: flex;
+  }
+  .el-tabs__item {
+    flex: 1;
+    text-align: center;
+  }
+  .el-tabs__nav {
+    width: 100%;
+  }
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 100%;
+  }
+}
+</style>
+

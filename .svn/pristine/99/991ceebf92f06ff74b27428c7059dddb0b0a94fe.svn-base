@@ -1,0 +1,26 @@
+import request from '@/utils/request';
+
+//项目进度查询
+export function xmjdSelect(obj){
+    return request({
+        url: '/xmjd/select',
+        method: 'post',
+        data: obj
+    })
+}
+//项目描述修改
+export function xmmsChange(obj){
+    return request({
+        url: '/xmb/updateXmb',
+        method: 'post',
+        data: obj
+    })
+}
+//项目描述刪除
+export function xmmsDelete(obj){
+    return request({
+        url: '/xmb/delete',
+        method: 'post',
+        data: obj
+    })
+}

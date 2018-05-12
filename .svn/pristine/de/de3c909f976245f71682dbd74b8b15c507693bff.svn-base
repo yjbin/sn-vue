@@ -1,0 +1,182 @@
+<template>
+    <div class="instiuTion">
+        <div class="demo-input-suffix">
+            <label>年度
+
+            </label>
+            <el-select suffix-icon="el-icon-date" v-model="seatch_nd">
+                <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
+            <label>项目名称
+
+            </label>
+            <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seatch_name" style="width:20%">
+            </el-input>
+
+            <el-button type="primary" style="margin-left:2%" @click="searchFun">查询</el-button>
+            <el-button type="success" style="margin-left:4%" @click="newMember">新增</el-button>
+        </div>
+        <div class="user-list">
+            <el-table :data="xmgsList" stripe border style="width: 100%">
+                <el-table-column type="index" label="序号" width="80"></el-table-column>
+                <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="nd" label="年度" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="xmze" label="项目总额(万元)" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope" >
+                        <el-button size="mini" type="primary" @click="changeModal(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" type="success" @click="applyform(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="user-page fr">
+                <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+                </el-pagination>
+            </div>
+        </div>
+        <projectOutline-Modal :newModal="newModal" @newToggle="newToggle" @getList="getList" :textTit="textTit" :editObj="editObj"></projectOutline-Modal>
+        <!-- <projectOutline-Edit :editModal="editModal" @editToggle="editToggle"  @getList="getList" :editObj="editObj" :editTitle="editTitle"></projectOutline-Edit> -->
+        <!-- <institutional-apply :applyModal="applyModal" @applyToggle="applyToggle" :applyTitle="applyTitle"></institutional-apply> -->
+    </div>
+</template>
+<script>
+import projectOutlineModal from "./projectOutlineModal";
+// import projectOutlineEdit from './projectOutlineEdit';
+import { xmlbList, xmmsDelete } from "@/api/projectOutline";
+import { doCreate, getDicTab } from "@/utils/config";
+import { formatDate } from "@/utils/data";
+
+export default {
+    components: {
+        projectOutlineModal
+    },
+    data() {
+        return {
+            xmgsList: [],
+            seatch_nd: "",
+            seatch_name: "",
+            newModal: false,
+            editModal: false,
+            editTitle: "",
+            textTit: "",
+            pageNo: 1,
+            pageSize: 10,
+            totalCount: 1,
+            ndOptions: [],
+            editObj: {}
+        };
+    },
+    methods: {
+        changeModal(i, t) {
+            this.newModal = true;
+            this.textTit = "修改";
+            this.editObj  = Object.assign({}, t);
+            // obj.xmlb = obj.xmlb.split(",")
+        },
+        newMember() {
+            this.newModal = true;
+            this.textTit = "新建";
+            this.editObj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                lrr:this.$store.state.user.user.uUser.username
+            };
+            this.getNowDate();
+        },
+        searchFun() {
+            this.getList();
+        },
+        applyform(index, row) {
+            let obj = {
+                id: row.id
+            };
+            xmmsDelete(obj).then(res => {
+                var data = res.data;
+                if (data.success) {
+                    this.$message({
+                        message: data.msg,
+                        type: "success"
+                    });
+                    this.getList();
+                }
+            });
+        },
+        formatterDatekssj(row) {
+            return formatDate(row.kssj, "yyyy-MM-dd");
+        },
+        formatterDatejssj(row) {
+            return formatDate(row.jssj, "yyyy-MM-dd");
+        },
+        getXzqh(row) {
+            return getDicTab("xzqh", row.xzqh);
+        },
+        getBmbm(row) {
+            return getDicTab("bmbm", row.bmbm);
+        },
+        getNowDate() {
+            let d = new Date();
+            this.editObj.lrsj =
+                d.getFullYear() +
+                "-" +
+                (d.getMonth() + 1 < 10
+                    ? "0" + (d.getMonth() + 1)
+                    : d.getMonth() + 1) +
+                "-" +
+                (d.getDate() < 10 ? "0" + d.getDate() : d.getDate());
+        },
+        handleCurrentChange(val) {
+            this.pageNo = val;
+            this.xmlbList();
+        },
+        editToggle(val) {
+            this.editModal = val;
+        },
+        newToggle(val) {
+            this.newModal = val;
+        },
+        getList(val) {
+            debugger
+            let obj = {
+                pageSize: this.pageSize,
+                pageNo: this.pageNo
+                // xzqh:this.$store.state.user.user.uUser.xzqh,
+                // bm:this.$store.state.user.user.uUser.bmbm,
+                // fgks:"0"
+            };
+            this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
+            this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
+            xmlbList(obj).then(res => {
+                this.xmgsList = res.data.data.elements;
+                this.totalCount = res.data.data.totalCount;
+            });
+        }
+    },
+    mounted() {
+        this.getList();
+        this.ndOptions = doCreate("ndTit");
+    }
+};
+</script>
+<style lang="scss" scoped>
+.instiuTion {
+    label {
+        display: inline-block;
+        text-align: right;
+    }
+    .user-list {
+        margin-top: 2%;
+    }
+   
+}
+</style>
+<style lang="scss">
+
+</style>
+
+
