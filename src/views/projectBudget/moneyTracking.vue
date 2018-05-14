@@ -9,7 +9,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="资金名称">
-          <el-input placeholder="资金名称" prefix-icon="el-icon-search" v-model="seatch_name" @keyup.enter.native="SearchList">
+          <el-input placeholder="资金名称" prefix-icon="el-icon-search" v-model.trim="seatch_name" @keyup.enter.native="SearchList">
           </el-input>
         </el-form-item>
         <el-form-item>

@@ -9,7 +9,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目名称">
-                    <el-input placeholder="项目名称" prefix-icon="el-icon-search" v-model="seatch_name">
+                    <el-input placeholder="项目名称" prefix-icon="el-icon-search" v-model.trim="seatch_name">
                     </el-input>
                 </el-form-item>
                 <el-form-item>

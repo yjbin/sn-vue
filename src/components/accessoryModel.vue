@@ -15,7 +15,7 @@
                         <el-table-column prop="address" label="操作" width="100">
                             <template slot-scope="scope">
                                 <a class="a1" :href="scope.row.href">下载</a>
-                                <span class="a2" @click="delFile(scope.row)">删除</span>
+                                <span class="a2" @click="delFile(scope.row)" v-show="upShowhide">删除</span>
                             </template>
                         </el-table-column>
                     </el-table>

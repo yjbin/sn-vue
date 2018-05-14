@@ -73,7 +73,7 @@
                 <el-row>
                     <el-form :inline="true" class="demo-form-inline"  style="margin-left:5%">
                         <el-form-item label="姓名">
-                            <el-input v-model="searchMember" placeholder="姓名"  @keyup.enter.native="search" prefix-icon="el-icon-search"></el-input>
+                            <el-input v-model.trim="searchMember" placeholder="姓名"  @keyup.enter.native="search" prefix-icon="el-icon-search"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" size="medium" @click="search">查询</el-button>

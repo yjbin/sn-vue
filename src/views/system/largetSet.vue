@@ -12,36 +12,36 @@
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item label="项目总额:" prop="xmze">
-                                            <el-input v-model="formData.xmze" placeholder="项目总额..."></el-input>
+                                            <el-input v-model.number="formData.xmze" placeholder="项目总额..."></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="中央资金:" prop="zyZj">
-                                            <el-input v-model="formData.zyZj" placeholder="中央资金..."></el-input>
+                                            <el-input v-model.number="formData.zyZj" placeholder="中央资金..."></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item label="省级资金:" prop="shengZj">
-                                            <el-input v-model="formData.shengZj" placeholder="省级资金..."></el-input>
+                                            <el-input v-model.number="formData.shengZj" placeholder="省级资金..."></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="市级资金:" prop="shiZj">
-                                            <el-input v-model="formData.shiZj" placeholder="市级资金..."></el-input>
+                                            <el-input v-model.number="formData.shiZj" placeholder="市级资金..."></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item label="县级资金:" prop="xianZj">
-                                            <el-input v-model="formData.xianZj" placeholder="县级资金..."></el-input>
+                                            <el-input v-model.number="formData.xianZj" placeholder="县级资金..."></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="乡级资金:" prop="xiangZj">
-                                            <el-input v-model="formData.xiangZj" placeholder="乡级资金..."></el-input>
+                                            <el-input v-model.number="formData.xiangZj" placeholder="乡级资金..."></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -72,19 +72,19 @@
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item label="录入人">
-                                            <el-input v-model="formData.lrr" placeholder="录入人" disabled></el-input>
+                                            <el-input v-model.trim="formData.lrr" placeholder="录入人" disabled></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="录入时间">
-                                            <el-date-picker v-model="formData.lrsj" type="datetime" placeholder="录入时间" disabled></el-date-picker>
+                                            <el-date-picker v-model.trim="formData.lrsj" type="datetime" placeholder="录入时间" disabled></el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-col :offset="11" :span="1">
+                            <el-col style="margin-left:48%" :span="1">
                                 <el-button type="primary" size="medium" @click="formSave">设置</el-button>
                             </el-col>
                         </el-row>
@@ -329,22 +329,31 @@ export default {
                     })
                         .then(() => {
                             let obj = Object.assign({}, _this.formData);
-                            obj.bmbm = _this.$store.state.user.user.uUser.bmbm;
-                            obj.xzqh = _this.$store.state.user.user.uUser.xzqh;
-                            addLarge(obj).then(res => {
-                                let data = res.data;
-                                if (data.success) {
-                                    _this.$refs.from_tab.resetFields();
-                                    _this.tabList(_this.pageSize, _this.pageNo);
-                                    this.$message({
-                                        message: data.msg,
-                                        type: "success"
-                                    });
-                                }
-                            });
+                            if(obj.xmze == obj.zyZj*1 + obj.shengZj*1 + obj.shiZj*1 + obj.xianZj*1 + obj.xiangZj*1){
+                                obj.bmbm = _this.$store.state.user.user.uUser.bmbm;
+                                obj.xzqh = _this.$store.state.user.user.uUser.xzqh;
+                                addLarge(obj).then(res => {
+                                    let data = res.data;
+                                    if (data.success) {
+                                        _this.$refs.from_tab.resetFields();
+                                        _this.tabList(_this.pageSize, _this.pageNo);
+                                        this.$message({
+                                            message: data.msg,
+                                            type: "success"
+                                        });
+                                    }
+                                });
+                            }else{
+                                this.$message({
+                                    success: "info",
+                                    message: "请确认资金总额是否等于各级单位总和"
+                                })
+                                return false
+                            }
+                            
                         })
                         .catch(() => {
-                            _this.$message({
+                            this.$message({
                                 type: "info",
                                 message: "已取消设置"
                             });

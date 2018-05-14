@@ -9,7 +9,7 @@
                 </el-select>
                 </el-form-item>
                 <el-form-item label="项目名称">
-                <el-input v-model="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
+                <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" size="medium" @click="searchFun">查询</el-button>

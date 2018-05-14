@@ -8,7 +8,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="文件名称">
-                <el-input placeholder="请输入文件名称" prefix-icon="el-icon-search" v-model="seatch_name"></el-input>
+                <el-input placeholder="请输入文件名称" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="ListQuery">查询</el-button>
