@@ -152,17 +152,17 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :offset="4" :span="2">
-                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>2" @click="shengShow">省级分管科室</el-button>
+                 <el-col :offset="4" :span="2">
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>2" @click="modelShow('sheng')">省级分管科室</el-button>
                 </el-col>
                 <el-col :offset="1" :span="2">
-                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>4" @click="shiShow">市级分管科室</el-button>
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>4" @click="modelShow('shi')">市级分管科室</el-button>
                 </el-col>
                 <el-col :offset="1" :span="2">
-                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>6" @click="xianShow">县级分管科室</el-button>
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>6" @click="modelShow('xian')">县级分管科室</el-button>
                 </el-col>
                 <el-col :offset="1" :span="2">
-                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>9" @click="xiangShow">乡级分管科室</el-button>
+                    <el-button type="primary" size="mini" v-if="xmForm.xzqh.length>9" @click="modelShow('xiang')">乡级分管科室</el-button>
                 </el-col>
             </el-row>
             <br>
@@ -193,28 +193,18 @@
             </el-row>
         </el-form>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
-
-        <sheng-Model :shengModal="shengModalShow" @shengToggle="shengToggle" :shengTit="shengTit" :shengChecked="shengChecked"></sheng-Model>
-        <shi-Model :shiModal="shiModalShow" @shiToggle="shiToggle" :shiTit="shiTit" :shiChecked="shiChecked"></shi-Model>
-        <xian-Model :xianModal="xianModalShow" @xianToggle="xianToggle" :xianTit="xianTit" :xianChecked="xianChecked"></xian-Model>
-        <xiang-Model :xiangModal="xiangModalShow" @xiangToggle="xiangToggle" :xiangTit="xiangTit" :xiangChecked="xiangChecked"></xiang-Model>
+        <levels-model :depModal="depModal" :depTit="depTit" :depcked="depcked" @depToggle="depToggle" ></levels-model>
     </div>
 </template>
 <script>
 import { doCreate, getDicTab, moreMenu } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
-import shengModel from "./moneyTracking_shengModel";
-import shiModel from "./moneyTracking_shiModel";
-import xianModel from "./moneyTracking_xianModel";
-import xiangModel from "./moneyTracking_xiangModel";
 import accessoryModel from "@/components/accessoryModel";
+import levelsModel from "@/components/levelsModel"
 export default {
     components: {
-        shengModel,
-        shiModel,
-        xianModel,
-        xiangModel,
-        accessoryModel
+        accessoryModel,
+        levelsModel
     },
     data() {
         return {
@@ -249,15 +239,6 @@ export default {
                 jsnr: "",
                 xmlb: ""
             },
-            //管理科室
-            shengTit: "",
-            shiTit: "",
-            xianTit: "",
-            xiangTit: "",
-            shengModalShow: false,
-            shiModalShow: false,
-            xianModalShow: false,
-            xiangModalShow: false,
             accessoryModalInt: false,
             upShowhide: false,
             textTitFile: "",
@@ -266,7 +247,11 @@ export default {
             shengChecked: [],
             shiChecked: [],
             xianChecked: [],
-            xiangChecked: []
+            xiangChecked: [],
+            //公共组件的传递参数
+            depModal:false,
+            depTit:"",
+            depcked:[]
         };
     },
     props: {
@@ -323,33 +308,30 @@ export default {
         }
     },
     methods: {
-        shengShow() {
-            this.shengModalShow = true;
-            this.shengTit = "省级分管处室";
+        modelShow(val){
+            this.depModal = true;
+            switch(val){
+                case "sheng":
+                    this.depTit = "省级分管处室";
+                    this.depcked = this.shengChecked;
+                break;
+                case "shi":
+                    this.depTit = "市级分管处室";
+                    this.depcked = this.shiChecked;
+                break;
+                case "xian":
+                    this.depTit = "县级分管处室";
+                    this.depcked = this.xianChecked;
+                break;
+                case "xiang":
+                    this.depTit = "乡级分管处室";
+                    this.depcked = this.xiangChecked;
+                break;
+                default:return false
+            }
         },
-        shiShow() {
-            this.shiModalShow = true;
-            this.shiTit = "市级分管处室";
-        },
-        xianShow() {
-            this.xianModalShow = true;
-            this.xianTit = "县级分管处室";
-        },
-        xiangShow() {
-            this.xiangModalShow = true;
-            this.xiangTit = "乡级分管处室";
-        },
-        shengToggle(val) {
-            this.shengModalShow = val;
-        },
-        shiToggle(val) {
-            this.shiModalShow = val;
-        },
-        xianToggle(val) {
-            this.xianModalShow = val;
-        },
-        xiangToggle(val) {
-            this.xiangModalShow = val;
+        depToggle(val){
+            this.depModal = val;
         },
 
         colseTog(val) {

@@ -2,20 +2,30 @@
     <div class="capitalSource">
         <div class="demo-input-suffix">
             <el-form :inline="true" class="demo-form-inline">
-            <el-form-item label="年度">
-                <el-select suffix-icon="el-icon-date" v-model="seatch_nd">
-                    <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
-                </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="资金名称">
-                <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="zjlyQuery">查询</el-button>
-                <el-button type="success" @click="zjlyAdd">新增</el-button>
-            </el-form-item>
-        </el-form>
+                <el-form-item label="年度">
+                    <el-select suffix-icon="el-icon-date" v-model="seatch_nd">
+                        <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="资金名称">
+                    <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="zjlyQuery">查询</el-button>
+                    <el-button type="success" @click="zjlyAdd">新增</el-button>
+                </el-form-item>
+                <el-form-item style="margin-left:10%" class="aLinkDown">
+                    <el-button type="primary">
+                        <a href="" style="color:#fff">下载模板</a>
+                    </el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-upload class="upload-demo" action="http://localhost:10000/excelZjly/uploadExcel" :on-success="handleSuccess" :show-file-list="false">
+                        <el-button type="primary">Excel导入</el-button>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
         </div>
         <div class="capit-tit">
             <el-row>
@@ -226,7 +236,7 @@
             </el-dialog>
         </div>
         <div class="role-listdialog">
-            <el-dialog :title="gjxqtit" :visible.sync="ygjVisible" :before-close="userClose" width="80%">
+            <el-dialog :title="gjxqtit" :visible.sync="ygjVisible" :before-close="userClose" width="70%">
 
                 <el-form :inline="true" class="demo-form-inline" :model="xmForm" label-width="110px">
                     <el-row>
@@ -805,6 +815,21 @@ export default {
         fileClick() {
             this.accessoryModalInt = true;
             this.textTitFile = "附件";
+        },
+        handleSuccess(res) {
+            console.log(res);
+            if (res.success) {
+                // this.fjArr.push(res.msg);
+                this.$message({
+                    message: res.msg,
+                    type: "success"
+                });
+            } else {
+                this.$message({
+                    message: res.msg,
+                    type: "warning"
+                });
+            }
         }
     },
     mounted() {

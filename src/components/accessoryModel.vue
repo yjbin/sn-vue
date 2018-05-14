@@ -1,6 +1,6 @@
 <template>
     <div class="accessoryModal">
-        <el-dialog :title="textTitText " :visible.sync="newModalToggle" width="70%" top="9vh" :before-close="userClose2">
+        <el-dialog :title="textTitText " :visible.sync="newModalToggle" :before-close="userClose2">
 
             <div class="fileBox">
                 <div class="fileBoxLift">
@@ -162,6 +162,9 @@ export default {
 <style lang="scss">
 .accessoryModal {
     .el-dialog {
+        width: 130vh;
+        height: 76vh;
+
         display: flex;
         flex-direction: column;
     }
@@ -169,11 +172,9 @@ export default {
         height: 60px;
         border-bottom: 1px solid #ccc;
     }
-    .el-dialog {
-        height: 75vh;
-    }
+   
     .el-dialog__body {
-        flex: 1;
+        height: 62vh;
         padding: 10px 10px;
         .fileBox {
             display: flex;
@@ -184,7 +185,7 @@ export default {
                 width: 400px;
                 border-right: 1px solid #ccc;
                 overflow: auto;
-                height: 590px;
+                height: 60vh;
                 .a1 {
                     color: #0011ff;
                     cursor: pointer;
@@ -196,12 +197,12 @@ export default {
             }
             .fileBoxRight {
                 flex: 1;
-
+                height: 58vh; 
                 overflow: auto;
                 .fileBoxRight_img {
                     width: 80%;
                     margin: 1% 0px 0 10%;
-                    height: 58vh;
+                 
                 }
             }
         }

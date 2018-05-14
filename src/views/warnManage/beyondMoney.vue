@@ -2,14 +2,14 @@
   <div id="beyondMoney">
     <div v-bind:class="{isShow:firstPage}">
       <el-form :inline="true" v-model="searchMember" class="demo-form-inline">
-        <el-form-item label="年度:">
-          <el-select v-model="searchMember.nd" @keyup.enter.native="search" placeholder="请输入..." suffix-icon="el-icon-search">
+        <el-form-item label="年度">
+          <el-select v-model="searchMember.nd" @keyup.enter.native="search" prefix-icon="el-icon-search">
             <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资金名称:">
-          <el-input v-model.trim="searchMember.zjmc" @keyup.enter.native="search" placeholder="名称..." suffix-icon="el-icon-search"></el-input>
+        <el-form-item label="资金名称">
+          <el-input v-model.trim="searchMember.zjmc" @keyup.enter.native="search" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" size="medium" @click="search">查询</el-button>
@@ -17,16 +17,21 @@
       </el-form>
       <div class="tabList">
         <el-table :data="tableData" stripe border style="width: 100%">
-          <el-table-column type="index" label="序号" width="80"></el-table-column>
-          <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip style="color:blue"></el-table-column>
-          <el-table-column prop="zjjb" label="资金级别" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjwh" label="资金文号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjje" label="资金金额(万元)" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sycj" label="使用层级" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xdsj" :formatter="formatterDatexdsj" label="限定时间" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zt" label="状态" show-overflow-tooltip></el-table-column>
+          <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+          <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="bmbm" label="部门处室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="zjjb" label="资金级别" :formatter="getzjjb" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="wh" label="资金文号" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="fpzj" label="资金金额(万元)" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sycj" label="使用层级" :formatter="formatersycj" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xdsysj" label="限定时间" :formatter="formaterxdsj" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="zt" label="状态">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.zt == 1" style="color:#67C23A;">已挂接</span>
+                    <span v-else style="color:#409EFF;">未挂接</span>
+                </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="detailModel(scope.row)">详情</el-button>
@@ -34,196 +39,175 @@
           </el-table-column>
         </el-table>
         <div class="fr mar10">
-          <el-pagination background @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+          <el-pagination @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
           </el-pagination>
         </div>
       </div>
     </div>
     <div v-bind:class="{isShow:secondPage}">
-      <div class="capit-tit">
-        <el-row>
-          <el-col :span="12">
-            <div class="user-left">
-              <span>考核列表</span>
-            </div>
-          </el-col>
-          <el-button class="backBtn" size="mini" type="primary" @click="backBtn()">返回</el-button>
-        </el-row>
-      </div>
-      <div class="capit-list">
-        <el-table :data="xmxyList" stripe border style="width: 100%">
-          <el-table-column type="index" :index="indexMethod_sec" label="序号" width="80"></el-table-column>
-          <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khr" label="考核人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khsj" :formatter="formatterDatekhsj" label="考核时间" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khyj" label="考核意见" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khpf" label="综合评分" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xzqh" label="行政区划" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="bmbm" label="部门科室" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="lrsj" :formatter="formatterDatelrsj" label="录入时间" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="xyEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="xyDel(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="fr">
-          <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo2" :page-size="pageSize2" layout="total, prev, pager, next" :total="totalCount2">
-          </el-pagination>
+        <div id="moneyEdit">
+        <div class="capit-tit">
+          <el-row>
+            <el-col :span="12">
+              <div class="user-left">
+                <span>超期资金详情</span>
+              </div>
+            </el-col>
+            <el-button class="backBtn" size="mini" type="success" @click="backBtn()" plain>返回</el-button>
+          </el-row>
         </div>
-      </div>
-      <div class="capit-tit" style="margin:44px 0 20px 0">
-        <el-row>
-          <el-col :span="12">
-            <div class="user-left">
-              <span>考核详情</span>
-            </div>
-          </el-col>
-          <el-button class="backBtn" size="mini" type="primary" @click="addList()">新增</el-button>
-        </el-row>
-      </div>
-      <div id="moneyEdit">
-        <el-form :inline="true" :model="xmxyFrom" ref="xmxyFrom" class="demo-form-inline" label-width="30%" :rules="rules">
-          <el-row>
-            <el-col :span="11">
-              <el-form-item label="项目名称" prop="xmmc">
-                <el-input v-model="xmxyFrom.xmmc" placeholder="项目名称" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11">
-              <el-form-item label="项目编号" prop="xmbh">
-                <el-input v-model="xmxyFrom.xmbh" placeholder="项目编号" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="11">
-              <el-form-item label="行政单位" prop="xzqh">
-                <el-input v-model="xmxyFrom.xzqh" placeholder="行政单位" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11">
-              <el-form-item label="部门科室" prop="bmbm">
-                <el-input v-model="xmxyFrom.bmbm" placeholder="部门科室" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="11">
-              <el-form-item label="录入人" prop="lrr">
-                <el-input v-model="xmxyFrom.lrr" placeholder="录入人" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11">
-              <el-form-item label="录入时间" prop="lrsj">
-                <el-date-picker type="date" v-model="xmxyFrom.lrsj" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
+         <el-form :inline="true" :model="moneyFrom" ref="moneyFrom" class="demo-form-inline" label-width="120px" :rules="rulesMoney">
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="资金名称" prop="zjmc">
+                        <el-input v-model="moneyFrom.zjmc" placeholder="资金名称"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="年度" prop="nd">
+                        <el-select v-model="moneyFrom.nd" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in ndoptions2" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="资金级别" prop="zjjb">
+                        <el-select v-model="moneyFrom.zjjb" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in zjjboptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="资金类别" prop="zjlb">
+                        <el-select v-model="moneyFrom.zjlb" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in zjlboptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
 
-          <el-row>
-            <el-col :span="11">
-              <el-form-item label="考核人" prop="khr">
-                <el-input v-model="xmxyFrom.khr" placeholder="考核人"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11">
-              <el-form-item label="考核时间" prop="khsj">
-                <el-date-picker type="date" v-model="xmxyFrom.khsj" placeholder="考核时间" style="width:100%"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="11">
-              <el-form-item label="考核结果" prop="khjg">
-                <el-select v-model="xmxyFrom.khjg" placeholder="考核结果" style="width:100%">
-                  <el-option v-for="(item,index) in khjg" :key="index" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11">
-              <el-form-item label="综合评分" prop="khpf">
-                <el-input v-model="xmxyFrom.khpf" placeholder="综合评分"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row class="textarea">
-            <el-col :span="22">
-              <el-form-item label="考核意见" prop="khyj">
-                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="xmxyFrom.khyj" placeholder="考核意见"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :offset="4" :span="3">
-              <el-button type="primary" size="medium">附件</el-button>
-            </el-col>
-          </el-row>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="资金性质" prop="zjxz">
+                        <el-select v-model="moneyFrom.zjxz" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in zjxzoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="使用层级" prop="sycj">
+                        <el-select v-model="moneyFrom.sycj" placeholder="请选择" style="width:100%">
+                            <el-option v-for="(item,index) in sycjoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="资金金额(万元)" prop="fpzj">
+                        <el-input v-model="moneyFrom.fpzj" placeholder="资金金额"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="资金文号" prop="wh">
+                        <el-input v-model="moneyFrom.wh" placeholder="资金文号"></el-input>
+                    </el-form-item>
+
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="行政区划" prop="xzqh">
+                        <el-select v-model="moneyFrom.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                            <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="部门科室" prop="bmbm">
+                        <el-select v-model="moneyFrom.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                            <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="录入人" prop="lrr">
+                        <el-input v-model="moneyFrom.lrr" placeholder="录入人" :disabled="true"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="9" :offset="2">
+                    <el-form-item label="录入时间" prop="lrsj">
+                        <el-date-picker v-model="moneyFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true"></el-date-picker>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="20" :offset="2">
+                    <el-form-item label="限定使用时间" prop="xdsysj">
+                        <el-date-picker v-model="moneyFrom.xdsysj" type="datetime" placeholder="限定使用时间"></el-date-picker>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="20" :offset="2">
+                    <el-form-item label="资金用途" prop="zjyt">
+                        <el-input type="textarea" :rows="5" v-model="moneyFrom.zjyt" placeholder="资金用途"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
         </el-form>
-        <span slot="footer" class="dialog-footer" style="margin-left:45%;">
+        <!-- <span slot="footer" class="dialog-footer" style="margin-left:45%;">
           <el-button type="primary" @click="submitForm()">保 存</el-button>
           <el-button @click="backBtn()">取 消</el-button>
-        </span>
+        </span> -->
       </div>
     </div>
   </div>
 </template>
 <script>
-import { xmlbList } from "@/api/projectOutline";
-import { assessSelect, assessDel, assessSave } from "@/api/projectAssess";
+import { bymoneySelect } from "@/api/foreWarning/beyondMoney";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-import { validateNumber } from "@/utils/validate";
+
 export default {
     data() {
         return {
             tableData: [],
-            xmxyList: [],
-            xmxyFrom: {
-                khr: "",
-                khsj: "",
-                khjg: "",
-                khpf: "",
-                khyj: ""
+            moneyFrom: {
+              
             },
             ndOptions: [],
+            ndoptions2:[],
+            zjjboptions:[],
+            sycjoptions:[],
+            zjlboptions:[],
+            zjxzoptions:[],
+            xzqhoptions:[],
+            bmbmoptions:[],
             searchMember: {
                 nd: null,
                 zjmc: null
             },
-            khjg: [
-                { label: "通过", value: "1" },
-                { label: "不通过", value: "0" }
-            ],
             firstPage: false,
             secondPage: true,
-            newModal: false,
-            editModal: false,
-            editTitle: "",
-            textTit: "",
             pageNo: 1,
             pageSize: 10,
             totalCount: 1,
-            pageNo2: 1,
-            pageSize2: 4,
-            totalCount2: 0,
-            xmid: "",
-            xmmc: "",
-            xmbh: "",
-            bmbm: "",
-            rulesXmkh: {
-                khr: [{ required: true, message: "不能为空", trigger: "blur" }],
-                khsj: [
-                    { required: true, message: "不能为空", trigger: "blur" }
-                ],
-                khjg: [
-                    { required: true, message: "不能为空", trigger: "blur" }
-                ],
-                khpf: [{ required: true, message: "不能为空", trigger: "blur"  }]
+            rulesMoney: {
+                wh: [{ required: true, trigger: "blur"}],
             }
         };
     },
@@ -232,31 +216,20 @@ export default {
             let start = (this.pageNo - 1) * this.pageSize;
             return start + index + 1;
         },
-        indexMethod_sec(index) {
-            let start = (this.pageNo2 - 1) * this.pageSize2;
-            return start + index + 1;
-        },
         getXzqh(row) {
             return getDicTab("xzqh", row.xzqh);
         },
         getBmbm(row) {
             return getDicTab("bmbm", row.bmbm);
         },
-        formatterDatekhsj(row) {
-            return formatDate(row.khsj, "yyyy-MM-dd");
+        getzjjb(row){
+            return getDicTab('zjjb',row.zjjb);
         },
-        formatterDatekssj(row) {
-            return formatDate(row.kssj, "yyyy-MM-dd");
+        formaterxdsj(row) {
+            return formatDate(row.xdsysj, "yyyy-MM-dd");
         },
-        formatterDatelrsj(row) {
-            return formatDate(row.lrsj, "yyyy-MM-dd");
-        },
-        formatterDatejssj(row) {
-            return formatDate(row.jssj, "yyyy-MM-dd");
-        },
-        handleCurrentChange(val) {
-            this.pageNo2 = val;
-            this.detailModel();
+        formatersycj(row){
+           return getDicTab('sycj',row.sycj);
         },
         currentPage(val) {
             this.pageNo = val;
@@ -266,15 +239,17 @@ export default {
         getList(pageSize, pageNo, option) {
             let obj = {
                 pageSize: pageSize,
-                pageNo: pageNo
+                pageNo: pageNo,
+                chaoqi:"1",
+                bmbm: this.$store.state.user.user.uUser.bmbm,
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",
                   option.nd ? (obj.nd = option.nd) : "")
                 : "";
-            xmlbList(obj).then(res => {
-                this.tableData = res.data.data.elements;
-                this.totalCount = res.data.data.totalCount;
+            bymoneySelect(obj).then(res => {
+                 this.tableData = res.data.msg.data;
+                 this.totalCount =  res.data.msg.totalCount;
             });
         },
         //搜索
@@ -288,114 +263,24 @@ export default {
         },
         //考核详情
         detailModel(row) {
-            if (row) {
-                this.xmid = row.id;
-                this.xmmc = row.xmmc;
-                this.xmbh = row.xmbh;
-                this.xzqh = row.xzqh;
-                this.bmbm = row.bmbm;
-                this.xmxyFrom = {};
-                this.$refs.xmxyFrom.resetFields();
-                this.xmjdFromInt(); //默认查询的参数
-            }
-            let obj = {
-                pageNo: this.pageNo2,
-                pageSize: this.pageSize2,
-                xmid: this.xmid
-            };
-            assessSelect(obj).then(res => {
-                this.xmxyList = res.data.msg.data;
-                this.totalCount2 = res.data.msg.totalCount;
-            });
+            this.moneyFrom = Object.assign({},row);
             this.firstPage = true;
             this.secondPage = false;
         },
-        addList() {
-            if (this.$refs.xmxyFrom) {
-                this.xmxyFrom = {};
-                this.$refs.xmxyFrom.resetFields();
-                this.xmjdFromInt();
-            }
-        },
-        //编辑
-        xyEdit(row) {
-            this.$refs.xmxyFrom.resetFields();
-            this.xmxyFrom = Object.assign({}, row);
-        },
-        //删除
-        xyDel(row) {
-            this.$confirm("你确定删除吗?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            })
-                .then(() => {
-                    assessDel({ id: row.id });
-                    this.$message({
-                        type: "success",
-                        message: "删除成功!"
-                    });
-                    this.$refs.xmxyFrom.resetFields();
-                    this.detailModel();
-                    this.xmjdFromInt();
-                })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除"
-                    });
-                });
-        },
-        //编辑，添加的保存
-        submitForm() {
-            this.$refs.xmxyFrom.validate(valid => {
-                if (valid) {
-                    let _this = this;
-                    let url = "update";
-                    let obj = Object.assign({}, this.xmxyFrom);
-                    if (!obj.id) {
-                        url = "add";
-                    }
-                    assessSave(url, obj).then(res => {
-                        let data = res.data;
-                        if (data.success) {
-                            _this.detailModel();
-                            // _this.xmxyFrom = {};
-                            this.$refs.xmxyFrom.resetFields();
-                            _this.xmjdFromInt();
-                            _this.$message({
-                                message: data.msg,
-                                type: "success"
-                            });
-                        }
-                    });
-                }
-            });
-        },
-        getNowDate() {
-            let d = new Date();
-            this.xmxyFrom.lrsj =
-                d.getFullYear() +
-                "-" +
-                (d.getMonth() + 1 < 10
-                    ? "0" + (d.getMonth() + 1)
-                    : d.getMonth() + 1) +
-                "-" +
-                (d.getDate() < 10 ? "0" + d.getDate() : d.getDate());
-        },
-        xmjdFromInt() {
-            this.getNowDate();
-            this.xmxyFrom.xmmc = this.xmmc;
-            this.xmxyFrom.xmbh = this.xmbh;
-            this.xmxyFrom.bmbm = this.bmbm;
-            this.xmxyFrom.xzqh = this.xzqh;
-            this.xmxyFrom.lrr = this.$store.state.user.user.uUser.username;
+         FromInt() {
+            this.ndOptions = doCreate("ndTit");
+            this.ndoptions2 = doCreate("nd");
+            this.zjjboptions = doCreate("zjjb");
+            this.zjlboptions = doCreate("zjlb");
+            this.zjxzoptions = doCreate("zjxz");
+            this.sycjoptions = doCreate("sycj");
+            this.xzqhoptions = doCreate("xzqh");
+            this.bmbmoptions = doCreate("bmbm");
+            this.cylxoptions = doCreate("cylb");
         }
     },
     mounted() {
-        this.ndOptions = doCreate("ndTit");
-        // this.khjg = doCreate("khjg");
-
+        this.FromInt();
         this.getList(this.pageSize, this.pageNo);
     }
 };
@@ -407,7 +292,7 @@ export default {
     }
     .capit-tit {
         background: #317ecc;
-        margin: 20px 0 0 0;
+        margin: 10px 0 20px 0;
         .user-left {
             span {
                 color: #fff;
@@ -421,24 +306,6 @@ export default {
             float: right;
             margin-top: 5px;
             margin-right: 20px;
-        }
-    }
-}
-</style>
-<style lang="scss">
-#moneyEdit {
-    .el-form-item {
-        width: 100%;
-        .el-form-item__content {
-            width: 70%;
-        }
-    }
-    .textarea {
-        .el-form-item__label {
-            width: 15% !important;
-        }
-        .el-form-item__content {
-            width: 85%;
         }
     }
 }

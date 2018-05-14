@@ -96,6 +96,7 @@ export default {
     watch: {
         xmxq(val) {
             this.xmid = val.id;
+            
             this.QueryListXmjd();
             this.QueryListXmbk();
         }
@@ -162,7 +163,8 @@ export default {
                     xmid: this.xmid
                 };
                 xmjdSelect(obj).then(res => {
-                    if (res.data.msg.data.length) {
+                    let data = res.data;
+                    if (data.success) {
                         this.xmjdList = res.data.msg.data;
                         this.xmjdtotalCount = res.data.msg.totalCount;
                     } else {
@@ -172,10 +174,12 @@ export default {
                 });
             } else {
                 this.xmjdList = [];
+                this.xmjdtotalCount = 0;
             }
         },
         QueryListXmbk() {
             //查询
+            let _this =this;
             if (this.xmid) {
                 let obj2 = {
                     pageNo: this.xmbfFrom.pageNo,
@@ -185,20 +189,23 @@ export default {
                 appropRecord(obj2).then(res => {
                     let data = res.data;
                     if (data.success) {
-                        if (data.msg.data.length) {
-                            this.xmbfList = data.msg.data;
-                            this.xmbftotalCount = data.msg.totalCount;
+                        
+                        if (data.success) {
+                            _this.xmbfList = data.msg.data;
+                            _this.xmbftotalCount = data.msg.totalCount;
                         } else {
-                            this.xmbfList = [];
-                            this.xmbftotalCount = 0;
+                            _this.xmbfList = [];
+                            _this.xmbftotalCount = 0;
                         }
                     }
                 });
             } else {
                 this.xmbfList = [];
+                this.xmbftotalCount = 0;
             }
         },
         handleClick(tab, event) {
+            
             if (tab.name == "third") {
                 this.QueryListXmjd();
             } else if (tab.name == "fourth") {

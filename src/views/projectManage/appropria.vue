@@ -1,157 +1,164 @@
 <template>
-  <div id="hook">
-    <div v-bind:class="{isShow:secondPage}">
-      <div class="capit-tit">
-        <el-row>
-          <el-col :span="12">
-            <div class="user-left">
-              <span>挂接资金列表</span>
+    <div id="hook">
+        <div v-bind:class="{isShow:secondPage}">
+            <div class="capit-tit">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="user-left">
+                            <span>挂接资金列表</span>
+                        </div>
+                    </el-col>
+                    <el-button class="backBtn" size="mini" type="success" @click="backBtn()" plain>返回</el-button>
+                </el-row>
             </div>
-          </el-col>
-          <el-button class="backBtn" size="mini" type="success" @click="backBtn()" plain>返回</el-button>
-        </el-row>
-      </div>
-      <div class="capit-list">
-        <el-table :data="zjList" stripe border style="width: 100%">
-          <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
-          <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjjb" label="资金级别" :formatter="formatterzjjb" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="qrje" label="挂接金额(万元)" :formatter="Numberqrje" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sjbfje" label="拨付金额(万元)" :formatter="Numbersjbfje" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjlrr" label="挂接人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zjlrsj" :formatter="formatterDatezjlrsj" label="挂接时间" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作" width="180">
-            <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="appropriate(scope.row)">拨付</el-button>
-              <el-button size="mini" type="success" @click="record(scope.row)">拨付记录</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="fr">
-          <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
-          </el-pagination>
-        </div>
-      </div>
-      <div id="hookEdit" :class="{isShow:secondPage_one}">
-          <div class="capit-tit" style="margin:44px 0 20px 0">
-            <el-row>
-            <el-col :span="12">
-                <div class="user-left">
-                <span>拨款详情</span>
+            <div class="capit-list">
+                <el-table :data="zjList" stripe border style="width: 100%">
+                    <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+                    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="zjjb" label="资金级别" :formatter="formatterzjjb" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="qrje" label="挂接金额(万元)" :formatter="Numberqrje" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="sjbfje" label="拨付金额(万元)" :formatter="Numbersjbfje" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="zjlrr" label="挂接人" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="zjlrsj" :formatter="formatterDatezjlrsj" label="挂接时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column label="操作" width="180">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="primary" @click="appropriate(scope.row)">拨付</el-button>
+                            <el-button size="mini" type="success" @click="record(scope.row)">拨付记录</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="fr">
+                    <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+                    </el-pagination>
                 </div>
-            </el-col>
-            <!-- <el-button class="backBtn" size="mini" type="primary"></el-button> -->
-            </el-row>
-        </div>
-        <el-form :inline="true" :model="bfzjFrom" ref="bfFrom" class="demo-form-inline" label-width="100px" :rules="rules">
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="项目名称" >
-                <el-input v-model="bfzjFrom.xmmc" placeholder="项目名称" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="项目编号" >
-                <el-input v-model="bfzjFrom.xmbh" placeholder="项目编号" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="资金名称" >
-                <el-input v-model="bfzjFrom.zjmc" placeholder="资金名称" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="资金余额">
-                <el-input v-model="bfzjFrom.zjye" placeholder="金额:(万元)" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="拨付金额" prop="bfje">
-                <el-input v-model="bfzjFrom.bfje" placeholder="金额:(万元)" ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="拨付人" prop="bfr">
-                <el-input v-model="bfzjFrom.bfr" placeholder="拨付人"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="拨付时间" prop="bfsj">
-                <el-date-picker type="datetime" v-model="bfzjFrom.bfsj" placeholder="拨付时间" ></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-           <el-row>
-            <el-col :span="20" :offset="2">
-              <el-form-item label="拨付说明" prop="bfsm">
-                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="bfzjFrom.bfsm" placeholder="拨付说明"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="录入人" >
-                <el-input v-model="bfzjFrom.lrr" placeholder="录入人" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="录入时间" prop="lrsj">
-                <el-date-picker type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :offset="4" :span="3">
-              <el-button type="success" size="small"  @click="fileClick">附件</el-button>
-            </el-col>
-          </el-row>
-        </el-form>
-        <span slot="footer" class="dialog-footer" style="margin-left:45%;">
-          <el-button type="primary" @click="submitForm()">保 存</el-button>
-          <el-button @click="backBtn()">取 消</el-button>
-        </span>
-      </div>
-      <div id="appropriateRecords" :class="{isShow:secondPage_two}">
-        <div class="capit-list">
-            <el-table :data="recordList" stripe border style="width: 100%">
-                <el-table-column type="index" :index="indexMethod_sec" label="序号" width="80"></el-table-column>
-                <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="bfje" label="拨付金额(万元)" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="bfr" label="拨付人" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="bfsj" :formatter="formatterDatebfsj" label="拨付时间" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="bfsm" label="拨付说明" show-overflow-tooltip></el-table-column>
-                <el-table-column label="操作" width="150">
-                    <template slot-scope="scope">
-                    <el-button size="mini" type="danger" @click="delRecord(scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div class="fr mar10">
-            <el-pagination @current-change="CurrentChange" :current-page.sync="pageNo_record" :page-size="pageSize_record" layout="total, prev, pager, next" :total="totalCount_record">
-            </el-pagination>
             </div>
+            <div id="hookEdit" :class="{isShow:secondPage_one}">
+                <div class="capit-tit" style="margin:44px 0 20px 0">
+                    <el-row>
+                        <el-col :span="12">
+                            <div class="user-left">
+                                <span>拨款详情</span>
+                            </div>
+                        </el-col>
+                        <!-- <el-button class="backBtn" size="mini" type="primary"></el-button> -->
+                    </el-row>
+                </div>
+                <el-form :inline="true" :model="bfzjFrom" ref="bfFrom" class="demo-form-inline" label-width="100px" :rules="rules">
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="项目名称">
+                                <el-input v-model="bfzjFrom.xmmc" placeholder="项目名称" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="项目编号">
+                                <el-input v-model="bfzjFrom.xmbh" placeholder="项目编号" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="资金名称">
+                                <el-input v-model="bfzjFrom.zjmc" placeholder="资金名称" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="资金余额">
+                                <el-input v-model="bfzjFrom.zjye" placeholder="金额:(万元)" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="拨付金额" prop="bfje">
+                                <el-input v-model="bfzjFrom.bfje" placeholder="金额:(万元)"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="拨付人" prop="bfr">
+                                <el-input v-model="bfzjFrom.bfr" placeholder="拨付人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="拨付时间" prop="bfsj">
+                                <el-date-picker type="datetime" v-model="bfzjFrom.bfsj" placeholder="拨付时间"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="20" :offset="2">
+                            <el-form-item label="拨付说明" prop="bfsm">
+                                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="bfzjFrom.bfsm" placeholder="拨付说明"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="录入人">
+                                <el-input v-model="bfzjFrom.lrr" placeholder="录入人" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="录入时间" prop="lrsj">
+                                <el-date-picker type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :offset="4" :span="3">
+                            <el-button type="success" size="small" @click="fileClick">附件</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer" style="margin-left:45%;">
+                    <el-button type="primary" @click="submitForm()">保 存</el-button>
+                    <el-button @click="backBtn()">取 消</el-button>
+                </span>
+            </div>
+            <div id="appropriateRecords" :class="{isShow:secondPage_two}">
+                <div class="capit-list">
+                    <el-table :data="recordList" stripe border style="width: 100%">
+                        <el-table-column type="index" :index="indexMethod_sec" label="序号" width="80"></el-table-column>
+                        <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="bfje" label="拨付金额(万元)" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="bfr" label="拨付人" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="bfsj" :formatter="formatterDatebfsj" label="拨付时间" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="bfsm" label="拨付说明" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="操作" width="150">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="danger" @click="delRecord(scope.row)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="fr mar10">
+                        <el-pagination @current-change="CurrentChange" :current-page.sync="pageNo_record" :page-size="pageSize_record" layout="total, prev, pager, next" :total="totalCount_record">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+
         </div>
-       </div>
+        <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
 
     </div>
-  </div>
 </template>
 <script>
-import { appropSelect, appropDel, appropSave,appropRecord } from "@/api/projectAppropriation";
+import {
+    appropSelect,
+    appropDel,
+    appropSave,
+    appropRecord
+} from "@/api/projectAppropriation";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-import { validateNumber,validMoney } from "@/utils/validate";
+import { validateNumber, validMoney } from "@/utils/validate";
 import accessoryModel from "@/components/accessoryModel";
 export default {
     components: {
@@ -167,42 +174,48 @@ export default {
         };
         return {
             zjList: [],
-            recordList:[],
+            recordList: [],
             bfzjFrom: {
-                bfje:"",
-                bfr:"",
-                bfsm:"",
-                zjye:""
+                bfje: "",
+                bfr: "",
+                bfsm: "",
+                zjye: ""
             },
             secondPage: true,
-            secondPage_one:true,
-            secondPage_two:true,
-            xmid:"",
-            xmzjId:"",
+            secondPage_one: true,
+            secondPage_two: true,
+            xmid: "",
+            xmzjId: "",
             pageNo: 1,
             pageSize: 4,
             totalCount: 1,
-            pageNo_record:1,
-            pageSize_record:4,
-            totalCount_record:1,
+            pageNo_record: 1,
+            pageSize_record: 4,
+            totalCount_record: 1,
             //附件
             accessoryModalInt: false,
             upShowhide: true,
             textTitFile: "",
-            fileSrc: "",      
+            fileSrc: "",
             rules: {
-                bfje: [{ required: true, trigger: "blur",validator: validOfMoney}],
+                bfje: [
+                    { required: true, trigger: "blur", validator: validOfMoney }
+                ],
                 bfr: [{ required: true, message: "不能为空", trigger: "blur" }],
-                bfsm: [{ required: true, message: "不能为空", trigger: "blur" }],
-                bfsj: [{ required: true, message: "不能为空", trigger: "blur" }],
-                lrsj: [{ required: true, message: "不能为空", trigger: "blur" }],
+                bfsm: [
+                    { required: true, message: "不能为空", trigger: "blur" }
+                ],
+                bfsj: [
+                    { required: true, message: "不能为空", trigger: "blur" }
+                ],
+                lrsj: [{ required: true, message: "不能为空", trigger: "blur" }]
             }
         };
     },
     props: {
         firstPage: Boolean,
-        propFrom:{
-           default: () => {}
+        propFrom: {
+            default: () => {}
         }
     },
     watch: {
@@ -210,10 +223,10 @@ export default {
             this.secondPage = !val;
         },
         propFrom: {
-            handler:function(val){
-                if(val){
+            handler: function(val) {
+                if (val) {
                     this.xmid = val.xmId;
-                    this.detailList(this.pageNo,this.pageSize,this.xmid);
+                    this.detailList(this.pageNo, this.pageSize, this.xmid);
                 }
             },
             deep: true
@@ -225,19 +238,19 @@ export default {
             this.secondPage = true;
             this.secondPage_one = true;
             this.secondPage_two = true;
-            this.$emit("secondPage",this.secondPage);
-            if(this.$refs.bfFrom){
+            this.$emit("secondPage", this.secondPage);
+            if (this.$refs.bfFrom) {
                 this.$refs.bfFrom.resetFields();
-            };
+            }
             this.xmid = "";
         },
         //挂接资金列表
-        detailList(pageNo,pageSize,option) {
+        detailList(pageNo, pageSize, option) {
             let obj = {
                 pageNo: pageNo,
                 pageSize: pageSize
             };
-            option ? obj.xmId = option : "";
+            option ? (obj.xmId = option) : "";
             appropSelect(obj).then(res => {
                 this.zjList = res.data.msg.data;
                 this.totalCount = res.data.msg.totalCount;
@@ -249,28 +262,32 @@ export default {
             this.secondPage_two = true;
             // this.bfzjFrom = Object.assign({}, row);
             this.xmzjId = row.xmzjId;
-            this.bfzjFrom.xmzjId = (this.xmzjId? this.xmzjId: row.xmzjId);
+            this.bfzjFrom.xmzjId = this.xmzjId ? this.xmzjId : row.xmzjId;
             this.bfzjFrom.xmmc = row.xmmc;
             this.bfzjFrom.xmbh = row.xmbh;
             this.bfzjFrom.zjmc = row.zjmc;
             this.bfzjFrom.zjid = row.zjId;
             this.bfzjFrom.xmid = this.xmid;
             this.bfzjFrom.zjye = row.zjye;
+            this.fileSrc = {
+                num: Math.random(),
+                fileStr: ""
+            };
             this.xmFromInt();
         },
         //拨付记录
-        record(row){
+        record(row) {
             this.secondPage_two = false;
             this.secondPage_one = true;
-            if(row){
-                 this.xmzjId = row.xmzjId;
+            if (row) {
+                this.xmzjId = row.xmzjId;
             }
             //查询
             let obj = {
-                pageNo:this.pageNo_record,
-                pageSize:this.pageSize_record,
-                xmzjId:this.xmzjId
-            }
+                pageNo: this.pageNo_record,
+                pageSize: this.pageSize_record,
+                xmzjId: this.xmzjId
+            };
             appropRecord(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
@@ -287,29 +304,37 @@ export default {
                     let obj = Object.assign({}, this.bfzjFrom);
                     // this.xmid ? obj.xmid = this.xmid: "";
                     // this.xmzjId ? obj.xmzjId = this.xmzjId :"";
-                    if(obj.bfje*1 > obj.zjye*1 || obj.bfje == 0){
-                         _this.$message({
+                    if (obj.bfje * 1 > obj.zjye * 1 || obj.bfje == 0) {
+                        _this.$message({
                             message: "拨付的金额不能超过剩余金额!(不为0)",
                             type: "success"
                         });
-                        return false
-                    }else{
+                        return false;
+                    } else {
                         delete obj.zjye;
                         appropSave(obj).then(res => {
                             let data = res.data;
                             if (data.success) {
-                                _this.detailList(_this.pageNo,_this.pageSize,_this.xmid);
+                                _this.detailList(
+                                    _this.pageNo,
+                                    _this.pageSize,
+                                    _this.xmid
+                                );
                                 _this.bfzjFrom = {
-                                    bfje:"",
-                                    bfr:"",
-                                    bfsm:"",
-                                    zjye:"",
-                                    lrsj:"",
-                                    bfsj:""
+                                    bfje: "",
+                                    bfr: "",
+                                    bfsm: "",
+                                    zjye: "",
+                                    lrsj: "",
+                                    bfsj: ""
                                 };
-                                if(_this.$refs.bfFrom){
+                                if (_this.$refs.bfFrom) {
                                     _this.$refs.bfFrom.resetFields();
                                 }
+                                _this.fileSrc = {
+                                    num: Math.random(),
+                                    fileStr: ""
+                                };
                                 _this.$message({
                                     message: data.msg,
                                     type: "success"
@@ -317,70 +342,78 @@ export default {
                             }
                         });
                     }
-                   
                 }
             });
         },
         //删除拨款记录
-        delRecord(row){
-            this.$confirm('此操作将删除该记录, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                     appropDel({ id: row.id }).then(res =>{
+        delRecord(row) {
+            this.$confirm("此操作将删除该记录, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    appropDel({ id: row.id }).then(res => {
                         this.record();
-                        this.detailList(this.pageNo,this.pageSize,this.xmid);
+                        this.detailList(this.pageNo, this.pageSize, this.xmid);
                         this.$message({
-                            type: 'success',
-                            message: '删除成功!'
+                            type: "success",
+                            message: "删除成功!"
                         });
-                    })
-                }).catch(() => {
+                    });
+                })
+                .catch(() => {
                     this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-            });      
+                        type: "info",
+                        message: "已取消删除"
+                    });
+                });
         },
         handleCurrentChange(val) {
             this.pageNo = val;
             this.detailList();
         },
-        CurrentChange(val){
+        CurrentChange(val) {
             this.pageNo_record = val;
             this.record();
         },
-        indexMethod_sec(index){
+        indexMethod_sec(index) {
             let start = (this.pageNo_record - 1) * this.pageSize_record;
             return start + index + 1;
         },
         indexMethod(index) {
-            let start = (this.pageNo - 1) * this.pageSize ;
+            let start = (this.pageNo - 1) * this.pageSize;
             return start + index + 1;
         },
-        Numberqrje(row){
+        Numberqrje(row) {
             return row.qrje || "0";
         },
-        Numbersjbfje(row){
+        Numbersjbfje(row) {
             return row.sjbfje || "0";
         },
-        formatterDatebfsj(row){
+        formatterDatebfsj(row) {
             return formatDate(row.bfsj, "yyyy-MM-dd");
         },
         formatterDatezjlrsj(row) {
             return formatDate(row.zjlrsj, "yyyy-MM-dd");
         },
-        formatterzjjb(row){
-            return getDicTab('zjjb',row.zjjb);
+        formatterzjjb(row) {
+            return getDicTab("zjjb", row.zjjb);
         },
         xmFromInt() {
             this.bfzjFrom.lrr = this.$store.state.user.user.uUser.nickname;
             this.bfzjFrom.lrrId = this.$store.state.user.user.uUser.id;
         },
+        colseTog(val) {
+            this.accessoryModalInt = val;
+        },
+        chileFile(val) {
+            this.xmxyFrom.fj = val;
+        },
         //附件
-        fileClick(){
-
+        fileClick() {
+            this.accessoryModalInt = true;
+            this.textTitFile = "附件";
         }
     }
 };

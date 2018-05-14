@@ -257,7 +257,7 @@ export let asyncRouterMap = [{
     name: 'beyondMoney',
     meta: {
       title: '超期资金',
-      icon: 'beyondMoney',
+      icon: '',
       rid: ""
     }
   }]

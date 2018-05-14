@@ -6,7 +6,7 @@
       <el-table-column prop="rolename" label="角色名称" show-overflow-tooltip></el-table-column>
       <el-table-column prop="remark" label="角色描述" show-overflow-tooltip></el-table-column>
     </el-table>
-    <el-pagination background layout="total,prev, pager, next" :total="totalCount" class="fr marr10" @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize"></el-pagination>
+    <el-pagination layout="total,prev, pager, next" :total="totalCount" class="fr mar10" @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize"></el-pagination>
   </div>
 </template>
 <script>
@@ -63,9 +63,7 @@ export default {
         text-align: center;
     }
 }
-.marr10 {
-    margin: 15px 3% 15px 0;
-}
+
 </style>
 
 
