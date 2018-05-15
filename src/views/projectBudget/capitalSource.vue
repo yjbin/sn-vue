@@ -17,11 +17,11 @@
                 </el-form-item>
                 <el-form-item style="margin-left:10%" class="aLinkDown">
                     <el-button type="primary">
-                        <a href="http://localhost:10000/zjlyb.xlsx" style="color:#fff" download="zjlyb">下载模板</a>
+                        <a :href="downloadUrl" style="color:#fff" download="zjlyb">下载模板</a>
                     </el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-upload class="upload-demo" action="http://localhost:10000/excelZjly/uploadExcel" :on-success="handleSuccess" :show-file-list="false">
+                    <el-upload class="upload-demo" :action="uploadUrl" :on-success="handleSuccess" :show-file-list="false">
                         <el-button type="primary">Excel导入</el-button>
                     </el-upload>
                 </el-form-item>
@@ -497,6 +497,9 @@ export default {
             pageNo2: 1,
             pageSize2: 4,
             totalCount2: 0,
+            baseUrl: process.env.BASE_URL,
+            uploadUrl: process.env.BASE_URL + "/excelZjly/uploadExcel",
+            downloadUrl: process.env.BASE_URL + "/zjlyb.xlsx",
             rulesZjly: {
                 zjmc: [{ required: true, message: "不能为空" }],
                 nd: [{ required: true, message: "不能为空" }],

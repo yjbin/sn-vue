@@ -96,9 +96,10 @@ export default {
     watch: {
         xmxq(val) {
             this.xmid = val.id;
-            
+            this.activeName = "first"; 
             this.QueryListXmjd();
             this.QueryListXmbk();
+            
         }
     },
 

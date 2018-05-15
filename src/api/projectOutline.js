@@ -31,3 +31,11 @@ export function xmmsDelete(obj){
         data: obj
     })
 }
+//查询单个项目
+export function xmbfindById(obj){
+    return request({
+        url: '/xmb/selectXmbById',
+        method: 'post',
+        data: obj
+    })
+}

@@ -75,6 +75,11 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+                    <el-row>
+                        <el-col :span="20" :offset="3">
+                            <el-button size="small" type="primary" @click="addJsdwMoudel">添加接收单位</el-button>
+                        </el-col>
+                    </el-row>
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -82,6 +87,7 @@
                 <el-button @click="btn_cancel">取 消</el-button>
             </span>
         </el-dialog>
+        <xzqhor-bm-modal :xzqhModel="xzqhModel" @xzqhOrToggle="xzqhOrToggle" @xzqhBm="xzqhBm" :modelTit="modelTit" :jsdwStr="jsdwStr"></xzqhor-bm-modal>
     </div>
 </template>
 <script>
@@ -93,15 +99,22 @@ import {
     pageQuery
 } from "@/api/postManagemen/fileManagement";
 import { doCreate, getDicTab, moreMenu } from "@/utils/config";
+import xzqhorBmModal from "./xzqhorBmModal";
 export default {
+    components: {
+        xzqhorBmModal
+    },
     data() {
         return {
             newModalToggle: false,
+            xzqhModel: false,
             fileForm: {},
             ndoptions: [],
             wjjboptions: [],
             xzqhoptions: [],
             bmbmoptions: [],
+            jsdwStr: {},
+            modelTit: "",
             rulesFile: {
                 name: [{ required: true, message: "不能为空" }],
                 nd: [{ required: true, message: "不能为空" }],
@@ -138,6 +151,7 @@ export default {
                             }
                         });
                     } else {
+                        obj.by2 = 0;
                         fileAdd(obj).then(res => {
                             let data = res.data;
                             if (data.success) {
@@ -157,6 +171,20 @@ export default {
                     }
                 }
             });
+        },
+        addJsdwMoudel() {
+            this.xzqhModel =true;
+            this.modelTit = "接收单位选择";
+            this.jsdwStr = {
+                    num:Math.random(),
+                    jsdw:this.fileForm.jsdw
+                }
+        },
+        xzqhOrToggle(val) {
+            this.xzqhModel = val;
+        },
+        xzqhBm(val){
+            this.fileForm.jsdw = val;
         }
     },
     props: {
@@ -172,8 +200,8 @@ export default {
                 if (this.$refs.fileForm) {
                     this.$refs.fileForm.resetFields();
                 }
-
                 this.fileForm = Object.assign({}, val);
+                
             }
         }
     },

@@ -123,7 +123,6 @@ import { doCreate } from "@/utils/config";
 export default {
   data() {
     return {
-      zjlyForm: {},
       ndoptions2: [],
       zjjboptions: [],
       sycjoptions: [],
@@ -132,6 +131,12 @@ export default {
       bmbmoptions:[],
       xzqhoptions:[]
     };
+  },
+  props: {
+    zjlyForm: {
+        type: Object,
+        default: () => {}
+    }
   },
   mounted() {
     this.ndoptions2 = doCreate("nd");

@@ -7,3 +7,11 @@ export function moneyQuery(obj) {
         data: obj
     })
 }
+//资金表根据主键id查询
+export function moneyById(obj) {
+    return request({
+        url: '/zjb/selectById',
+        method: 'post',
+        data: obj
+    })
+}

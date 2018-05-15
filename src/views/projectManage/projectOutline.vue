@@ -2,10 +2,10 @@
     <div class="instiuTion">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="年度">
-            <el-select v-model="seatch_nd" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
-                <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
-                </el-option>
-            </el-select>
+                <el-select v-model="seatch_nd" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="项目名称">
                 <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
@@ -27,7 +27,7 @@
                 <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
                 <el-table-column label="操作">
-                    <template slot-scope="scope" >
+                    <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="changeModal(scope.row)">编辑</el-button>
                         <el-button size="mini" type="danger" @click="applyform(scope.row)">删除</el-button>
                     </template>
@@ -80,8 +80,8 @@ export default {
             let obj = {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
-                bmbm:this.$store.state.user.user.uUser.bmbm,
-                xmlx:"0"
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                xmlx: "0"
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name.trim()) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
@@ -96,17 +96,17 @@ export default {
             this.editObj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                lrr:this.$store.state.user.user.uUser.nickname
+                lrr: this.$store.state.user.user.uUser.nickname
             };
             this.getNowDate();
         },
         changeModal(row) {
             this.newModal = true;
             this.textTit = "修改";
-            this.editObj  = Object.assign({}, row);
+            this.editObj = Object.assign({}, row);
         },
         applyform(row) {
-             let obj = {
+            let obj = {
                 id: row.id
             };
             this.$confirm("你确定删除吗?", "提示", {
@@ -114,24 +114,29 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning"
             })
-            .then(() => {
-                xmmsDelete(obj).then(res => {
-                    var data = res.data;
-                    if (data.success) {
-                        this.$message({
-                            message: data.msg,
-                            type: "success"
-                        });
-                        this.getList();
-                    }
+                .then(() => {
+                    xmmsDelete(obj).then(res => {
+                        var data = res.data;
+                        if (data.success) {
+                            this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                            this.getList();
+                        } else {
+                            this.$message({
+                                message: data.msg,
+                                type: "warning"
+                            });
+                        }
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
                 });
-            })
-            .catch(() => {
-                this.$message({
-                    type: "info",
-                    message: "已取消删除"
-                });
-            })
         },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;
@@ -151,7 +156,7 @@ export default {
         },
         getNowDate() {
             let d = new Date();
-            this.editObj.lrsj = d.getTime();      
+            this.editObj.lrsj = d.getTime();
         }
     },
     mounted() {

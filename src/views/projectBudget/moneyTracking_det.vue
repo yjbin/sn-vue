@@ -209,6 +209,7 @@ export default {
                         this.xmbfFrom.pageSize,
                         this.searchList
                     );
+                    this.activeName = "first"; 
                 }
             },
             deep: true

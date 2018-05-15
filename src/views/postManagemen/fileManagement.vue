@@ -42,9 +42,9 @@
                         <span v-else style="color:#409EFF;">未发布</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="yds" label="阅读数" show-overflow-tooltip>
+                <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick">{{scope.row.yds}}</span>
+                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick">{{scope.row.by2}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="address" label="操作" width="150">

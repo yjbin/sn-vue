@@ -7,6 +7,14 @@ export function treeQuery(obj) {
     data:obj
   })
 }
+//根据当前行政区划获取树
+export function xzqhtreeQuery(obj) {
+  return request({
+    url: '/xzqh/selectByLength',
+    method: 'post',
+    data:obj
+  })
+}
 //添加修改
 export function formSave(url, obj) {
   return request({

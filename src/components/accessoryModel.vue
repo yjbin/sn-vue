@@ -17,7 +17,7 @@
                     </el-table>
                 </div>
                 <div class="fileBoxRight">
-                     <el-upload class="upload-demo" drag :action="uploadUrl" multiple :on-success="handleSuccess" :on-exceed="handleExceed" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile" >
+                     <el-upload class="upload-demo" :action="uploadUrl" multiple :on-success="handleSuccess" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile" >
                           <i class="el-icon-upload"></i>
                          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
                     </el-upload>
@@ -133,14 +133,6 @@ export default {
                     url: this.baseUrl+"/file/downloadFile?filePath="+res.msg
                 });
             }
-        },
-        //文件超出限制的方法
-        handleExceed(files, fileList) {
-            // this.$message.warning(
-            //     `当前限制选择 3 个文件，本次选择了 ${
-            //         files.length
-            //     } 个文件，共选择了 ${files.length + fileList.length} 个文件`
-            // );
         }
     },
     mounted() {
