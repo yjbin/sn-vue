@@ -71,9 +71,9 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-form :inline="true" class="demo-form-inline"  style="margin-left:5%">
+                    <el-form :inline="true" class="demo-form-inline" style="margin-left:5%">
                         <el-form-item label="姓名">
-                            <el-input v-model.trim="searchMember" placeholder="姓名"  @keyup.enter.native="search" prefix-icon="el-icon-search"></el-input>
+                            <el-input v-model.trim="searchMember" placeholder="姓名" @keyup.enter.native="search" prefix-icon="el-icon-search"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" size="medium" @click="search">查询</el-button>
@@ -132,7 +132,7 @@ export default {
             bm_treeData: [],
             tableData: [],
             bmszNumber: [],
-            formBm:"",
+            formBm: "",
             newModal: false,
             groupObj: {},
             pageNo: 1,
@@ -162,15 +162,15 @@ export default {
             this.formBm = data.bm;
             this.pid = data.bm;
             this.pureClick = false;
-            const newChild = { label: "新增节点",bm: data.bm };
+            const newChild = { label: "新增节点", bm: data.bm };
             data.children.push(newChild);
         },
         appendTj(data) {
             this.formBm = data.parentId;
             this.pid = data.parentId;
             this.pureClick = false;
-            const newChild = { label: "新增节点",bm: data.parentId};
-            if (data.parentId=="0") {
+            const newChild = { label: "新增节点", bm: data.parentId };
+            if (data.parentId == "0") {
                 this.bm_treeData.push(newChild);
             } else {
                 this.bm_treeData.map(t => {
@@ -207,7 +207,6 @@ export default {
                             });
                             this.treeQueryBm();
                         });
-                        
                     })
                     .catch(() => {
                         this.$message({
@@ -302,13 +301,13 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                    delMember({ id: row.id }).then(res =>{
+                    delMember({ id: row.id }).then(res => {
                         this.$message({
                             type: "success",
                             message: "删除成功!"
                         });
                         this.userList(this.pageSize, this.pageNo);
-                    })                   
+                    });
                 })
                 .catch(() => {
                     this.$message({
@@ -328,6 +327,7 @@ export default {
                         obj.parentId = this.pid;
                     }
                     obj.xzqh = this.$store.state.user.user.uUser.xzqh;
+
                     if (obj.parentId != "0") {
                         if (
                             obj.parentId !=
@@ -342,7 +342,7 @@ export default {
                             this.$message({
                                 showClose: true,
                                 message: "请输入正确的部门编码编码",
-                                duration: 4000,
+                                duration: 3000,
                                 type: "error"
                             });
                             return;
@@ -355,24 +355,57 @@ export default {
                                 this.$message({
                                     showClose: true,
                                     message: "请输入正确的部门编码编码",
-                                    duration: 4000,
+                                    duration: 3000,
                                     type: "error"
                                 });
                                 return;
                             }
                         }
+                        if ((obj.parentId + "").length >= 8) {
+                            this.$message({
+                                showClose: true,
+                                message: "请输入正确的部门编码编码",
+                                duration: 3000,
+                                type: "error"
+                            });
+                            return;
+                        }
+
+                        // this.bmszNumber.map(i => {
+                        //     if (
+                        //         (obj.bm + "").length ==(obj.parentId + "").length + Number(i) && obj.parentId ==(obj.bm + "").substring(0,(obj.parentId + "").length)
+                        //     ) {
+                        //         formSave(url, obj).then(res => {
+                        //             let data = res.data;
+                        //             if (data.success) {
+                        //                 _this.formData = {};
+                        //                 _this.treeQueryBm();
+                        //                 _this.$message({
+                        //                     message: data.msg,
+                        //                     type: "success"
+                        //                 });
+                        //             }
+                        //         });
+                        //         return;
+                        //     }else{
+                        //         this.$message({
+                        //         showClose: true,
+                        //         message: "请输入正确的部门编码编码",
+                        //         type: "error"
+                        //     });
+                        //     }
+                        // });
                     } else {
                         if ((obj.bm + "").length != 3) {
                             this.$message({
                                 showClose: true,
                                 message: "请输入正确的部门编码编码",
-                                duration: 4000,
+
                                 type: "error"
                             });
                             return;
                         }
                     }
-
                     formSave(url, obj).then(res => {
                         let data = res.data;
                         if (data.success) {
@@ -394,12 +427,12 @@ export default {
         this.$refs.tree.setCurrentKey([1]);
         this.userXzqh = this.$store.state.user.user.uUser.xzqh;
         //调取部门验证规则接口
-        // xtszSelect({type:"bmbm"}).then(res=>{
-        //     let data = res.data;
-        //     if (data.success){
-        //         this.bmszNumber = data.data[0].value.split(",");
-        //     }
-        // })
+        xtszSelect({ type: "bmbm" }).then(res => {
+            let data = res.data;
+            if (data.success) {
+                this.bmszNumber = data.data[0].value.split(",");
+            }
+        });
     }
 };
 </script>

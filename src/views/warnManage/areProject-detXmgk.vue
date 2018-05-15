@@ -187,7 +187,7 @@
             <el-row>
                 <el-col :span="4" :offset="4">
                     <el-form-item prop="xzqh">
-                        <el-button type="success" size="mini" @click="fileClick">查看附件</el-button>
+                        <el-button type="success" size="mini" @click="fileClick">附件</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>

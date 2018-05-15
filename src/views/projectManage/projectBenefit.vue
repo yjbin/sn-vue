@@ -246,7 +246,7 @@
               </el-row>
               <el-row>
                 <el-col :offset="3" :span="11">
-                  <el-button type="success" size="small" @click="fileClick">查看附件</el-button>
+                  <el-button type="success" size="small" @click="fileClick">附件</el-button>
                 </el-col>
               </el-row>
             </el-col>
@@ -355,7 +355,8 @@ export default {
                 pageSize: pageSize,
                 pageNo: pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xmlx: "0"
+                xmlx: "0",
+                flag:"1"
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc.trim()) : "",

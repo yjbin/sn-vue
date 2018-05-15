@@ -50,7 +50,7 @@ export function delMember(obj){
 //部门规则设置查询
 export function xtszSelect(obj){
   return request({
-    url:'/xtsz/selectXtsz',
+    url:'/xtsz/selectXtszByType',
     method:'post',
     data:obj
   })

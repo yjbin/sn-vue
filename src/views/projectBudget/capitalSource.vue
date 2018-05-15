@@ -17,7 +17,7 @@
                 </el-form-item>
                 <el-form-item style="margin-left:10%" class="aLinkDown">
                     <el-button type="primary">
-                        <a href="" style="color:#fff">下载模板</a>
+                        <a href="http://localhost:10000/zjlyb.xlsx" style="color:#fff" download="zjlyb">下载模板</a>
                     </el-button>
                 </el-form-item>
                 <el-form-item>
@@ -671,7 +671,6 @@ export default {
             });
         },
         ygjMoudel(row) {
-            this.xmForm = {};
             let obj = {
                 pageSize: this.pageSize2,
                 pageNo: this.pageNo2,
@@ -684,17 +683,21 @@ export default {
                 if (data.success) {
                     this.ygjVisible = true;
                     this.gjxqtit = "已挂接项目详情";
-                    this.xmForm = data.data.elements[0];
-                    if (data.data.elements[0].fj) {
-                        this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: this.xmForm.fj
-                        };
-                    } else {
-                        this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: ""
-                        };
+                    if (data.data.elements.length) {
+                        this.xmForm = data.data.elements[0];
+                        if (data.data.elements[0].fj) {
+                            this.fileSrc = {
+                                num: Math.random(),
+                                fileStr: this.xmForm.fj
+                            };
+                        } else {
+                            this.fileSrc = {
+                                num: Math.random(),
+                                fileStr: ""
+                            };
+                        }
+                    }else{
+                        this.xmForm = {};
                     }
                 }
             });
@@ -714,7 +717,8 @@ export default {
                 pageNo: this.pageNo2,
                 weiguajie: 1,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xmlx: "0"
+                xmlx: "0",
+                flag: "1"
             };
             xmlbList(obj).then(res => {
                 let resArr = [];

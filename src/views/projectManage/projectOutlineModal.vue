@@ -172,7 +172,7 @@
                 </el-row>
                 <el-row>
                     <el-col :offset="3" :span="23">
-                        <el-button type="success" class="fileButtom" size="small" @click="fileClick">查看附件</el-button>
+                        <el-button type="success" class="fileButtom" size="small" @click="fileClick">附件</el-button>
                     </el-col>
                 </el-row>
             </div>

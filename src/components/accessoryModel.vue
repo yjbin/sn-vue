@@ -1,40 +1,34 @@
 <template>
     <div class="accessoryModal">
-        <el-dialog :title="textTitText " :visible.sync="newModalToggle" :before-close="userClose2">
-
+        <el-dialog :title="text_Text" :visible.sync="fileToggle" :before-close="userClose" width="68%">
             <div class="fileBox">
                 <div class="fileBoxLift">
-                    <el-table ref="multipleTable" :data="accessoryList" stripe>
-
-                        <el-table-column prop="name" label="附件名称" show-overflow-tooltip width="280">
+                    <el-table ref="multipleTable" :data="fileList" stripe>
+                        <el-table-column prop="name" label="附件名称" show-overflow-tooltip width="240">
                             <template slot-scope="scope">
-                                <span @click="seePic(scope.row)">{{scope.row.name}}</span>
+                                <span>{{scope.row.name}}</span>
                             </template>
                         </el-table-column>
-
-                        <el-table-column prop="address" label="操作" width="100">
+                        <el-table-column label="操作" width="50">
                             <template slot-scope="scope">
                                 <a class="a1" :href="scope.row.href">下载</a>
-                                <span class="a2" @click="delFile(scope.row)" v-show="upShowhide">删除</span>
                             </template>
                         </el-table-column>
                     </el-table>
-
                 </div>
                 <div class="fileBoxRight">
-                    <img :src="srcBox" alt="" class="fileBoxRight_img">
-
+                     <el-upload class="upload-demo" drag :action="uploadUrl" multiple :on-success="handleSuccess" :on-exceed="handleExceed" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile" >
+                          <i class="el-icon-upload"></i>
+                         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                    </el-upload>
                 </div>
-
             </div>
-
             <span slot="footer" class="dialog-footer" v-show="upShowhide">
-                <el-upload class="upload-demo" action="http://localhost:10000/file/ajax/upload_file" multiple :on-success="handleSuccess" :on-exceed="handleExceed" :file-list="fileList2" :show-file-list="false">
-                    <el-button size="small" type="primary">上传附件</el-button>
-                    <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-                </el-upload>
-                <el-button type="primary" size="small" @click="btn_cancel">确定</el-button>
+                <el-button type="primary" size="small" @click="btn_save">确定</el-button>
             </span>
+        </el-dialog>
+         <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="" class="fileBoxRight_img">
         </el-dialog>
     </div>
 </template>
@@ -42,12 +36,15 @@
 export default {
     data() {
         return {
-            accessoryList: [],
-            fileList2: [],
-            newModalToggle: false,
-            textTitText: "",
+            fileList: [],
+            fileToggle: false,
+            text_Text: "",
             newSrcstr: "",
-            srcBox: ""
+            dialogImageUrl: "",
+            dialogVisible:false,
+            baseUrl: process.env.BASE_URL,
+            uploadUrl: process.env.BASE_URL + "/file/ajax/upload_file"
+
         };
     },
     props: {
@@ -60,25 +57,26 @@ export default {
     },
     watch: {
         newModal(val) {
-            this.newModalToggle = val;
+            this.fileToggle = val;
         },
         textTitFile(val) {
-            this.textTitText = val;
+            this.text_Text = val;
         },
         fileSrc: {
             handler: function(val) {
-                this.accessoryList = [];
-                this.srcBox = "";
+                this.fileList = [];
+                this.dialogImageUrl = "";
                 if (val.fileStr) {
                     let srcArr = val.fileStr.split(";");
                     srcArr.map(i => {
                         let fileName = i.split("_");
-                        this.accessoryList.push({
+                        this.fileList.push({
                             name: fileName[1],
                             href:
-                                "http://localhost:10000/file/downloadFile?filePath=" +
+                                this.baseUrl+"/file/downloadFile?filePath=" +
                                 i,
-                            src: i
+                            src:i,
+                            url:this.baseUrl+ "/file/downloadFile?filePath="+i
                         });
                     });
                 }
@@ -88,53 +86,55 @@ export default {
     },
 
     methods: {
-        btn_cancel() {
-            this.newModalToggle = false;
+        btn_save() {
+            this.fileToggle = false;
             this.newSrcstr = "";
-            if (this.accessoryList.length) {
-                this.accessoryList.map(i => {
+            if (this.fileList.length) {
+                this.fileList.map(i => {
                     this.newSrcstr += i.src + ";";
                 });
             } else {
                 this.newSrcstr = "";
             }
-
             if (this.newSrcstr) {
                 this.newSrcstr = this.newSrcstr.substring(
                     0,
                     this.newSrcstr.length - 1
                 );
             }
-
             this.$emit("chileFile", this.newSrcstr);
-            this.$emit("colseTog", this.newModalToggle);
+            this.$emit("colseTog", this.fileToggle);
         },
-        userClose2() {
-            this.newModalToggle = false;
-            this.$emit("colseTog", this.newModalToggle);
+        userClose() {
+            this.fileToggle = false;
+            this.$emit("colseTog", this.fileToggle);
         },
-        seePic(rows) {
-            this.srcBox =
-                "http://localhost:10000/file/downloadFile?filePath=" + rows.src;
+        //查看
+        handlePictureCardPreview(file){
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
         },
-        delFile(row) {
-            this.accessoryList.remove(row);
-            this.srcBox = "";
+        //删除
+        delFile(file, fileList) {
+            this.fileList.remove(file);
+            this.dialogImageUrl = "";
         },
+        //上传成功回调
         handleSuccess(res) {
-            console.log(res);
             if (res.success) {
                 // this.fjArr.push(res.msg);
                 let fileName = res.msg.split("_");
-                this.accessoryList.push({
+                this.fileList.push({
                     name: fileName[1],
                     href:
-                        "http://localhost:10000/file/downloadFile?filePath=" +
+                        this.baseUrl+"/file/downloadFile?filePath=" +
                         res.msg,
-                    src: res.msg
+                    src: res.msg,
+                    url: this.baseUrl+"/file/downloadFile?filePath="+res.msg
                 });
             }
         },
+        //文件超出限制的方法
         handleExceed(files, fileList) {
             // this.$message.warning(
             //     `当前限制选择 3 个文件，本次选择了 ${
@@ -161,20 +161,11 @@ export default {
 </script>
 <style lang="scss">
 .accessoryModal {
-    .el-dialog {
-        width: 130vh;
-        height: 76vh;
-
-        display: flex;
-        flex-direction: column;
-    }
     .el-dialog__header {
         height: 60px;
         border-bottom: 1px solid #ccc;
     }
-   
     .el-dialog__body {
-        height: 62vh;
         padding: 10px 10px;
         .fileBox {
             display: flex;
@@ -182,22 +173,20 @@ export default {
             height: 100%;
 
             .fileBoxLift {
-                width: 400px;
+                width: 300px;
                 border-right: 1px solid #ccc;
-                overflow: auto;
+                overflow-y: auto;
                 height: 60vh;
                 .a1 {
                     color: #0011ff;
-                    cursor: pointer;
-                }
-                .a2 {
-                    color: rgb(255, 0, 0);
                     cursor: pointer;
                 }
             }
             .fileBoxRight {
                 flex: 1;
                 height: 58vh; 
+                padding:10px;
+                box-sizing:border-box;
                 overflow: auto;
                 .fileBoxRight_img {
                     width: 80%;
@@ -210,21 +199,13 @@ export default {
     .el-dialog {
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
+    .el-upload-dragger{
+        width:150px;
+        height:150px;
+    }
     .el-dialog__footer {
         border-top: 1px solid #ccc;
         height: 60px;
-        // .saveBut {
-        //     position: relative;
-        //     right: 1px;
-        //     bottom: 36px;;
-        // }
-        // .upload-demo{
-        //     width: 80%
-        // }
-        .upload-demo {
-            width: 80%;
-            float: left;
-        }
     }
 }
 </style>
