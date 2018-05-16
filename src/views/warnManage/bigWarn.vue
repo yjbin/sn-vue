@@ -75,7 +75,7 @@ export default {
             seatch_nd: "",
             seatch_name: "",
             pageNo: 1,
-            pageSize: 5,
+            pageSize: 10,
             totalCount: 0,
             tableData: [],
             propFrom:{},
@@ -117,7 +117,7 @@ export default {
               if (data) {
                   _this.xmgkList = Object.assign({}, data);
               }else{
-                _this.$message({
+                  _this.$message({
                       message: "未查询到此项目",
                       type: "success"
                   })

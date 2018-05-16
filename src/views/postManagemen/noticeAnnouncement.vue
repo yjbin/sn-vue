@@ -177,6 +177,8 @@ export default {
             let obj = {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
                 lx: "0",
                 nd: this.seatch_nd,
                 name: this.seatch_name

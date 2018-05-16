@@ -33,10 +33,10 @@ export default {
     min-width: 1000px;
 
     .layout_navBar {
-        height: 60px;
+        height: 80px;
     }
     .layout_body {
-        height: calc(100% - 60px);
+        height: calc(100% - 80px);
         .layout_sideBar {
             float: left;
             height: 100%;

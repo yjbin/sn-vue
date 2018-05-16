@@ -284,11 +284,16 @@ export default {
                 // bm: this.$store.state.user.user.uUser.bmbm,
                 // fgks: "0"
             };
-            this.seatch_name ? (obj.xmmc = this.seatch_name.trim()) : "";
+            this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
             xmlbList(obj).then(res => {
-                this.xmgsList = res.data.data.elements;
-                this.totalCount = res.data.data.totalCount;
+                if(res.data.data.elements.length){
+                     this.xmgsList = res.data.data.elements;
+                     this.totalCount = res.data.data.totalCount;
+                }else{
+                    this.xmgsList = [];
+                    this.totalCount = 0;
+                }
             });
         },
         searchFun() {

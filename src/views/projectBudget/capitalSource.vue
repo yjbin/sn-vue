@@ -17,7 +17,7 @@
                 </el-form-item>
                 <el-form-item style="margin-left:10%" class="aLinkDown">
                     <el-button type="primary">
-                        <a :href="downloadUrl" style="color:#fff" download="zjlyb">下载模板</a>
+                        <a :href="downloadUrl" style="color:#fff" download="zjlyb.xlsx">下载模板</a>
                     </el-button>
                 </el-form-item>
                 <el-form-item>
@@ -46,7 +46,7 @@
                 <el-table-column prop="wh" label="资金文号" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="nd" label="年度" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="fpzj" label="资金金额(万元)" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="qrzj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="qrzj" label="已挂接(万元)" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="xdsysj" label="限定使用时间" :formatter="xdsysjFormat" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="zt" label="状态">
                     <template slot-scope="scope">
@@ -57,7 +57,7 @@
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="zjlyEdit(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="zjlyDel(scope.row)">删除</el-button>
+                        <el-button size="mini" type="danger" @click="zjlyDel(scope.row)" :disabled="(scope.row.qrzj>0?true:false)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>

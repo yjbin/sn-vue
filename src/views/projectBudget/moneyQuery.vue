@@ -35,7 +35,7 @@
                     <el-table-column prop="wh" label="资金文号" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="nd" label="年度" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="fpzj" label="资金金额(万元)" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="qrzj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="qrzj" label="已挂接(万元)" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="xdsysj" label="限定使用时间" :formatter="xdsysjFormat" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="zt" label="状态">
                         <template slot-scope="scope">

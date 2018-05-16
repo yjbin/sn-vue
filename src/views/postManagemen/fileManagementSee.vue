@@ -32,7 +32,7 @@
                 <el-table-column prop="name" label="文件名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="nd" label="年度" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="jb" label="文件级别" :formatter="wjjbDic" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="nd" label="发文文号" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="wh" label="发文文号" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrr" label="发布人" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrsj" label="发布时间" :formatter="formatterDatefbsj" show-overflow-tooltip></el-table-column>
                 <!-- <el-table-column prop="zt" label="状态" :formatter="ztDic" ></el-table-column> -->
@@ -131,7 +131,8 @@ export default {
             let obj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                name: this.$store.state.user.user.uUser.nickname,
+                name: row.name,
+                ydr: this.$store.state.user.user.uUser.nickname,
                 ydrId:this.$store.state.user.user.uUser.id,
                 count: "1",
                 fwtzId: row.id
@@ -195,7 +196,7 @@ export default {
                 lx: "1",
                 nd: this.seatch_nd,
                 name: this.seatch_name,
-                // jsdw: this.$store.state.user.user.uUser.bmbm
+                jsdw: this.$store.state.user.user.uUser.bmbm
             };
             fileQuery(obj).then(res => {
                 let data = res.data;

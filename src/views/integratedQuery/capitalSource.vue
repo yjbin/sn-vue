@@ -20,7 +20,7 @@
         <el-row>
           <el-col :span="12">
             <div class="user-left">
-              <span>资金追踪列表</span>
+              <span>资金来源列表</span>
             </div>
           </el-col>
         </el-row>

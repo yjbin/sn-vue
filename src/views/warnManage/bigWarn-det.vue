@@ -64,13 +64,13 @@ export default {
       xmjdList: [],
       xmjdFrom: {
         pageNo: 1,
-        pageSize: 5,
+        pageSize: 10,
         totalCount: 0
       },
       xmbfList: [],
       xmbfFrom: {
         pageNo: 1,
-        pageSize: 5,
+        pageSize: 10,
         totalCount: 0
       }
     };

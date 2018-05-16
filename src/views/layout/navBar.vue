@@ -1,14 +1,16 @@
 <template>
   <div class="navHead">
     <span class="headName">
-      山西省涉农资金监督管理平台
+      <img src="../../assets/images/logo.png" alt="">
     </span>
     <span class="headSelect">
+       <span style="margin-right:30px">
+        <img src="../../assets/images/user.png" alt="" style="margin-right:5px">&nbsp;欢迎您,{{username}}!
+      </span>
       <el-dropdown>
-        <el-button type="primary" style="background: #d11523;border-color:#fff">
-          欢迎您, {{username}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
+        <span class="el-dropdown-link">
+          <img src="../../assets/images/layout.png" style="margin-right:5px" alt="">&nbsp;注销<i class="el-icon-arrow-down el-icon-caret-bottom" style="margin-left:10px"></i>
+        </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item @click.native="revamp_password">修改密码</el-dropdown-item>
           <el-dropdown-item @click.native="out_btn">退出</el-dropdown-item>
@@ -100,6 +102,9 @@ export default {
       this.dialogVisible = false;
     },
     revamp_password() {
+      if(this.$refs.infoForm){
+        this.$refs.infoForm.resetFields();
+      }
       this.dialogVisible = true;
     },
     info_btn() {
@@ -142,22 +147,26 @@ export default {
 
 <style lang="scss" scoped>
 .navHead {
-  height: 62px;
-  background: #464C5B;
-  padding-left: 23px;
+  width: 100%;
+  padding-left: 60px;
+  font-size:15px;
+  background-color: #307ECD;
 
   .headName {
-    height: 62px;
-    line-height: 62px;
     display: inline-block;
-    font-size: 30px;
-    color: #ffffff;
+    height: 80px;
+    line-height: 80px;
+    img{
+      vertical-align: middle;
+    }
   }
   .headSelect {
     float: right;
-    width: 173px;
-    height: 30px;
-    margin: 16px 20px 0 0;
+    width: 300px;
+    height: 80px;
+    line-height: 80px;
+    margin: 0 10px 0 0;
+    color:#fff;
   }
   .info-content {
     span {
@@ -166,35 +175,13 @@ export default {
       line-height: 40px;
     }
   }
-  .el-button--primary{
-    background: #d11523
-  }
 }
 </style>
 <style lang="scss">
 .navHead {
-  .headSelect .el-dropdown {
-    background: #4c90d4;
-    color: #fff;
-    border-radius: 15px;
-    width: 173px;
-    height: 30px;
-    .el-button {
-      width: 173px;
-      height: 30px;
-      border-radius: 15px;
-      background-color: #4c90d4;
-      border-color: #4c90d4;
-      padding: 0;
-      span {
-        width: 173px;
-        height: 30px;
-        line-height: 30px;
-      }
-    }
-  }
-  .el-dropdown-menu__item {
-    width: 170px;
+  .el-dropdown{
+    color:#fff;
+    height: 45px;
   }
   .el-dialog__header {
     background: #307ecc;
@@ -207,13 +194,6 @@ export default {
   }
   .el-dialog__footer {
     text-align: center;
-  }
-  .el-form-item {
-    width: 100%;
-    margin-bottom: 0;
-    & > div {
-      width: 100%;
-    }
   }
 }
 </style>

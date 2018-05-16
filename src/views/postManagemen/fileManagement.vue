@@ -32,7 +32,7 @@
                 <el-table-column prop="name" label="文件名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="nd" label="年度" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="jb" label="文件级别" :formatter="wjjbDic" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="nd" label="发文文号" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="wh" label="发文文号" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrr" label="发布人" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrsj" label="发布时间" :formatter="formatterDatefbsj" show-overflow-tooltip></el-table-column>
                 <!-- <el-table-column prop="zt" label="状态" :formatter="ztDic" ></el-table-column> -->
@@ -161,9 +161,9 @@ export default {
             this.pageModal = true;
             this.pageTit = "阅读人信息";
             this.pageObj = {
-                num:Math.random(),
-                fwtzId:row.id
-            }
+                num: Math.random(),
+                fwtzId: row.id
+            };
         },
         newToggle(val) {
             this.newModal = val;
@@ -177,6 +177,8 @@ export default {
             let obj = {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
                 lx: "1",
                 nd: this.seatch_nd,
                 name: this.seatch_name

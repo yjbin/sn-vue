@@ -1,48 +1,48 @@
 <template>
-  <div class="source">
-    <div class="source_tree">
-      <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
-          <span>{{ node.label }}</span>
-          <span>
-            <i class="el-icon-plus" @click.stop="() => append(data)"></i>
-            <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
-            <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
-          </span>
-        </span>
-      </el-tree>
+    <div class="source">
+        <div class="source_tree">
+            <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
+                <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <span>{{ node.label }}</span>
+                    <span>
+                        <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                        <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                        <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
+                    </span>
+                </span>
+            </el-tree>
+        </div>
+        <div class="source_form">
+            <el-form :inline="true" :model="formData" label-width="90px" ref="treeForm" class="demo-form-inline" :rules="rules">
+                <el-row>
+                    <el-col :span="10" :offset="1">
+                        <el-form-item label="资源路径" prop="uri">
+                            <el-input v-model="formData.uri" placeholder="资源路径"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="10" :offset="3">
+                        <el-form-item label="资源名称" prop="pName">
+                            <el-input v-model="formData.pName" placeholder="资源名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10" :offset="1">
+                        <el-form-item label="资源图标" prop="pIcon">
+                            <el-input v-model="formData.pIcon" placeholder="资源图标"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10" :offset="1">
+                        <el-form-item label="." class="none">
+                            <el-button type="primary" @click="formSave">确定</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
     </div>
-    <div class="source_form">
-      <el-form :inline="true" :model="formData" label-width="90px" ref="treeForm" class="demo-form-inline" :rules="rules">
-        <el-row>
-          <el-col :span="10" :offset="1">
-            <el-form-item label="资源路径" prop="uri">
-              <el-input v-model="formData.uri" placeholder="资源路径"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="3">
-            <el-form-item label="资源名称" prop="pName">
-              <el-input v-model="formData.pName" placeholder="资源名称"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="10" :offset="1">
-            <el-form-item label="资源图标" prop="pIcon">
-              <el-input v-model="formData.pIcon" placeholder="资源图标"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="10" :offset="1">
-            <el-form-item label="." class="none">
-              <el-button type="primary" @click="formSave">确定</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </div>
-  </div>
 </template>
 <script>
 import { treeQuery, formSave, treeDel } from "@/api/source";
@@ -148,7 +148,7 @@ export default {
                         url = "add"; //TreeModel
                         obj.pid = this.pid;
                         //delete obj.id;
-                        
+
                         delete obj.parentId;
                     }
                     delete obj.children;
@@ -179,6 +179,8 @@ export default {
     .source_tree {
         float: left;
         width: 350px;
+        height: 83vh;
+        overflow: auto;
     }
     .source_form {
         float: left;

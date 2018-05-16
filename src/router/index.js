@@ -46,6 +46,12 @@ import fileManagement from '@/views/postManagemen/fileManagement'
 import fileManagementSee from '@/views/postManagemen/fileManagementSee'
 import noticeAnnouncement from '@/views/postManagemen/noticeAnnouncement'
 import noticeAnnouncementSee from '@/views/postManagemen/noticeAnnouncementSee'
+//综合查询
+import ZhprojectApplication from '@/views/integratedQuery/projectApplication'
+import ZhcapitalSource from '@/views/integratedQuery/capitalSource'
+import ZhprojectOutline from '@/views/integratedQuery/projectOutline'
+import ZhwarningInformation from '@/views/integratedQuery/warningInformation'
+
 
 
 Vue.use(Router)
@@ -68,7 +74,7 @@ export const constantRouterMap = [{
     redirect: '/home/home',
     meta: {
       title: '首页',
-      icon: 'home'
+      icon: 'home.png'
     },
     children: [{
       path: 'home',
@@ -76,7 +82,6 @@ export const constantRouterMap = [{
       name: 'home',
       meta: {
         title: '首页',
-        icon: 'home'
       }
     }]
   }
@@ -96,7 +101,7 @@ export let asyncRouterMap = [{
   redirect: '/system/largetSet',
   meta: {
     title: '系统设置',
-    icon: 'el-icon-menu',
+    icon: '',
     rid: ""
   },
   children: [{
@@ -105,7 +110,7 @@ export let asyncRouterMap = [{
     name: 'largeSet',
     meta: {
       title: '大额设置',
-      icon: 'largetSet',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -114,7 +119,7 @@ export let asyncRouterMap = [{
     name: 'exploiting',
     meta: {
       title: '实施单位',
-      icon: 'exploiting',
+      icon: '',
       rid: "-1"
     }
   }]
@@ -123,7 +128,7 @@ export let asyncRouterMap = [{
   component: Layout,
   meta: {
     title: '项目预算',
-    icon: '',
+    icon: 'projectBenefit.png',
     rid: ""
   },
   children: [{
@@ -160,7 +165,7 @@ export let asyncRouterMap = [{
   redirect: '/projectManage/projectOutline',
   meta: {
     title: '项目管理',
-    icon: '',
+    icon: 'projectManager.png',
     rid: ""
   },
   children: [{
@@ -169,7 +174,7 @@ export let asyncRouterMap = [{
     name: 'projectOutline',
     meta: {
       title: '项目概述',
-      icon: 'projectOutline',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -178,7 +183,7 @@ export let asyncRouterMap = [{
     name: 'projectProcess',
     meta: {
       title: '项目进度',
-      icon: 'projectProcess',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -187,7 +192,7 @@ export let asyncRouterMap = [{
     name: 'projectAppropriation',
     meta: {
       title: '项目拨款',
-      icon: 'projectAppropriation',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -196,7 +201,7 @@ export let asyncRouterMap = [{
     name: 'projectAccept',
     meta: {
       title: '项目验收',
-      icon: 'projectAccept',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -205,7 +210,7 @@ export let asyncRouterMap = [{
     name: 'projectBenefit',
     meta: {
       title: '项目效益',
-      icon: 'projectBenefit',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -214,7 +219,7 @@ export let asyncRouterMap = [{
     name: 'projectAssess',
     meta: {
       title: '项目考核',
-      icon: 'projectAssess',
+      icon: '',
       rid: "-1"
     }
   }]
@@ -224,7 +229,7 @@ export let asyncRouterMap = [{
   redirect: '/warnManage/bigWarn',
   meta: {
     title: '预警管理',
-    icon: '',
+    icon: 'warn.png',
     rid: ""
   },
   children: [{
@@ -242,7 +247,7 @@ export let asyncRouterMap = [{
     name: 'excessWarn',
     meta: {
       title: '超额预警',
-      icon: 'excessWarn',
+      icon: '',
       rid: ""
     }
   }, {
@@ -251,7 +256,7 @@ export let asyncRouterMap = [{
     name: 'areProject',
     meta: {
       title: '超期项目',
-      icon: 'areProject',
+      icon: '',
       rid: ""
     }
   }, {
@@ -284,12 +289,58 @@ export let asyncRouterMap = [{
     }
   }]
 },{
+  path: '/ZhprojectApplication',
+  component: Layout,
+  redirect: '/ZhprojectApplication/ZhprojectApplication',
+  meta: {
+    title: '综合查询',
+    icon: '',
+    rid: ""
+  },
+  children: [{
+    path: 'ZhprojectApplication',
+    component: ZhprojectApplication,
+    name: 'ZhprojectApplication',
+    meta: {
+      title: '项目申报',
+      icon: '',
+      rid: ""
+    }
+  },{
+    path: 'ZhcapitalSource',
+    component: ZhcapitalSource,
+    name: 'ZhcapitalSource',
+    meta: {
+      title: '资金来源',
+      icon: '',
+      rid: ""
+    }
+  },{
+    path: 'ZhprojectOutline',
+    component: ZhprojectOutline,
+    name: 'ZhprojectOutline',
+    meta: {
+      title: '项目概述',
+      icon: '',
+      rid: ""
+    }
+  },{
+    path: 'ZhwarningInformation',
+    component: ZhwarningInformation,
+    name: 'ZhwarningInformation',
+    meta: {
+      title: '预警信息',
+      icon: '',
+      rid: ""
+    }
+  }]
+},{
   path: '/postManagemen',
   component: Layout,
   redirect: '/postManagemen/fileManagement',
   meta: {
     title: '发文管理',
-    icon: '',
+    icon: 'postManager.png',
     rid: ""
   },
   children: [{
@@ -336,7 +387,7 @@ export let asyncRouterMap = [{
   redirect: '/manage/user',
   meta: {
     title: '系统管理',
-    icon: 'manage',
+    icon: 'system.png',
     rid: ""
   },
   children: [{
@@ -345,7 +396,7 @@ export let asyncRouterMap = [{
     name: 'user',
     meta: {
       title: '用户管理',
-      icon: 'user',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -354,7 +405,7 @@ export let asyncRouterMap = [{
     name: 'role',
     meta: {
       title: '角色管理',
-      icon: 'role',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -363,7 +414,7 @@ export let asyncRouterMap = [{
     name: 'source',
     meta: {
       title: '资源管理',
-      icon: 'source',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -372,7 +423,7 @@ export let asyncRouterMap = [{
     name: 'dict',
     meta: {
       title: '字典管理',
-      icon: 'dict',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -381,7 +432,7 @@ export let asyncRouterMap = [{
     name: 'administrative',
     meta: {
       title: '行政区划',
-      icon: 'administrative',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -390,7 +441,7 @@ export let asyncRouterMap = [{
     name: 'department',
     meta: {
       title: '部门管理',
-      icon: 'department',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -399,7 +450,7 @@ export let asyncRouterMap = [{
     name: 'multistageDown',
     meta: {
       title: '多级下拉设置',
-      icon: 'multistageDown',
+      icon: '',
       rid: "-1"
     }
   }]
@@ -419,7 +470,7 @@ export let asyncRouterMap = [{
     redirect: '/ideologicalBuilding/theoryofArmed/ysxtjs',
     meta: {
       title: '理论武装',
-      icon: 'user',
+      icon: '',
       rid: ""
     },
     children: [{
@@ -429,7 +480,7 @@ export let asyncRouterMap = [{
       redirect: '/ideologicalBuilding/theoryofArmed/ysxtjs/instituTional',
       meta: {
         title: '意识形态建设',
-        icon: 'user',
+        icon: '',
         rid: ""
       },
       children: [{
@@ -438,7 +489,7 @@ export let asyncRouterMap = [{
         component: institutional,
         meta: {
           title: '组织机构',
-          icon: 'user',
+          icon: '',
           rid: "-1"
         }
       }]
@@ -449,7 +500,7 @@ export let asyncRouterMap = [{
     component: Inner_Layout,
     meta: {
       title: '舆论宣传',
-      icon: 'consensus',
+      icon: '',
       rid: ""
     },
     children: [{
@@ -458,7 +509,7 @@ export let asyncRouterMap = [{
       component: Inner_Layout,
       meta: {
         title: '融媒体宣传',
-        icon: 'consensus',
+        icon: '',
         rid: ""
       },
       children: [{
@@ -467,7 +518,7 @@ export let asyncRouterMap = [{
         component: build,
         meta: {
           title: '平台搭建',
-          icon: 'consensus',
+          icon: '',
           rid: "-1"
         }
       }, {
@@ -476,7 +527,7 @@ export let asyncRouterMap = [{
         component: Information,
         meta: {
           title: '信息推送',
-          icon: 'consensus',
+          icon: '',
           rid: "-1"
         }
       }]
@@ -487,7 +538,7 @@ export let asyncRouterMap = [{
     name: 'spiritual',
     meta: {
       title: '精神文明建设',
-      icon: 'spiritual',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -496,7 +547,7 @@ export let asyncRouterMap = [{
     component: regulations,
     meta: {
       title: '政策法规',
-      icon: 'regulations',
+      icon: '',
       rid: "-1"
     }
   }]
@@ -506,7 +557,7 @@ export let asyncRouterMap = [{
   redirect: '/origin/originBuild',
   meta: {
     title: '组织建设',
-    icon: 'ins',
+    icon: '',
     rid: ""
   },
   children: [{
@@ -515,7 +566,7 @@ export let asyncRouterMap = [{
     name: 'originBuild',
     meta: {
       title: '组织建设',
-      icon: 'origin',
+      icon: '',
       rid: "-1"
     }
   }, {
@@ -524,7 +575,7 @@ export let asyncRouterMap = [{
     name: 'originhost',
     meta: {
       title: '组织活动',
-      icon: 'origin',
+      icon: '',
       rid: "-1"
     }
   }]

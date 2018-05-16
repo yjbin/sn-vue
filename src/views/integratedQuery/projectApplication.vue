@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
-                <el-button type="success" size="medium" @click="newMember">新增</el-button>
+                <!-- <el-button type="success" size="medium" @click="newMember">新增</el-button> -->
             </el-form-item>
         </el-form>
         <div class="user-list">
@@ -28,8 +28,8 @@
                 <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="changeModal(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="applyform(scope.row)">删除</el-button>
+                        <el-button size="mini" type="primary" @click="changeModal(scope.row)">详情</el-button>
+                        <!-- <el-button size="mini" type="danger" @click="applyform(scope.row)">删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-import projectOutlineModal from "./projectOutlineModal";
+import projectOutlineModal from "@/views/projectManage/projectOutlineModal";
 import { xmlbList, xmmsDelete } from "@/api/projectOutline";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
@@ -57,8 +57,8 @@ export default {
             seatch_nd: "",
             seatch_name: "",
             newModal: false,
+            shenbaoTrue: false,
             chubeiTrue: true,
-            shenbaoTrue: true,
             textTit: "",
             pageNo: 1,
             pageSize: 10,
@@ -83,7 +83,8 @@ export default {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xmlx: "0"
+                xmlx: "1",
+                flag:"1"
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
@@ -109,7 +110,7 @@ export default {
         },
         changeModal(row) {
             this.newModal = true;
-            this.textTit = "修改";
+            this.textTit = "详情";
             this.editObj = Object.assign({}, row);
         },
         applyform(row) {

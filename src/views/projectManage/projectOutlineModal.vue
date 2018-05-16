@@ -177,7 +177,7 @@
                 </el-row>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="userbtn_save">保 存</el-button>
+                <el-button v-show="shenbaoTrue" type="primary" @click="userbtn_save">保 存</el-button>
                 <el-button @click="btn_cancel">取 消</el-button>
             </span>
         </el-dialog>
@@ -213,7 +213,7 @@
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="ssdwSelectBc">确 定</el-button>
+                    <el-button v-show="shenbaoTrue" type="primary" @click="ssdwSelectBc">确 定</el-button>
                     <el-button @click="ssdwVisible=false">取 消</el-button>
                 </span>
             </el-dialog>
@@ -361,6 +361,8 @@ export default {
     props: {
         newModal: Boolean,
         chubeiTrue: Boolean,
+        //从综合查询项目申报点击进入该组件
+        shenbaoTrue: Boolean,
         textTit: "",
         editObj: {
             default: () => {}
@@ -368,14 +370,16 @@ export default {
     },
     watch: {
         editForm: {
-            handler: function(val) {
+            handler: function(val,oldval) {
+                console.log(val,oldval)
                 if (val) {
+                
                     this.editForm.xmze =
                         Number(this.editForm.zyZj || 0) +
                         Number(this.editForm.shengZj || 0) +
                         Number(this.editForm.shiZj || 0) +
                         Number(this.editForm.xianZj || 0) +
-                        Number(this.editForm.xianZj || 0);
+                        Number(this.editForm.xiangZj || 0);
                 }
             },
             deep: true
@@ -387,6 +391,9 @@ export default {
             if (this.$refs.editForm) {
                 this.$refs.editForm.resetFields();
                 this.xmlbArr = [];
+            }
+            if (this.editForm.lrsj) {
+                this.editForm.lrsj = new Date().getTime();
             }
             this.newModalToggle = val;
         },
@@ -406,10 +413,6 @@ export default {
                         num: Math.random(),
                         fileStr: ""
                     };
-                }
-
-                if (this.editForm.lrsj) {
-                    this.editForm.lrsj = new Date().getTime();
                 }
                 if (this.editForm.xmlb) {
                     this.xmlbArr = this.editForm.xmlb.split(",");
@@ -503,7 +506,6 @@ export default {
                     let obj = Object.assign({}, this.editForm);
                     obj.xmlb = this.xmlbArr.join(",");
                     if (this.chubeiTrue == true) {
-                        debugger
                         obj.xmlx = "0";
                     }else{
                         obj.xmlx = "1";

@@ -73,7 +73,7 @@ export default {
         secondPage(val) {
             this.firstPage = !val;
             if (val == true) {
-                this.getList(this.pageSize, this.pageNo, this.searchMember);
+                this.getList();
             }
         },
         indexMethod(index) {
@@ -94,34 +94,40 @@ export default {
         },
         currentPage(val) {
             this.pageNo = val;
-            this.getList(this.pageSize, this.pageNo);
+            this.getList();
         },
         //查询
-        getList(pageSize, pageNo, option) {
+        getList(option) {
             let obj = {
-                pageSize: pageSize,
-                pageNo: pageNo,
+                pageSize: this.pageSize,
+                pageNo: this.pageNo,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0"
             };
             option
-                ? (option.xmmc ? (obj.xmmc = option.xmmc.trim()) : "",
+                ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",
                   option.nd ? (obj.nd = option.nd) : "",
                   option.bmbm ? (obj.bmbm = option.bmbm) : "")
                 : "";
             xmlbList(obj).then(res => {
                 let data = res.data.data.elements;
-                data.forEach(function(item) {
+                if(data.length){
+                    data.forEach(function(item) {
                     item.ljsdzj
                         ? (item.ljsdzj = item.ljsdzj)
                         : (item.ljsdzj = "0");
-                });
-                this.tableData = data;
-                this.totalCount = res.data.data.totalCount;
+                    });
+                    this.tableData = data;
+                    this.totalCount = res.data.data.totalCount;
+                }else{
+                    this.tableData = [];
+                    this.totalCount = 0;
+                }
             });
         },
         //搜索
         search() {
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList(this.searchMember);
         },
         //传递给下个页面的参数
         detailModel(row) {
@@ -134,7 +140,7 @@ export default {
     mounted() {
         this.ndOptions = doCreate("ndTit");
         (this.searchMember.bmbm = this.$store.state.user.user.uUser.bmbm),
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList();
     }
 };
 </script>

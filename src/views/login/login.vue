@@ -1,19 +1,19 @@
 <template>
   <div class="login">
     <div class="header">
-      <span class="header-tit">山西省涉农资金监督管理平台</span>
+      <span class="header-tit"><img src="../../assets/images/loginLogo.png" alt="" > </span>
       <span class="header-login">欢迎您登录系统!</span>
     </div>
     <div class="content">
       <el-row :gutter="20">
-        <el-col :span="6" :offset="5">
+        <!-- <el-col :span="6" :offset="5">
           <div class="fl-box">
             <div class="fl-bg">
               <img src="../../assets/images/login.png" alt="">
             </div>
           </div>
-        </el-col>
-        <el-col :span="6" :offset="1">
+        </el-col> -->
+        <el-col :span="6" :offset="14">
           <div class="fr-box">
             <div class="fr-box-content">
               <div class="login-tit">
@@ -55,7 +55,7 @@
       </el-row>
     </div>
     <div class="footer">
-      <p>版权所有：中农信达</p>
+      <p>版权所有：北京中农信达信息技术有限公司</p>
     </div>
   </div>
 </template>
@@ -160,15 +160,19 @@ export default {
     .header-tit {
       color: #3383d0;
       font-size: 30px;
+      img{
+            margin-top: 30px;
+      }
     }
     .header-login {
       float: right;
-      color: #999999;
+      color: #307ecd;
       font-size: 14px;
     }
   }
   .content {
-    background: #45a1e6;
+    background: url("../../assets/images/loginBanner_02.png") no-repeat center;
+ 
     background-size: 100%;
     width: 100%;
     height: calc(100% - 240px);
@@ -220,7 +224,7 @@ export default {
       i {
         width: 100%;
         height: 20px;
-        background: url("../../assets/images/login_lucency.png") no-repeat;
+        background: url("../../assets/images/login_lucency.png") no-repeat center;
         display: inline-block;
       }
     }

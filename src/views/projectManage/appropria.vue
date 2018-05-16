@@ -105,7 +105,7 @@
                         </el-col>
                         <el-col :span="9" :offset="2">
                             <el-form-item label="录入时间" prop="lrsj">
-                                <el-date-picker type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间"></el-date-picker>
+                                <el-date-picker type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间" :disabled="true"></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -226,7 +226,7 @@ export default {
             handler: function(val) {
                 if (val) {
                     this.xmid = val.xmId;
-                    this.detailList(this.pageNo, this.pageSize, this.xmid);
+                    this.detailList(this.xmid);
                 }
             },
             deep: true
@@ -245,15 +245,20 @@ export default {
             this.xmid = "";
         },
         //挂接资金列表
-        detailList(pageNo, pageSize, option) {
+        detailList(option) {
             let obj = {
-                pageNo: pageNo,
-                pageSize: pageSize
+                pageNo: this.pageNo,
+                pageSize: this.pageSize
             };
             option ? (obj.xmId = option) : "";
             appropSelect(obj).then(res => {
-                this.zjList = res.data.msg.data;
-                this.totalCount = res.data.msg.totalCount;
+                if(res.data.msg.data.length){
+                    this.zjList = res.data.msg.data;
+                    this.totalCount = res.data.msg.totalCount;
+                }else{
+                    this.zjList = [];
+                    this.totalCount = 0;
+                }
             });
         },
         //拨付
@@ -355,7 +360,7 @@ export default {
                 .then(() => {
                     appropDel({ id: row.id }).then(res => {
                         this.record();
-                        this.detailList(this.pageNo, this.pageSize, this.xmid);
+                        this.detailList(this.xmid);
                         this.$message({
                             type: "success",
                             message: "删除成功!"
@@ -403,6 +408,7 @@ export default {
         xmFromInt() {
             this.bfzjFrom.lrr = this.$store.state.user.user.uUser.nickname;
             this.bfzjFrom.lrrId = this.$store.state.user.user.uUser.id;
+            this.getNowDate();
         },
         colseTog(val) {
             this.accessoryModalInt = val;
@@ -414,6 +420,10 @@ export default {
         fileClick() {
             this.accessoryModalInt = true;
             this.textTitFile = "附件";
+        },
+        getNowDate() {
+            let d = new Date();
+            this.bfzjFrom.lrsj = d.getTime();
         }
     }
 };

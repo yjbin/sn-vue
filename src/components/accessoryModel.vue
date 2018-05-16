@@ -17,7 +17,7 @@
                     </el-table>
                 </div>
                 <div class="fileBoxRight">
-                     <el-upload class="upload-demo" :action="uploadUrl" multiple :on-success="handleSuccess" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile" >
+                     <el-upload class="upload-demo" :disabled="!upShowhide" :action="uploadUrl" multiple :on-success="handleSuccess" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile" >
                           <i class="el-icon-upload"></i>
                          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
                     </el-upload>

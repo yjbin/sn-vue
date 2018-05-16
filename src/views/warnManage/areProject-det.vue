@@ -117,8 +117,7 @@ export default {
             handler: function(val) {
                 this.xmgkList = val;
                 this.xmid = val.id;
-                this.QueryListXmjd();
-                this.detailList();
+                this.xmjdList = [];
                 this.xmbfList = [];
                 this.xmbftotalCount = 0;
                 this.gjzjAndbfjl2 = false;

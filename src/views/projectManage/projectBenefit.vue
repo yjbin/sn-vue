@@ -347,13 +347,13 @@ export default {
         },
         currentPage(val) {
             this.pageNo = val;
-            this.getList(this.pageSize, this.pageNo);
+            this.getList();
         },
         //查询
-        getList(pageSize, pageNo, option) {
+        getList(option) {
             let obj = {
-                pageSize: pageSize,
-                pageNo: pageNo,
+                pageSize: this.pageSize,
+                pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
                 flag:"1"
@@ -364,13 +364,18 @@ export default {
                   option.bmbm ? (obj.bmbm = option.bmbm) : "")
                 : "";
             xmlbList(obj).then(res => {
+              if(res.data.data.elements.length){
                 this.tableData = res.data.data.elements;
                 this.totalCount = res.data.data.totalCount;
+              }else{
+                 this.tableData = [];
+                 this.totalCount = 0;
+              }
             });
         },
         //搜索
         search() {
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList(this.searchMember);
         },
         //返回
         backBtn() {
@@ -394,8 +399,13 @@ export default {
                 xmId: this.xmid
             };
             xmxySelect(obj).then(res => {
+              if(res.data.msg.data.length){
                 this.xmxyList = res.data.msg.data;
                 this.totalCount2 = res.data.msg.totalCount;
+              }else{
+                 this.xmxyList = [];
+                 this.totalCount2 = 0;
+              }         
             });
             this.firstPage = true;
             this.secondPage = false;
@@ -426,24 +436,24 @@ export default {
         },
         //删除
         xyDel(row) {
-            let _this = this;
             this.$confirm("你确定删除吗?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             })
                 .then(() => {
-                    xmxyDel({ id: row.id });
-                    _this.$message({
+                    xmxyDel({ id: row.id }).then(() =>{
+                       this.$message({
                         type: "success",
                         message: "删除成功!"
+                      });
+                      this.$refs.xmxyFrom.resetFields();
+                      this.detailModel();
+                      this.xmjdFromInt();
                     });
-                    _this.$refs.xmxyFrom.resetFields();
-                    _this.detailModel();
-                    _this.xmjdFromInt();
                 })
                 .catch(() => {
-                    _this.$message({
+                    this.$message({
                         type: "info",
                         message: "已取消删除"
                     });
@@ -472,8 +482,6 @@ export default {
                     });
                 }
             });
-            //   }
-            // });
         },
         getNowDate() {
             let d = new Date();
@@ -505,7 +513,7 @@ export default {
     mounted() {
         this.ndOptions = doCreate("ndTit");
         (this.searchMember.bmbm = this.$store.state.user.user.uUser.bmbm),
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList();
         this.xzqhoptions = doCreate("xzqh");
         this.bmbmoptions = doCreate("bmbm");
     }

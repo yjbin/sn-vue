@@ -38,7 +38,7 @@
                 </el-pagination>
             </div>
         </div>
-        <projectOutline-Modal :newModal="newModal" @newToggle="newToggle" @getList="getList" :textTit="textTit" :editObj="editObj" :chubeiTrue="chubeiTrue"></projectOutline-Modal>
+        <projectOutline-Modal :newModal="newModal" @newToggle="newToggle" @getList="getList" :textTit="textTit" :editObj="editObj" :chubeiTrue="chubeiTrue" :shenbaoTrue="shenbaoTrue"></projectOutline-Modal>
     </div>
 </template>
 <script>
@@ -58,6 +58,7 @@ export default {
             seatch_name: "",
             newModal: false,
             chubeiTrue: false,
+            shenbaoTrue: true,
             textTit: "",
             pageNo: 1,
             pageSize: 10,

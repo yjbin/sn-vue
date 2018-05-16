@@ -54,6 +54,7 @@ export default {
             this.newModal = true;
             this.textTit = "新建";
             this.userId = "";
+            this.userData = {};
         },
         newToggle(val) {
             this.newModal = val;

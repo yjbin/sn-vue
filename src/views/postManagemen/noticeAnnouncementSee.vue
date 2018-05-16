@@ -129,7 +129,8 @@ export default {
             let obj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                name: this.$store.state.user.user.uUser.nickname,
+                name: row.name,
+                ydr: this.$store.state.user.user.uUser.nickname,
                 ydrId:this.$store.state.user.user.uUser.id,
                 count: "1",
                 fwtzId: row.id

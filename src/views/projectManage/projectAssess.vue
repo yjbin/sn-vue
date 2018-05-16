@@ -57,8 +57,8 @@
           <el-table-column prop="khsj" :formatter="formatterDatekhsj" label="考核时间" show-overflow-tooltip></el-table-column>
           <el-table-column prop="khyj" label="考核意见" show-overflow-tooltip></el-table-column>
           <el-table-column prop="khpf" label="综合评分" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xzqh" label="行政区划" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="bmbm" label="部门科室" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="bmbm" label="部门科室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
           <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="lrsj" :formatter="formatterDatelrsj" label="录入时间" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作" width="150">
@@ -287,30 +287,35 @@ export default {
         },
         currentPage(val) {
             this.pageNo = val;
-            this.getList(this.pageSize, this.pageNo);
+            this.getList();
         },
         //查询
-        getList(pageSize, pageNo, option) {
+        getList(option) {
             let obj = {
-                pageSize: pageSize,
-                pageNo: pageNo,
+                pageSize: this.pageSize,
+                pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
                 flag:"1"
             };
             option
-                ? (option.xmmc ? (obj.xmmc = option.xmmc.trim()) : "",
+                ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",
                   option.nd ? (obj.nd = option.nd) : "",
                   option.bmbm ? (obj.bmbm = option.bmbm) : "")
                 : "";
             xmlbList(obj).then(res => {
-                this.tableData = res.data.data.elements;
-                this.totalCount = res.data.data.totalCount;
+                if(res.data.data.elements.length){
+                    this.tableData = res.data.data.elements;
+                    this.totalCount = res.data.data.totalCount;
+                }else{
+                    this.tableData = [];
+                    this.totalCount = 0;
+                }
             });
         },
         //搜索
         search() {
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList(this.searchMember);
         },
         //返回
         backBtn() {
@@ -335,8 +340,13 @@ export default {
                 xmId: this.xmid
             };
             assessSelect(obj).then(res => {
-                this.xmxyList = res.data.msg.data;
-                this.totalCount2 = res.data.msg.totalCount;
+                if(res.data.msg.data.length){
+                    this.xmxyList = res.data.msg.data;
+                    this.totalCount2 = res.data.msg.totalCount;
+                }else{
+                    this.xmxyList = [];
+                    this.totalCount2 = 0;
+                }             
             });
             this.firstPage = true;
             this.secondPage = false;
@@ -354,6 +364,7 @@ export default {
                 this.$refs.xmxyFrom.resetFields();
             }
             this.xmxyFrom = Object.assign({}, row);
+            this.xmjdFromInt(); 
             if (row.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -368,7 +379,6 @@ export default {
         },
         //删除
         xyDel(row) {
-            let _this = this;
             this.$confirm("你确定删除吗?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -376,17 +386,17 @@ export default {
             })
                 .then(() => {
                     assessDel({ id: row.id }).then(res => {
-                        _this.$message({
+                        this.$message({
                             type: "success",
                             message: "删除成功!"
                         });
-                        _this.$refs.xmxyFrom.resetFields();
-                        _this.detailModel();
-                        _this.xmjdFromInt();
+                        this.$refs.xmxyFrom.resetFields();
+                        this.detailModel();
+                        this.xmjdFromInt();
                     });
                 })
                 .catch(() => {
-                    _this.$message({
+                    this.$message({
                         type: "info",
                         message: "已取消删除"
                     });
@@ -405,7 +415,6 @@ export default {
                     }
                     assessSave(url, obj).then(res => {
                         let data = res.data;
-
                         if (data.success) {
                             _this.detailModel();
 
@@ -452,7 +461,7 @@ export default {
         this.xzqhoptions = doCreate("xzqh");
         this.bmbmoptions = doCreate("bmbm");
         (this.searchMember.bmbm = this.$store.state.user.user.uUser.bmbm),
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList();
     }
 };
 </script>
