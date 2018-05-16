@@ -7,19 +7,19 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="通知名称">
-                <el-input placeholder="请输入通知名称" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
+            <el-form-item label="文件名称">
+                <el-input placeholder="请输入文件名称" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="ListQuery">查询</el-button>
-                <el-button type="success" @click="fileAdd">新增</el-button>
+                <!-- <el-button type="success" @click="fileAdd">新增</el-button> -->
             </el-form-item>
         </el-form>
         <div class="capit-tit">
             <el-row>
                 <el-col :span="12">
                     <div class="user-left">
-                        <span>通知公告</span>
+                        <span>发文列表</span>
                     </div>
                 </el-col>
             </el-row>
@@ -29,10 +29,10 @@
                 <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
                 <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="bmbm" label="部门处室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="name" label="通知名称" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="name" label="文件名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="nd" label="年度" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="jb" label="通知类型" :formatter="tzlxDic" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="wh" label="通知文号" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="jb" label="文件级别" :formatter="wjjbDic" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="nd" label="发文文号" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrr" label="发布人" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrsj" label="发布时间" :formatter="formatterDatefbsj" show-overflow-tooltip></el-table-column>
                 <!-- <el-table-column prop="zt" label="状态" :formatter="ztDic" ></el-table-column> -->
@@ -44,13 +44,13 @@
                 </el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick">{{scope.row.by2}}</span>
+                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="fileEdit(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="listDel(scope.row)">删除</el-button>
+                        <el-button size="mini" type="primary" @click="fileEdit(scope.row)">详情</el-button>
+                        <!-- <el-button size="mini" type="danger" @click="listDel(scope.row)">删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -58,27 +58,28 @@
                 <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
                 </el-pagination>
             </div>
-            <notice-Modal :newModal="newModal" :activeShow="activeShow" :textTit="textTit" @newToggle="newToggle" :editObj="editObj"></notice-Modal>
-            <notice-pageview :pageModal="pageModal" :pageTit="pageTit" :pageObj="pageObj"  @pageToggle="pageToggle"></notice-pageview>
+            <file-Modal :newModal="newModal" :activeShow="activeShow" :textTit="textTit" @newToggle="newToggle" :editObj="editObj"></file-Modal>
+            <!-- <file-pageview :pageModal="pageModal" :pageTit="pageTit" @pageToggle="pageToggle"></file-pageview> -->
         </div>
     </div>
 </template>
 <script>
-import noticeModal from "./noticeModal";
-import noticePageview from "./noticePageview";
+import fileModal from "./fileModal";
+import filePageview from "./filePageview";
 import {
-    noticeQuery,
-    noticeAdd,
-    noticeUpdate,
-    noticeDel,
-    pageQuery
-} from "@/api/postManagemen/noticeAnnouncement";
+    fileQuery,
+    fileAdd,
+    fileUpdate,
+    fileDel,
+    pageQuery,
+    pageQueryAdd
+} from "@/api/postManagemen/fileManagement";
 import { doCreate, getDicTab, moreMenu } from "@/utils/config";
 import { formatDate } from "@/utils/data";
 export default {
     components: {
-        noticeModal,
-        noticePageview
+        fileModal,
+        filePageview
     },
     data() {
         return {
@@ -88,7 +89,7 @@ export default {
             pageTit: "",
             newModal: false,
             pageModal: false,
-            activeShow: true,
+            activeShow: false,
             pageSize: 10,
             pageNo: 1,
             totalCount: 0,
@@ -105,8 +106,8 @@ export default {
         getBmbm(row) {
             return getDicTab("bmbm", row.bmbm);
         },
-        tzlxDic(row) {
-            return getDicTab("tzlx", row.jb);
+        wjjbDic(row) {
+            return getDicTab("wjjb", row.jb);
         },
         formatterDatefbsj(row) {
             return formatDate(row.lrsj, "yyyy-MM-dd");
@@ -126,6 +127,22 @@ export default {
             this.newModal = true;
             this.textTit = "编辑";
             this.editObj = row;
+            
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                name: this.$store.state.user.user.uUser.nickname,
+                ydrId:this.$store.state.user.user.uUser.id,
+                count: "1",
+                fwtzId: row.id
+            };
+            pageQueryAdd(obj).then(res => {
+                let data = res.data;
+                if(data.success){
+                    this.ListQuery();
+                }
+
+            });
         },
         listDel(row) {
             this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -137,7 +154,7 @@ export default {
                     let obj = {
                         id: row.id
                     };
-                    noticeDel(obj).then(res => {
+                    fileDel(obj).then(res => {
                         let data = res.data;
                         this.$message({
                             message: data.msg,
@@ -160,10 +177,8 @@ export default {
         ydsClick(row) {
             this.pageModal = true;
             this.pageTit = "阅读人信息";
-            this.pageObj = {
-                num:Math.random(),
-                fwtzId:row.id
-            }
+            
+
         },
         newToggle(val) {
             this.newModal = val;
@@ -177,11 +192,12 @@ export default {
             let obj = {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
-                lx: "0",
+                lx: "1",
                 nd: this.seatch_nd,
-                name: this.seatch_name
+                name: this.seatch_name,
+                // jsdw: this.$store.state.user.user.uUser.bmbm
             };
-            noticeQuery(obj).then(res => {
+            fileQuery(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
                     this.fileList = data.msg.data;

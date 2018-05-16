@@ -34,7 +34,15 @@ export function noticeDel(option) {
 //浏览人数查询
 export function pageQuery(option) {
   return request({
-    url: '',
+    url: '/fwtz/selectYdb',
+    method: 'post',
+    data: option
+  })
+}
+//浏览人数添加
+export function pageQueryAdd(option) {
+  return request({
+    url: '/fwtz/addYdb',
     method: 'post',
     data: option
   })

@@ -8,9 +8,17 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {},
+    assetsSubDirectory: 'static',//静态资源文件
+    assetsPublicPath: '/',//发布路径
+    proxyTable: {
+      '/api':{
+        target:"http://localhost:10000",
+        changeOrigin:true,//开启代理
+        pathRewrite:{ 
+          '^/api': ''
+        } //重写路径
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

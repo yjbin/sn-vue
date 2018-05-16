@@ -57,7 +57,7 @@ export default {
             seatch_nd: "",
             seatch_name: "",
             newModal: false,
-            chubeiTrue: true,
+            chubeiTrue: false,
             textTit: "",
             pageNo: 1,
             pageSize: 10,
@@ -82,7 +82,7 @@ export default {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xmlx: "0"
+                xmlx: "1"
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name.trim()) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";

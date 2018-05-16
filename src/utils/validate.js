@@ -17,9 +17,13 @@ export function validPassword(val) {
 }
 //联系方式
 export function validContact(val){  
-  var reg =/(^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$)|(^((\(\d{3}\))|(\d{3}\-))?(1[358]\d{9})$)/;  
+  var reg =/(^[0-9]{3,20}$)/;  
   return reg.test(val);  
 }  
+// export function validContact(val){  
+//   var reg =/(^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$)|(^((\(\d{3}\))|(\d{3}\-))?(1[358]\d{9})$)/;  
+//   return reg.test(val);  
+// }  
 //身份证
 export function card(val){  
   var reg =/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;

@@ -186,9 +186,7 @@ export default {
     data() {
         return {
             tableData: [],
-            moneyFrom: {
-              
-            },
+            moneyFrom: {},
             ndOptions: [],
             ndoptions2:[],
             zjjboptions:[],
@@ -233,41 +231,46 @@ export default {
         },
         currentPage(val) {
             this.pageNo = val;
-            this.getList(this.pageSize, this.pageNo);
+            this.getList();
         },
         //查询
-        getList(pageSize, pageNo, option) {
+        getList(option) {
             let obj = {
-                pageSize: pageSize,
-                pageNo: pageNo,
+                pageSize: this.pageSize,
+                pageNo: this.pageNo,
                 chaoqi:"1",
                 bmbm: this.$store.state.user.user.uUser.bmbm,
             };
             option
-                ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",
+                ? (option.zjmc ? (obj.zjmc = option.zjmc) : "",
                   option.nd ? (obj.nd = option.nd) : "")
                 : "";
             bymoneySelect(obj).then(res => {
-                 this.tableData = res.data.msg.data;
-                 this.totalCount =  res.data.msg.totalCount;
+                if(res.data.msg.data.length){
+                    this.tableData = res.data.msg.data;
+                    this.totalCount =  res.data.msg.totalCount;
+                }else{
+                    this.tableData = [];
+                    this.totalCount = 0;
+                }
             });
         },
         //搜索
         search() {
-            this.getList(this.pageSize, this.pageNo, this.searchMember);
+            this.getList(this.searchMember);
         },
         //返回
         backBtn() {
             this.firstPage = false;
             this.secondPage = true;
         },
-        //考核详情
+        //详情
         detailModel(row) {
             this.moneyFrom = Object.assign({},row);
             this.firstPage = true;
             this.secondPage = false;
         },
-         FromInt() {
+        FromInt() {
             this.ndOptions = doCreate("ndTit");
             this.ndoptions2 = doCreate("nd");
             this.zjjboptions = doCreate("zjjb");
@@ -281,7 +284,7 @@ export default {
     },
     mounted() {
         this.FromInt();
-        this.getList(this.pageSize, this.pageNo);
+        this.getList();
     }
 };
 </script>

@@ -58,8 +58,8 @@
                 <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
                 </el-pagination>
             </div>
-            <file-Modal :newModal="newModal" :textTit="textTit" @newToggle="newToggle" :editObj="editObj"></file-Modal>
-            <file-pageview :pageModal="pageModal" :pageTit="pageTit" @pageToggle="pageToggle"></file-pageview>
+            <file-Modal :newModal="newModal" :activeShow="activeShow" :textTit="textTit" @newToggle="newToggle" :editObj="editObj"></file-Modal>
+            <file-pageview :pageModal="pageModal" :pageTit="pageTit" :pageObj="pageObj" @pageToggle="pageToggle"></file-pageview>
         </div>
     </div>
 </template>
@@ -88,11 +88,13 @@ export default {
             pageTit: "",
             newModal: false,
             pageModal: false,
+            activeShow: true,
             pageSize: 10,
             pageNo: 1,
             totalCount: 0,
             ndoptions: [],
             editObj: {},
+            pageObj: {},
             fileList: []
         };
     },
@@ -155,9 +157,13 @@ export default {
             this.pageNo = val;
             this.ListQuery();
         },
-        ydsClick() {
+        ydsClick(row) {
             this.pageModal = true;
             this.pageTit = "阅读人信息";
+            this.pageObj = {
+                num:Math.random(),
+                fwtzId:row.id
+            }
         },
         newToggle(val) {
             this.newModal = val;

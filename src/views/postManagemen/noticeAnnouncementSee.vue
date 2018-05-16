@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="ListQuery">查询</el-button>
-                <el-button type="success" @click="fileAdd">新增</el-button>
+                <!-- <el-button type="success" @click="fileAdd">新增</el-button> -->
             </el-form-item>
         </el-form>
         <div class="capit-tit">
@@ -44,13 +44,13 @@
                 </el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick">{{scope.row.by2}}</span>
+                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="fileEdit(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="listDel(scope.row)">删除</el-button>
+                        <el-button size="mini" type="primary" @click="fileEdit(scope.row)">详情</el-button>
+                        <!-- <el-button size="mini" type="danger" @click="listDel(scope.row)">删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -59,7 +59,7 @@
                 </el-pagination>
             </div>
             <notice-Modal :newModal="newModal" :activeShow="activeShow" :textTit="textTit" @newToggle="newToggle" :editObj="editObj"></notice-Modal>
-            <notice-pageview :pageModal="pageModal" :pageTit="pageTit" :pageObj="pageObj"  @pageToggle="pageToggle"></notice-pageview>
+            <!-- <notice-pageview :pageModal="pageModal" :pageTit="pageTit" @pageToggle="pageToggle"></notice-pageview> -->
         </div>
     </div>
 </template>
@@ -71,7 +71,8 @@ import {
     noticeAdd,
     noticeUpdate,
     noticeDel,
-    pageQuery
+    pageQuery,
+    pageQueryAdd
 } from "@/api/postManagemen/noticeAnnouncement";
 import { doCreate, getDicTab, moreMenu } from "@/utils/config";
 import { formatDate } from "@/utils/data";
@@ -88,13 +89,12 @@ export default {
             pageTit: "",
             newModal: false,
             pageModal: false,
-            activeShow: true,
+            activeShow: false,
             pageSize: 10,
             pageNo: 1,
             totalCount: 0,
             ndoptions: [],
             editObj: {},
-            pageObj: {},
             fileList: []
         };
     },
@@ -126,6 +126,21 @@ export default {
             this.newModal = true;
             this.textTit = "编辑";
             this.editObj = row;
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                name: this.$store.state.user.user.uUser.nickname,
+                ydrId:this.$store.state.user.user.uUser.id,
+                count: "1",
+                fwtzId: row.id
+            };
+            pageQueryAdd(obj).then(res => {
+                let data = res.data;
+                if(data.success){
+                    this.ListQuery();
+                }
+
+            });
         },
         listDel(row) {
             this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -160,10 +175,7 @@ export default {
         ydsClick(row) {
             this.pageModal = true;
             this.pageTit = "阅读人信息";
-            this.pageObj = {
-                num:Math.random(),
-                fwtzId:row.id
-            }
+
         },
         newToggle(val) {
             this.newModal = val;
@@ -179,7 +191,8 @@ export default {
                 pageSize: this.pageSize,
                 lx: "0",
                 nd: this.seatch_nd,
-                name: this.seatch_name
+                name: this.seatch_name,
+                jsdw:this.$store.state.user.user.uUser.bmbm
             };
             noticeQuery(obj).then(res => {
                 let data = res.data;

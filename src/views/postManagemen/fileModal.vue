@@ -83,7 +83,7 @@
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="btn_fileSave">保 存</el-button>
+                <el-button v-show="activeShow" type="primary" @click="btn_fileSave">保 存</el-button>
                 <el-button @click="btn_cancel">取 消</el-button>
             </span>
         </el-dialog>
@@ -189,6 +189,7 @@ export default {
     },
     props: {
         newModal: Boolean,
+        activeShow: Boolean,
         textTit: "",
         editObj: {
             default: () => {}

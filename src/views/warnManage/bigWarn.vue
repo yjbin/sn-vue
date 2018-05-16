@@ -9,7 +9,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="项目名称">
-          <el-input placeholder="项目名称" prefix-icon="el-icon-search" v-model.trim="seatch_name">
+          <el-input placeholder="项目名称" prefix-icon="el-icon-search" @keyup.enter.native="seatchQuery" v-model.trim="seatch_name">
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -78,9 +78,7 @@ export default {
             pageSize: 5,
             totalCount: 0,
             tableData: [],
-            propFrom:{
-              
-            },
+            propFrom:{},
             zjxqFrom:{},
             xmgkList:{}
         };
@@ -101,6 +99,8 @@ export default {
           let _this = this;
           this.active = false;
           if(row){
+            // this.propFrom.zjId = row.zjid;
+            // this.propFrom.xmid = row.xmid;
             this.propFrom = {
               zjId:row.zjid,
               xmid:row.xmid

@@ -253,18 +253,11 @@ export default {
               fileStr: ""
             };
           }
-          this.ndoptions = doCreate("nd");
-          this.cylxoptions = doCreate("cylb");
-          this.xzqhoptions = doCreate("xzqh");
-          this.bmbmoptions = doCreate("bmbm");
           if (this.xmForm.xmlb) {
             this.xmlbArr = this.xmForm.xmlb.split(",");
+          }else{
+              this.xmlbArr = [];
           }
-          treeQuery({ dicttype: "xmlb" }).then(res => {
-            let data = res.data;
-            moreMenu(data);
-            this.options = data;
-          });
           val.shengFgksIds
             ? (this.shengChecked = val.shengFgksIds)
             : (this.shengChecked = []);
@@ -321,6 +314,17 @@ export default {
       this.accessoryModalInt = true;
       this.textTitFile = "附件";
     }
+  },
+  mounted(){
+    this.ndoptions = doCreate("nd");
+    this.cylxoptions = doCreate("cylb");
+    this.xzqhoptions = doCreate("xzqh");
+    this.bmbmoptions = doCreate("bmbm");
+    treeQuery({ dicttype: "xmlb" }).then(res => {
+    let data = res.data;
+    moreMenu(data);
+    this.options = data;
+    });
   }
 };
 </script>

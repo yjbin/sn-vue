@@ -6,10 +6,10 @@
                     <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
                     <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="bmbm" label="部门处室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="zjmc" label="通知名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="name" label="文件名称" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="ydr" label="阅读人" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="ydsj" label="阅读时间" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="ydsj" label="次数" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="ydsj" label="阅读时间" :formatter="ydsjFormat" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="count" label="次数" show-overflow-tooltip></el-table-column>
 
                 </el-table>
                 <div class="user-page fr">
@@ -21,39 +21,62 @@
     </div>
 </template>
 <script>
+import { pageQuery } from "@/api/postManagemen/fileManagement";
+import { doCreate, getDicTab } from "@/utils/config";
+import { formatDate } from "@/utils/data";
 export default {
     data() {
         return {
             newModalToggle: false,
-            pageList: [
-                {
-                    ydsj: 6
-                }
-            ],
+            pageList: [],
             pageSize: 10,
             pageNo: 1,
-            totalCount: 0
+            totalCount: 0,
+            fwtzId:""
         };
     },
     methods: {
-        getXzqh() {},
-        getBmbm() {},
+        getXzqh(row) {
+            return getDicTab("xzqh", row.xzqh);
+        },
+
+        getBmbm(row) {
+            return getDicTab("bmbm", row.bmbm);
+        },
+        ydsjFormat(row) {
+            return formatDate(row.ydsj, "yyyy-MM-dd");
+        },
         btn_cancel() {
             this.newModalToggle = false;
             this.$emit("pageToggle", this.newModalToggle);
         },
         handleCurrentChange(val) {
             this.pageNo = val;
+            this.pageQueryList()
         },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;
             return start + index + 1;
+        },
+        pageQueryList() {
+            let obj = {
+                pageSize: this.pageSize,
+                pageNo: this.pageNo,
+                fwtzId: this.fwtzId
+            };
+            pageQuery(obj).then(res => {
+                let data = res.data;
+                if (data.success) {
+                    this.pageList = data.msg.data;
+                    this.totalCount = data.msg.totalCount;
+                }
+            });
         }
     },
     props: {
         pageModal: Boolean,
         pageTit: "",
-        editObj: {
+        pageObj: {
             default: () => {}
         }
     },
@@ -61,9 +84,12 @@ export default {
         pageModal(val) {
             this.newModalToggle = val;
         },
-        editObj(val) {
-            if (val) {
-            }
+        pageObj: {
+            handler: function(val) {
+                this.fwtzId = val.fwtzId;
+                this.pageQueryList()
+            },
+            deep: true
         }
     }
 };

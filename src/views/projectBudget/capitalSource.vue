@@ -9,7 +9,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资金名称">
-                    <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
+                    <el-input placeholder="请输入内容" prefix-icon="el-icon-search" @keyup.enter.native="zjlyQuery" v-model.trim="seatch_name"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="zjlyQuery">查询</el-button>
@@ -625,8 +625,13 @@ export default {
             capotalQuery(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
-                    this.zjlyList = data.msg.data;
-                    this.totalCount = data.msg.totalCount;
+                    if(data.msg.data.length){
+                        this.zjlyList = data.msg.data;
+                        this.totalCount = data.msg.totalCount;
+                    }else{
+                        this.zjlyList = [];
+                        this.totalCount = 0;
+                    }
                 }
             });
         },

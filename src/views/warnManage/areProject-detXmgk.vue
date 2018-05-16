@@ -241,10 +241,6 @@ export default {
     watch: {
         xmgkList(val) {
             this.xmForm = Object.assign({}, val);
-            this.ndoptions = doCreate("nd");
-            this.cylxoptions = doCreate("cylb");
-            this.xzqhoptions = doCreate("xzqh");
-            this.bmbmoptions = doCreate("bmbm");
             if (val.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -261,12 +257,6 @@ export default {
             } else {
                 this.xmlbArr = [];
             }
-            treeQuery({ dicttype: "xmlb" }).then(res => {
-                let data = res.data;
-                moreMenu(data);
-                this.options = data;
-            });
-
              val.shengFgksIds
                         ? (this.shengChecked = val.shengFgksIds)
                         : (this.shengChecked = []);
@@ -324,11 +314,15 @@ export default {
         }
     },
     mounted() {
-        // treeQuery({ dicttype: "xmlb" }).then(res => {
-        //   let data = res.data;
-        //   moreMenu(data);
-        //   this.options = data;
-        // });
+        this.ndoptions = doCreate("nd");
+        this.cylxoptions = doCreate("cylb");
+        this.xzqhoptions = doCreate("xzqh");
+        this.bmbmoptions = doCreate("bmbm");
+        treeQuery({ dicttype: "xmlb" }).then(res => {
+          let data = res.data;
+          moreMenu(data);
+          this.options = data;
+        });
     }
 };
 </script>

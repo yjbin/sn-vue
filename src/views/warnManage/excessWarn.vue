@@ -9,7 +9,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="项目名称">
-          <el-input placeholder="项目名称" prefix-icon="el-icon-search" v-model.trim="seatch_name">
+          <el-input placeholder="项目名称" prefix-icon="el-icon-search" @keyup.enter.native="areProQueryList" v-model.trim="seatch_name">
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -98,8 +98,7 @@ export default {
         },
         handleEdit(rows) {
             this.active = false;
-            let obj = Object.assign({}, rows);
-            this.clickxmDet = obj;
+            this.clickxmDet = Object.assign({}, rows);
             this.clickxmDet.newDate = Math.random();
         },
         backBtn() {

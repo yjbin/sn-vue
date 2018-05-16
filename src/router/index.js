@@ -26,6 +26,7 @@ import largetSet from '@/views/system/largetSet'
 import exploiting from '@/views/system/exploiting'
 //项目管理
 import projectOutline from '@/views/projectManage/projectOutline'
+import projectReserve from '@/views/projectManage/projectReserve'
 import projectProcess from '@/views/projectManage/projectProcess'
 import projectAccept from '@/views/projectManage/projectAccept'
 import projectAppropriation from '@/views/projectManage/projectAppropriation'
@@ -42,7 +43,9 @@ import areProject from '@/views/warnManage/areProject'
 import beyondMoney from '@/views/warnManage/beyondMoney'
 //发文管理
 import fileManagement from '@/views/postManagemen/fileManagement'
+import fileManagementSee from '@/views/postManagemen/fileManagementSee'
 import noticeAnnouncement from '@/views/postManagemen/noticeAnnouncement'
+import noticeAnnouncementSee from '@/views/postManagemen/noticeAnnouncementSee'
 
 
 Vue.use(Router)
@@ -261,6 +264,25 @@ export let asyncRouterMap = [{
       rid: ""
     }
   }]
+}, {
+  path: '/projectManage2',
+  component: Layout,
+  redirect: '/projectManage2/projectReserve2',
+  meta: {
+    title: '储备项目库',
+    icon: '',
+    rid: ""
+  },
+  children: [{
+    path: 'projectReserve2',
+    component: projectReserve,
+    name: 'projectReserve',
+    meta: {
+      title: '储备项目库',
+      icon: '',
+      rid: ""
+    }
+  }]
 },{
   path: '/postManagemen',
   component: Layout,
@@ -280,11 +302,29 @@ export let asyncRouterMap = [{
       rid: ""
     }
   }, {
+    path: 'fileManagementSee',
+    component: fileManagementSee,
+    name: 'fileManagementSee',
+    meta: {
+      title: '收到文件',
+      icon: '',
+      rid: ""
+    }
+  },{
     path: 'noticeAnnouncement',
     component: noticeAnnouncement,
     name: 'noticeAnnouncement',
     meta: {
       title: '通知公告',
+      icon: '',
+      rid: ""
+    }
+  },{
+    path: 'noticeAnnouncementSee',
+    component: noticeAnnouncementSee,
+    name: 'noticeAnnouncementSee',
+    meta: {
+      title: '收到通知',
       icon: '',
       rid: ""
     }

@@ -48,7 +48,8 @@ export default {
       let _this = this;
        let obj = {
          pageNo:this.pageNo,
-         pageSize:this.pageSize
+         pageSize:this.pageSize,
+         xzqh:this.$store.state.user.user.uUser.xzqh
        }
        name ? obj.name=name :""
       userSearch(obj).then(res => {

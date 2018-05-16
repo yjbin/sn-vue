@@ -105,16 +105,19 @@ export default {
       let obj = {
         pageNo: this.pageNo,
         pageSize: this.pageSize,
-        zjmc: this.seatch_name.trim(),
+        zjmc: this.seatch_name,
         nd: this.seatch_nd
       };
       moneyTracking(obj).then(res => {
         let data = res.data;
         if (data.success) {
-          this.tableData = data.msg.data;
-          this.totalCount = data.msg.totalCount;
-          // this.seatch_name = "";
-          // this.seatch_nd = "";
+          if(data.msg.data.length){
+            this.tableData = data.msg.data;
+            this.totalCount = data.msg.totalCount;
+          }else{
+              this.tableData = [];
+               this.totalCount = 0;
+          }
         }
       });
     },

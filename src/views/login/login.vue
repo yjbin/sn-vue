@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       checked: false,
-      src: "captcha.jpg",
+      src: process.env.BASE_URL+"/captcha.jpg",
       loginForm: {
         username: "",
         password: "",
@@ -106,7 +106,7 @@ export default {
     changeImg() {
       this.src = "";
       this.$nextTick(() => {
-        this.src = "captcha.jpg";
+        this.src = process.env.BASE_URL+"/captcha.jpg";
       });
     },
     getCookie() {

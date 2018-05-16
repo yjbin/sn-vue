@@ -360,6 +360,7 @@ export default {
     },
     props: {
         newModal: Boolean,
+        chubeiTrue: Boolean,
         textTit: "",
         editObj: {
             default: () => {}
@@ -394,27 +395,17 @@ export default {
         },
         editObj(val) {
             if (val) {
-                this.ndoptions = doCreate("nd");
-                this.cylxoptions = doCreate("cylb");
-                this.xzqhoptions = doCreate("xzqh");
-                this.bmbmoptions = doCreate("bmbm");
-                //项目类别多级菜单
-                treeQuery({ dicttype: "xmlb" }).then(res => {
-                    let data = res.data;
-                    moreMenu(data);
-                    this.options = data;
-                });
                 this.editForm = Object.assign({}, val);
                 if (val.fj) {
                     this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: this.editForm.fj
-                        };
-                }else{
-                   this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: ""
-                        };
+                        num: Math.random(),
+                        fileStr: this.editForm.fj
+                    };
+                } else {
+                    this.fileSrc = {
+                        num: Math.random(),
+                        fileStr: ""
+                    };
                 }
 
                 if (this.editForm.lrsj) {
@@ -511,7 +502,13 @@ export default {
                     let _this = this;
                     let obj = Object.assign({}, this.editForm);
                     obj.xmlb = this.xmlbArr.join(",");
-                    obj.xmlx = "0";
+                    if (this.chubeiTrue == true) {
+                        debugger
+                        obj.xmlx = "0";
+                    }else{
+                        obj.xmlx = "1";
+                    }
+
                     // for(var i in obj){
                     //     if(i.length && i.length>2 && i.substring(i.length-2,i.length)=="Zj"){
                     //         obj[i]= operation(obj[i],"*")
@@ -674,6 +671,18 @@ export default {
             this.accessoryModalInt = true;
             this.textTitFile = "附件";
         }
+    },
+    mounted() {
+        this.ndoptions = doCreate("nd");
+        this.cylxoptions = doCreate("cylb");
+        this.xzqhoptions = doCreate("xzqh");
+        this.bmbmoptions = doCreate("bmbm");
+        //项目类别多级菜单
+        treeQuery({ dicttype: "xmlb" }).then(res => {
+            let data = res.data;
+            moreMenu(data);
+            this.options = data;
+        });
     }
 };
 </script>

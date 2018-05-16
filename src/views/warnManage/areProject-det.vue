@@ -4,7 +4,7 @@
       <el-tab-pane label="项目概况" name="first">
         <details-xmgk :xmgkList="xmgkList"></details-xmgk>
       </el-tab-pane>
-      <el-tab-pane label="项目进度" name="third">
+      <el-tab-pane label="项目进度" name="second">
         <el-table :data="xmjdList" stripe border style="width: 100%">
           <el-table-column type="index" :index="indexMethod_xmjd" label="序号" width="80"></el-table-column>
           <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
@@ -16,12 +16,12 @@
           <el-table-column prop="lrsj" label="录入时间" :formatter="lrformatterData" show-overflow-tooltip></el-table-column>
           <el-table-column prop="wgnr" label="完工内容" show-overflow-tooltip></el-table-column>
         </el-table>
-        <div class="user-page fr">
+        <div class="mar10 fr">
           <el-pagination @current-change="xmjdChange" :current-page.sync="xmjdFrom.pageNo" :page-size="xmjdFrom.pageSize" layout="total, prev, pager, next" :total="xmjdtotalCount">
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="项目拨付" name="fourth">
+      <el-tab-pane label="项目拨付" name="third">
         <div class="bfjlListClass">
           <el-table :data="zjList" stripe border style="width: 100%">
             <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
@@ -40,7 +40,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="fr">
+          <div class="fr mar10">
             <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
             </el-pagination>
           </div>
@@ -56,7 +56,7 @@
             <el-table-column prop="bfsj" label="拨付时间" :formatter="bfformatterData" show-overflow-tooltip></el-table-column>
             <el-table-column prop="bfsm" label="拨付说明" show-overflow-tooltip></el-table-column>
           </el-table>
-          <div class="user-page fr">
+          <div class="mar10 fr">
             <el-pagination @current-change="xmbfChange" :current-page.sync="xmbfFrom.pageNo" :page-size="xmbfFrom.pageSize" layout="total, prev, pager, next" :total="xmbftotalCount">
             </el-pagination>
           </div>
@@ -82,7 +82,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             gjzjAndbfjl2: false,
             gjzjAndbfjl: true,
             activeName: "first",
@@ -98,6 +97,7 @@ export default {
                 pageSize: 5
             },
             xmid: "",
+            xmzjId:"",
             xmbfList: [],
             xmbftotalCount: 0,
             xmbfFrom: {
@@ -122,6 +122,7 @@ export default {
                 this.xmbfList = [];
                 this.xmbftotalCount = 0;
                 this.gjzjAndbfjl2 = false;
+                this.activeName = "first";
             },
             deep: true
         }
@@ -159,35 +160,17 @@ export default {
         },
         handleCurrentChange(val) {
             this.pageNo = val;
+            this.detailList();
         },
         xmjdChange(val) {
             this.xmjdFrom.pageNo = val;
-            let obj = {
-                pageNo: this.xmjdFrom.pageNo,
-                pageSize: this.xmjdFrom.pageSize,
-                xmId: this.xmid
-            };
-            xmjdSelect(obj).then(res => {
-                this.xmjdList = res.data.msg.data;
-                this.xmjdtotalCount = res.data.msg.totalCount;
-            });
+            this.QueryListXmjd();
         },
         xmbfChange(val) {
             this.xmbfFrom.pageNo = val;
-            //查询
-            let obj2 = {
-                pageNo: this.xmbfFrom.pageNo,
-                pageSize: this.xmbfFrom.pageSize,
-                xmid: this.xmid
-            };
-            appropRecord(obj2).then(res => {
-                let data = res.data;
-                if (data.success) {
-                    this.xmbfList = data.msg.data;
-                    this.xmbftotalCount = data.msg.totalCount;
-                }
-            });
+            this.xmbfRrcord(this.xmzjId);
         },
+        //拨付查询
         detailList() {
             let obj = {
                 pageNo: this.pageNo,
@@ -195,14 +178,21 @@ export default {
                 xmId: this.xmid
             };
             appropSelect(obj).then(res => {
-                this.zjList = res.data.msg.data;
-                this.totalCount = res.data.msg.totalCount;
+                if(res.data.msg.data.length){
+                    this.zjList = res.data.msg.data;
+                    this.totalCount = res.data.msg.totalCount;
+                }else{
+                    this.zjList = [];
+                    this.totalCount = 0;
+                }
             });
         },
         record(row) {
-          this.QueryListXmbk(row.xmzjId);
+          this.xmzjId = row.xmzjId;
+          this.xmbfRrcord(row.xmzjId);
           this.gjzjAndbfjl2 = true;
         },
+        //进度查询
         QueryListXmjd() {
             if (this.xmid) {
                 let obj = {
@@ -223,8 +213,8 @@ export default {
                 this.xmjdList = [];
             }
         },
-        QueryListXmbk(row) {
-            //查询
+        //拨付记录查询
+        xmbfRrcord(row) {
             if (this.xmid) {
                 let obj2 = {
                     pageNo: this.xmbfFrom.pageNo,
@@ -248,10 +238,9 @@ export default {
             }
         },
         handleClick(tab, event) {
-            if (tab.name == "third") {
+            if (tab.name == "second") {
                 this.QueryListXmjd();
-            } else if (tab.name == "fourth") {
-                // this.QueryListXmbk();
+            } else if (tab.name == "third") {
                 this.detailList();
             }
         }
