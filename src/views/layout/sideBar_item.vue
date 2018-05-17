@@ -13,7 +13,7 @@
             <el-submenu v-else :index="item.name||item.path" :key="item.name">
                 <template slot="title" >
                     <!-- <svg-icon v-if="item.meta&&item.meta.icon" :icon-class="item.meta.icon"></svg-icon> -->
-                    <img v-if="item.meta&&item.meta.icon" :src="'../../../static/sliderBar/'+item.meta.icon[0]">
+                    <img v-if="item.meta&&item.meta.icon" :src="changimg(item.path,item.meta.icon)">
                     <span v-if="item.meta&&item.meta.title">{{item.meta.title}}</span>
                 </template>
 
@@ -40,13 +40,29 @@ export default {
       type: Array
     },
     todo:{
-         default: () => {}
+        default:()=>{}
     }
   },
+  data() {
+    return {
+      actived:"",
+    };
+  },
   watch:{
-      todo(val){
-          debugger
-
+      todo:{
+          handler:function(val) {
+            this.actived = val.path;
+          },
+          deep:true
+      }
+  },
+  methods:{
+      changimg(path,icon){
+          if(path == this.actived){
+              return  '../../../static/sliderBar/'+icon[1];
+          }else{
+              return  '../../../static/sliderBar/'+icon[0];
+          }
       }
   }
   

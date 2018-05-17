@@ -371,7 +371,7 @@ export default {
     watch: {
         editForm: {
             handler: function(val,oldval) {
-                console.log(val,oldval)
+                // console.log(val,oldval)
                 if (val) {
                 
                     this.editForm.xmze =

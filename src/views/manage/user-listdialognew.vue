@@ -191,8 +191,8 @@ export default {
       rulesUser: {
         nickname: [{ required: true, message: "不能为空" }],
         username: [{ required: true, message: "不能为空" }],
-        xzqh: [{ required: true, message: "不能为空" }],
-        bmbm: [{ required: true, message: "不能为空" }],
+        // xzqh: [{ required: true, message: "不能为空" }],
+        // bmbm: [{ required: true, message: "不能为空" }],
         password: [
           {
             required: true,

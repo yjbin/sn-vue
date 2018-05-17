@@ -224,6 +224,7 @@ export default {
         },
         propFrom: {
             handler: function(val) {
+                debugger
                 if (val) {
                     this.xmid = val.xmId;
                     this.detailList(this.xmid);
@@ -265,6 +266,9 @@ export default {
         appropriate(row) {
             this.secondPage_one = false;
             this.secondPage_two = true;
+            if (this.$refs.bfFrom) {
+                this.$refs.bfFrom.resetFields();
+            }
             // this.bfzjFrom = Object.assign({}, row);
             this.xmzjId = row.xmzjId;
             this.bfzjFrom.xmzjId = this.xmzjId ? this.xmzjId : row.xmzjId;
@@ -320,11 +324,7 @@ export default {
                         appropSave(obj).then(res => {
                             let data = res.data;
                             if (data.success) {
-                                _this.detailList(
-                                    _this.pageNo,
-                                    _this.pageSize,
-                                    _this.xmid
-                                );
+                                _this.detailList(_this.xmid);
                                 _this.bfzjFrom = {
                                     bfje: "",
                                     bfr: "",
