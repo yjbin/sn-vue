@@ -1,6 +1,7 @@
 <template>
   <el-breadcrumb separator-class="el-icon-arrow-right" class="breadCrumb">
     <el-breadcrumb-item v-for="(item,index) in breadList" :key="item.path" v-if='item.meta.title'>
+      <img v-if="item.meta&&item.meta.icon" :src="'../../../static/sliderBar/'+item.meta.icon[1]">
       <span v-if='item.redirect==="noredirect"||index==breadList.length-1' class="no-redirect">{{item.meta.title}}</span>
       <router-link v-else :to="item.redirect||item.path" tag="span">{{item.meta.title}}</router-link>
     </el-breadcrumb-item>
@@ -41,6 +42,9 @@ export default {
   .el-breadcrumb__inner span {
     color: #5b93d3;
     cursor: pointer;
+  }
+  img{
+    vertical-align:middle;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <el-menu mode="vertical" unique-opened :default-active="$route.path"  background-color="#fff"  @open="changMenu">
+  <el-menu mode="vertical" unique-opened :default-active="$route.path"  background-color="#fff"  @open="changMenu"  class="el-menu-vertical-demo">
     <el-menu-item index="" class="sideBar_title">功能菜单</el-menu-item>
-    <sidebar-item :routes="permission_routers"></sidebar-item>
+    <sidebar-item :routes="permission_routers" :todo="actMenu"></sidebar-item>
   </el-menu>
 </template>
 
@@ -14,10 +14,14 @@ export default {
   computed: {
     ...mapGetters(["permission_routers"])
   },
+  data() {
+    return {
+      actMenu: null
+    };
+  },
   methods:{
       changMenu(key, keyPath){
-          debugger
-          console.log(key, keyPath);
+        this.actMenu = key;
       }
   }
 };

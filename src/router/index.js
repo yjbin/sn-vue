@@ -74,7 +74,7 @@ export const constantRouterMap = [{
     redirect: '/home/home',
     meta: {
       title: '首页',
-      icon: 'home.png'
+      icon: ['home.png','home-c.png']
     },
     children: [{
       path: 'home',
@@ -128,7 +128,7 @@ export let asyncRouterMap = [{
   component: Layout,
   meta: {
     title: '项目预算',
-    icon: 'projectBenefit.png',
+    icon: ["projectBenefit.png","projectBenefit-c.png"],
     rid: ""
   },
   children: [{
@@ -165,7 +165,7 @@ export let asyncRouterMap = [{
   redirect: '/projectManage/projectOutline',
   meta: {
     title: '项目管理',
-    icon: 'projectManager.png',
+    icon: ['projectManager.png','projectManager-c.png'],
     rid: ""
   },
   children: [{
@@ -229,7 +229,7 @@ export let asyncRouterMap = [{
   redirect: '/warnManage/bigWarn',
   meta: {
     title: '预警管理',
-    icon: 'warn.png',
+    icon: ['warn.png','warn-c.png'],
     rid: ""
   },
   children: [{
@@ -340,7 +340,7 @@ export let asyncRouterMap = [{
   redirect: '/postManagemen/fileManagement',
   meta: {
     title: '发文管理',
-    icon: 'postManager.png',
+    icon: ['postManager.png','postManager-c.png'],
     rid: ""
   },
   children: [{
@@ -387,7 +387,7 @@ export let asyncRouterMap = [{
   redirect: '/manage/user',
   meta: {
     title: '系统管理',
-    icon: 'system.png',
+    icon: ['system.png','system-c.png'],
     rid: ""
   },
   children: [{
