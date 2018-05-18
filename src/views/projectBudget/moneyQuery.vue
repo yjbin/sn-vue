@@ -8,8 +8,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目名称">
-                    <el-input placeholder="项目名称" prefix-icon="el-icon-search" v-model.trim="seatch_name">
+                <el-form-item label="资金名称">
+                    <el-input placeholder="资金名称" prefix-icon="el-icon-search" v-model.trim="seatch_name">
                     </el-input>
                 </el-form-item>
                 <el-form-item>
@@ -117,7 +117,9 @@ export default {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
                 zjmc: this.seatch_name.trim(),
-                nd: this.seatch_nd
+                nd: this.seatch_nd,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm
             };
             moneyQuery(obj).then(res => {
                 let data = res.data;

@@ -59,8 +59,7 @@ export default {
             formBm: "",
             rules: {
                 bm: [
-                    { required: true, message: "编码不能为空" },
-                    { type: "number", message: "编码必须为数字值" }
+                    { required: true, message: "编码不能为空" }
                 ],
                 name: [{ required: true, message: "不能为空" }]
             }

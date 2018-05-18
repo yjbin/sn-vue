@@ -8,7 +8,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 import '@/router/permission'
-
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 /* eslint-disable no-new */

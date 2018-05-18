@@ -1,16 +1,16 @@
 <template>
-  <div class="layout">
-    <navBar class="layout_navBar"></navBar>
-    <div class="layout_body">
-      <sideBar class="layout_sideBar"></sideBar>
-      <div class="layout_main">
-        <breadCrumb></breadCrumb>
-        <div class="main_body">
-          <router-view></router-view>
+    <div class="layout">
+        <navBar class="layout_navBar"></navBar>
+        <div class="layout_body">
+            <sideBar class="layout_sideBar"></sideBar>
+            <div class="layout_main">
+                <breadCrumb></breadCrumb>
+                <div class="main_body">
+                    <router-view></router-view>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 <script>
 import navBar from "@/views/layout/navBar";
@@ -41,7 +41,16 @@ export default {
             float: left;
             height: 100%;
             width: 200px;
-            background: #545c64;
+            overflow: hidden;
+            overflow-y: auto;
+
+            .menu-wrapper {
+                .el-submenu {
+                    .router-link-active {
+                        border-left: 8px solid #307ecd !important;
+                    }
+                }
+            }
         }
         .layout_main {
             display: flex;
@@ -56,6 +65,29 @@ export default {
             overflow: auto;
         }
     }
-    
+}
+</style>
+<style lang="scss">
+.layout {
+    .layout_body {
+        .layout_sideBar {
+            .menu-wrapper {
+                .el-submenu {
+                    .router-link-active {
+                        border-left: 6px solid #307ecd;
+                        box-sizing: border-box;
+                        .is-active {
+                            min-width: 192px;
+                        }
+                    }
+                    .el-menu--inline {
+                        .el-menu-item {
+                            padding-left: 70px!important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 </style>

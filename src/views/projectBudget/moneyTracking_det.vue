@@ -151,6 +151,10 @@ export default {
       },
       xmid: "",
       xmgkList: {}, //概况
+      xmgkFrom: {
+        pageNo: 1,
+        pageSize: 5
+      },
       xmjdList: [], //进度
       xmjdtotalCount: 0,
       xmjdFrom: {
@@ -204,11 +208,7 @@ export default {
         if (val) {
           this.searchList.zjId = val.zjId;
           this.searchList.bmbm = val.bmbm;
-          this.getXmgkDate(
-            this.xmbfFrom.pageNo,
-            this.xmbfFrom.pageSize,
-            this.searchList
-          );
+          this.getXmgkDate(this.searchList);
           this.activeName = "first";
         }
       },
@@ -231,11 +231,11 @@ export default {
       return getDicTab("bmbm", row.bmbm);
     },
     //项目概述查询xmid
-    getXmgkDate(pageNo, pageSize, option) {
+    getXmgkDate(option) {
       let _this = this;
       let obj = {
-        pageNo: pageNo,
-        pageSize: pageSize
+        pageNo: this.xmgkFrom.pageNo,
+        pageSize:this.xmgkFrom.pageSize
       };
       option.zjId ? (obj.zjId = option.zjId) : "";
       option.bmbm ? (obj.bmbm = option.bmbm) : "";
@@ -402,7 +402,7 @@ export default {
     },
     xmxyChange(val) {
       this.xmxyFrom.pageNo = val;
-      this.xmysSearch(this.xmid);
+      this.xmxySearch(this.xmid);
     },
     xmxy_detail(row) {
       this.xmxyDates = Object.assign({}, row);
@@ -434,7 +434,7 @@ export default {
     },
     xmkhChange(val) {
       this.xmkhFrom.pageNo = val;
-      this.xmysSearch(this.xmid);
+      this.xmkhSearch(this.xmid);
     },
     xmkh_detail(row) {
       this.xmkhDates = Object.assign({}, row);

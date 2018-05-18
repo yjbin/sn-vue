@@ -429,7 +429,7 @@ export default {
         //调取部门验证规则接口
         xtszSelect({ type: "bmbm" }).then(res => {
             let data = res.data;
-            if (data.success) {
+            if (data.success && data.data.length) {
                 this.bmszNumber = data.data[0].value.split(",");
             }
         });

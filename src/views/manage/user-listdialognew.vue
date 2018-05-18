@@ -110,8 +110,8 @@
       <el-tree :data="xzqh_data" @node-click="nodeClick" default-expand-all :expand-on-click-node="false" :highlight-current="true">
       </el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="xzqh_save">保 存</el-button>
-        <el-button type="primary" @click="xzqhClose">取 消</el-button>
+        <el-button type="primary" @click="xzqh_save">保 存</el-button>
+        <el-button @click="xzqhClose">取 消</el-button>
       </span>
     </el-dialog>
      <!-- 部门弹框 -->
@@ -119,8 +119,8 @@
       <el-tree :data="bm_data" @node-click="bmnodeClick" default-expand-all :expand-on-click-node="false" :highlight-current="true">
       </el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="xzqh_save">保 存</el-button>
-        <el-button type="primary" @click="xzqhClose">取 消</el-button>
+        <el-button type="primary" @click="xzqh_save">保 存</el-button>
+        <el-button @click="xzqhClose">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -218,7 +218,7 @@ export default {
   },
   methods: {
     bmData(){
-       treeQueryBm({xzqh:this.userXzqh}).then(res => {
+       treeQueryBm({xzqh:this.xzqh}).then(res => {
         let data = res.data;
         if (data) {
             this.bm_data = data;

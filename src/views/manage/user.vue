@@ -155,6 +155,7 @@ export default {
             let obj = {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
                 name:this.name
             };
             

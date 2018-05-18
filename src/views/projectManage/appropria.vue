@@ -224,7 +224,6 @@ export default {
         },
         propFrom: {
             handler: function(val) {
-                debugger
                 if (val) {
                     this.xmid = val.xmId;
                     this.detailList(this.xmid);

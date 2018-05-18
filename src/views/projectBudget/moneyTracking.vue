@@ -106,7 +106,9 @@ export default {
         pageNo: this.pageNo,
         pageSize: this.pageSize,
         zjmc: this.seatch_name,
-        nd: this.seatch_nd
+        nd: this.seatch_nd,
+        xzqh: this.$store.state.user.user.uUser.xzqh,
+        bmbm: this.$store.state.user.user.uUser.bmbm
       };
       moneyTracking(obj).then(res => {
         let data = res.data;

@@ -132,7 +132,6 @@ export default {
         //传递给下个页面的参数
         detailModel(row) {
             if (row) {
-                debugger
                 this.propFrom.xmId = row.id;
             }
             this.firstPage = true;
