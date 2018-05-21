@@ -39,6 +39,18 @@ obj = [{
   label: '挂接完成'
 }];
 dicMap.setItem("zjzt", JSON.stringify(obj));
+//性别
+obj = [{
+  value: '0',
+  label: '女'
+},{
+  value: '1',
+  label: '男'
+},{
+  value: '2',
+  label: '其他'
+}];
+dicMap.setItem("xb", JSON.stringify(obj));
 import {
   dictionaries, xzqhDict, bmbmDict, duojiDict
 } from "@/api/config";

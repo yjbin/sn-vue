@@ -4,10 +4,12 @@
         <div class="layout_body">
             <sideBar class="layout_sideBar"></sideBar>
             <div class="layout_main">
-                <breadCrumb></breadCrumb>
-                <div class="main_body">
-                    <router-view></router-view>
-                </div>
+                <el-scrollbar class="page-component__scroll">
+                    <breadCrumb></breadCrumb>
+                    <div class="main_body">
+                        <router-view></router-view>
+                    </div>
+                </el-scrollbar>
             </div>
         </div>
     </div>
@@ -86,6 +88,12 @@ export default {
                         }
                     }
                 }
+            }
+        }
+        .page-component__scroll{
+            height: 100%;
+            .page-component__scroll .el-scrollbar__wrap{
+                overflow: auto;
             }
         }
     }

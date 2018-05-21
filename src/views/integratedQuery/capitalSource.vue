@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-     <moneyquery-det :isActive="isActive" @secondPage="secondPage" :propFrom="propFrom"></moneyquery-det>
+     <moneyquery-det :isActive="isActive" @secondPage="secondPage" :propFrom="propFrom" :zjxq="zjxqFrom"></moneyquery-det>
   </div>
 </template>
 
@@ -76,6 +76,7 @@ export default {
       seatch_name: "",
       ndOptions: [],
       tableData: [],
+      zjxqFrom:{},
       propFrom:{
         zjId:"",
         bmbm:""
@@ -92,6 +93,7 @@ export default {
     },
     query_details(row) {
       if(row){
+        this.zjxqFrom = Object.assign({}, row);
         this.propFrom.zjId = row.id;
         this.propFrom.bmbm = row.bmbm;
       }

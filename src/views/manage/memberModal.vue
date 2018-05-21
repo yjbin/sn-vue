@@ -15,7 +15,10 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="xzqh">
-                         <el-input v-model="userForm.xzqh" placeholder="行政区划：" disabled></el-input>
+                        <el-select v-model="userForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                          <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                          </el-option>
+                        </el-select>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -28,7 +31,10 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="bm">
-                        <el-input v-model="userForm.bm" placeholder="部门：" disabled=""></el-input>
+                        <el-select v-model="userForm.bm" placeholder="请选择" style="width:100%" :disabled="true">
+                          <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                          </el-option>
+                        </el-select>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -57,7 +63,7 @@
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="sex">
                         <el-select v-model="userForm.sex" placeholder="请选择">
-                          <el-option v-for="(item,index) in sexoptions" :key="index" :label="item.label" :value="item.value">
+                          <el-option v-for="(item,index) in xboptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
                         </el-select>
                       </el-form-item>
@@ -74,7 +80,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="birthday">
-                        <el-date-picker  v-model="userForm.birthday" type="date" placeholder="出生日期"></el-date-picker>
+                        <el-date-picker v-model="userForm.birthday" type="date" placeholder="出生日期"></el-date-picker>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -87,7 +93,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="zzmm">
-                          <el-input v-model="userForm.zzmm"></el-input>
+                        <el-input v-model="userForm.zzmm"></el-input>
                         <!-- <el-select v-model="userForm.zzmm" placeholder="请选择">
                           <el-option v-for="(item,index) in zjoptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
@@ -107,7 +113,7 @@
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="zw">
                         <el-select v-model="userForm.zw" placeholder="请选择">
-                          <el-option v-for="(item,index) in sexoptions" :key="index" :label="item.label" :value="item.value">
+                          <el-option v-for="(item,index) in zwlxoptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
                         </el-select>
                       </el-form-item>
@@ -161,8 +167,8 @@
         </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="userbtn_save">保 存</el-button>
-        <el-button type="primary" @click="btn_cancel">取 消</el-button>
+        <el-button type="primary" @click="userbtn_save">保 存</el-button>
+        <el-button @click="btn_cancel">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -178,159 +184,166 @@
 import { doCreate } from "@/utils/config";
 import { findRoles, addMember, delMember } from "@/api/department";
 export default {
-  data() {
-    const PassWord = (rule, value, callback) => {
-      if (!validPassword(value)) {
-        callback(new Error("密码由6-20字母和数字组成"));
-      } else {
-        callback();
-      }
-    };
-    return {
-      newModalToggle: false,
-      pageNo: 1,
-      pageSize: 3,
-      text_Tit: "",
-      activeName2: "first",
-      userForm: {
-        xzqh: "",
-        bm: "",
-        name: "",
-        sex: "",
-        birthday: "",
-        zzmm: "",
-        zw: "",
-        tel: "",
-        address: "",
-        gps: ""
-      },
-      sexoptions: [],
-      rulesUser: {
-        xzqh: [{ required: true, message: "不能为空" }],
-        bm: [{ required: true, message: "不能为空" }],
-        rId: [{ required: true, message: "不能为空" }],
-        name: [{ required: true, message: "不能为空" }],
-        zzmm: [{ required: true, message: "不能为空" }],
-        tel: [{ required: true, message: "不能为空" }],
-        zw: [{ required: true, message: "不能为空" }]
-      }
-    };
-  },
-  props: {
-    newModal: Boolean,
-    xzqh: { default: "" },
-    bm: { default: "" },
-    groupObj: {
-      default: () => {}
-    },
-    textTit: {
-      default: ""
-    }
-  },
-  methods: {
-    btn_cancel() {
-      this.newModalToggle = false;
-      this.$emit("newToggle", this.newModalToggle);
-    },
-    userClose() {
-      this.btn_cancel();
-    },
-    userbtn_save() {
-      this.$refs.userForm2.validate(valid => {
-        if (valid) {
-          let url = "update";
-          if (!this.userForm.id) {
-            url = "add";
-          }
-          addMember(this.userForm, url).then(res => {
-            let data = res.data;
-            if (data.success) {
-              this.$message({
-                message: data.msg,
-                type: "success"
-              });
-              this.btn_cancel();
-              let obj = {};
-              obj.xzqh = this.userForm.xzqh;
-              obj.bm = this.userForm.bm;
-              this.$emit("groupMember",obj);
+    data() {
+        const PassWord = (rule, value, callback) => {
+            if (!validPassword(value)) {
+                callback(new Error("密码由6-20字母和数字组成"));
+            } else {
+                callback();
             }
-          });
+        };
+        return {
+            newModalToggle: false,
+            pageNo: 1,
+            pageSize: 3,
+            text_Tit: "",
+            activeName2: "first",
+            userForm: {
+                xzqh: "",
+                bm: "",
+                name: "",
+                sex: "",
+                birthday: "",
+                zzmm: "",
+                zw: "",
+                tel: "",
+                address: "",
+                gps: ""
+            },
+            xboptions: [],
+            zwlxoptions: [],
+            xzqhoptions: [],
+            bmbmoptions: [],
+            rulesUser: {
+                xzqh: [{ required: true, message: "不能为空" }],
+                bm: [{ required: true, message: "不能为空" }],
+                rId: [{ required: true, message: "不能为空" }],
+                name: [{ required: true, message: "不能为空" }],
+                zzmm: [{ required: true, message: "不能为空" }],
+                tel: [{ required: true, message: "不能为空" }],
+                zw: [{ required: true, message: "不能为空" }]
+            }
+        };
+    },
+    props: {
+        newModal: Boolean,
+        xzqh: { default: "" },
+        bm: { default: "" },
+        groupObj: {
+            default: () => {}
+        },
+        textTit: {
+            default: ""
         }
-      });
     },
-  },
-  mounted() {
-    this.sexoptions = doCreate("zw");
-    // this.userRole();
-    // this.userForm.uUser.cjr = this.$store.getters.user.uUser.nickname;
-  },
-  watch: {
-    newModal(val) {
-      this.newModalToggle = val;
-      this.text_Tit = this.textTit;
-      if (this.$refs.userForm2) {
-        this.$refs.userForm2.resetFields();
-      }
-      this.userForm.xzqh = this.xzqh ? this.xzqh : "";
-      this.userForm.bm = this.bm ? this.bm : "";
+    methods: {
+        btn_cancel() {
+            this.newModalToggle = false;
+            this.$emit("newToggle", this.newModalToggle);
+        },
+        userClose() {
+            this.btn_cancel();
+        },
+        userbtn_save() {
+            this.$refs.userForm2.validate(valid => {
+                if (valid) {
+                    let url = "update";
+                    if (!this.userForm.id) {
+                        url = "add";
+                    }
+                    addMember(this.userForm, url).then(res => {
+                        let data = res.data;
+                        if (data.success) {
+                            this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                            this.btn_cancel();
+                            let obj = {};
+                            obj.xzqh = this.userForm.xzqh;
+                            obj.bm = this.userForm.bm;
+                            this.$emit("groupMember", obj);
+                        }
+                    });
+                }
+            });
+        }
     },
-    //  groupObj(val){
-    //     this.userForm = val
-    // },
-    groupObj: {
-      handler: function(val) {
-        this.userForm = Object.assign({}, val);
-      },
-      deep: true
+    mounted() {
+        this.sexoptions = doCreate("zw");
+        this.xzqhoptions = doCreate("xzqh");
+        this.bmbmoptions = doCreate("bmbm");
+        this.xboptions = doCreate("xb");
+        this.zwlxoptions = doCreate("zwlx");
+        // this.userRole();
+        // this.userForm.uUser.cjr = this.$store.getters.user.uUser.nickname;
+    },
+    watch: {
+        newModal(val) {
+            this.newModalToggle = val;
+            this.text_Tit = this.textTit;
+            if (this.$refs.userForm2) {
+                this.$refs.userForm2.resetFields();
+            }
+            this.userForm.xzqh = this.xzqh ? this.xzqh : "";
+            this.userForm.bm = this.bm ? (this.xzqh+"-"+this.bm) : "";
+        },
+        //  groupObj(val){
+        //     this.userForm = val
+        // },
+        groupObj: {
+            handler: function(val) {
+                this.userForm = Object.assign({}, val);
+            },
+            deep: true
+        }
     }
-  }
 };
 </script>
 <style lang="scss" scoped>
 .user-listdialog {
-  .user-content {
-    border-bottom: 1px dashed #ccc;
-    padding-bottom: 20px;
-  }
+    .user-content {
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 20px;
+    }
 }
 </style>
 <style lang="scss">
 .user-listdialog {
-  .el-dialog__header {
-    background: #307ecc;
-    .el-dialog__title {
-      color: #fff;
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
     }
-  }
-  .el-dialog__body {
-    padding: 20px 20px 0 20px;
-  }
-  .user-content {
-    .el-input__inner {
-      border-radius: 0;
+    .el-dialog__body {
+        padding: 20px 20px 0 20px;
     }
-    .el-select {
-      width: 100%;
+    .user-content {
+        .el-input__inner {
+            border-radius: 0;
+        }
+        .el-select {
+            width: 100%;
+        }
+        .el-date-editor {
+            width: 100%;
+        }
+        .el-button {
+            height: 40px;
+            margin: 0 5px;
+        }
     }
-    .el-date-editor {
-      width: 100%;
+    .el-dialog__footer {
+        text-align: center;
     }
-    .el-button {
-      height: 40px;
-      margin: 0 5px;
+    .el-form-item {
+        width: 100%;
+        margin-bottom: 0;
+        & > div {
+            width: 100%;
+        }
     }
-  }
-  .el-dialog__footer {
-    text-align: center;
-  }
-  .el-form-item {
-    width: 100%;
-    margin-bottom: 0;
-    & > div {
-      width: 100%;
-    }
-  }
 }
 </style>
 

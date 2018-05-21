@@ -88,7 +88,7 @@
                             </el-table-column>
                             <el-table-column prop="name" label="姓名" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column prop="zw" label="职务" show-overflow-tooltip>
+                            <el-table-column prop="zw" label="职务" :formatter="getZwlx" show-overflow-tooltip>
                             </el-table-column>
                             <el-table-column prop="tel" label="电话" show-overflow-tooltip>
                             </el-table-column>
@@ -118,7 +118,7 @@ import {
     delMember,
     xtszSelect
 } from "@/api/department";
-
+import { doCreate, getDicTab } from "@/utils/config";
 import memberModal from "./memberModal";
 export default {
     components: {
@@ -154,6 +154,9 @@ export default {
         };
     },
     methods: {
+        getZwlx(row) {
+            return getDicTab("zwlx", row.zw);
+        },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;
             return start + index + 1;

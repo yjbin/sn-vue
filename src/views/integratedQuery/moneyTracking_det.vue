@@ -7,6 +7,9 @@
         </el-col>
       </el-row>
       <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="资金详情" name="first_one">
+          <details-zjxq :zjlyForm="zjxq"></details-zjxq>
+        </el-tab-pane>
         <el-tab-pane label="项目概况" name="first">
           <details-xmgk :xmgkList="xmgkList"></details-xmgk>
         </el-tab-pane>
@@ -43,7 +46,7 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="项目验收" name="fourth">
+        <!-- <el-tab-pane label="项目验收" name="fourth">
           <el-table :data="xmysListDate" stripe border style="width: 100%">
             <el-table-column type="index" label="序号" width="80" :index="index_xmys"></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
@@ -65,7 +68,7 @@
             <el-pagination @current-change="xmysChange" :current-page.sync="xmysFrom.pageNo" :page-size="xmysFrom.pageSize" layout="total, prev, pager, next" :total="xmystotalCount">
             </el-pagination>
           </div>
-        </el-tab-pane>
+        </el-tab-pane> -->
         <xmys-detail :xmysDates="xmysDates" :xmysShow="xmysShow" @xmysSecond="xmysSecond"></xmys-detail>
         <el-tab-pane label="项目效益" name="five">
           <el-table :data="xmxyList" stripe border style="width: 100%">
@@ -80,17 +83,17 @@
             <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
             <el-table-column prop="lrsj" label="录入时间" :formatter="formatterDatelrsj" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作">
-                  <template slot-scope="scope">
-                      <el-button size="mini" type="primary" @click="xmxy_detail(scope.row)">详情</el-button>
-                  </template>
-              </el-table-column>
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" @click="xmxy_detail(scope.row)">详情</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <div class="user-page fr">
             <el-pagination @current-change="xmxyChange" :current-page.sync="xmxyFrom.pageNo" :page-size="xmxyFrom.pageSize" layout="total, prev, pager, next" :total="xmxytotalCount">
             </el-pagination>
           </div>
         </el-tab-pane>
-         <xmxy-detail :xmxyDates="xmxyDates" :xmxyShow="xmxyShow" @xmxySecond="xmxySecond"></xmxy-detail>
+        <xmxy-detail :xmxyDates="xmxyDates" :xmxyShow="xmxyShow" @xmxySecond="xmxySecond"></xmxy-detail>
         <el-tab-pane label="项目考核" name="six">
           <el-table :data="xmkhList" stripe border style="width: 100%">
             <el-table-column type="index" label="序号" width="80" :index="index_xmkh"></el-table-column>
@@ -105,10 +108,10 @@
             <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
             <el-table-column prop="lrsj" label="录入时间" :formatter="formatterDatelrsj" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作">
-                  <template slot-scope="scope">
-                      <el-button size="mini" type="primary" @click="xmkh_detail(scope.row)">详情</el-button>
-                  </template>
-              </el-table-column>
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" @click="xmkh_detail(scope.row)">详情</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <div class="mar10 fr">
             <el-pagination @current-change="xmkhChange" :current-page.sync="xmkhFrom.pageNo" :page-size="xmkhFrom.pageSize" layout="total, prev, pager, next" :total="xmkhtotalCount">
@@ -134,407 +137,413 @@ import { formatDate } from "@/utils/data";
 import { xmysSelect } from "@/api/projectAccept";
 import { xmxySelect } from "@/api/projectBenefit";
 import { assessSelect } from "@/api/projectAssess";
+import detailsZjxq from "./moneyQuery_detZjxq";
 export default {
-  components: {
-    detailsXmgk,
-    xmysDetail,
-    xmxyDetail,
-    xmkhDetail
-  },
-  data() {
-    return {
-      activeName: "first",
-      secondPage: false,
-      searchList: {
-        zjId: "",
-        bmbm: ""
-      },
-      xmid: "",
-      xmgkList: {}, //概况
-      xmjdList: [], //进度
-      xmjdtotalCount: 0,
-      xmjdFrom: {
-        pageNo: 1,
-        pageSize: 5
-      },
-      xmbfList: [], //拨付
-      xmbftotalCount: 0,
-      xmbfFrom: {
-        pageNo: 1,
-        pageSize: 5
-      },
-      xmysListDate: [], //项目验收
-      xmystotalCount: 0,
-      xmysFrom: {
-        pageNo: 1,
-        pageSize: 5
-      },
-      xmxyList: [], //项目效益
-      xmxytotalCount: 0,
-      xmxyFrom: {
-        pageNo: 1,
-        pageSize: 5
-      },
-      xmkhList: [], //项目考核
-      xmkhtotalCount: 0,
-      xmkhFrom: {
-        pageNo: 1,
-        pageSize: 5
-      },
-      xmysDates: {},
-      xmxyDates: {},
-      xmkhDates: {},
-      xmysShow: false,
-      xmxyShow: false,
-      xmkhShow: false
-    };
-  },
-  props: {
-    isActive: Boolean,
-    propFrom: {
-      default: () => {}
-    }
-  },
-  watch: {
-    isActive(val) {
-      this.secondPage = !val;
+    components: {
+        detailsXmgk,
+        xmysDetail,
+        xmxyDetail,
+        xmkhDetail,
+        detailsZjxq
     },
-    propFrom: {
-      handler: function(val) {
-        if (val) {
-          this.searchList.zjId = val.zjId;
-          this.searchList.bmbm = val.bmbm;
-          this.getXmgkDate(
-            this.xmbfFrom.pageNo,
-            this.xmbfFrom.pageSize,
-            this.searchList
-          );
-          this.activeName = "first";
+    data() {
+        return {
+            activeName: "first",
+            secondPage: false,
+            searchList: {
+                zjId: "",
+                bmbm: ""
+            },
+            xmid: "",
+            xmgkList: {}, //概况
+            xmjdList: [], //进度
+            xmjdtotalCount: 0,
+            xmjdFrom: {
+                pageNo: 1,
+                pageSize: 5
+            },
+            xmbfList: [], //拨付
+            xmbftotalCount: 0,
+            xmbfFrom: {
+                pageNo: 1,
+                pageSize: 5
+            },
+            xmysListDate: [], //项目验收
+            xmystotalCount: 0,
+            xmysFrom: {
+                pageNo: 1,
+                pageSize: 5
+            },
+            xmxyList: [], //项目效益
+            xmxytotalCount: 0,
+            xmxyFrom: {
+                pageNo: 1,
+                pageSize: 5
+            },
+            xmkhList: [], //项目考核
+            xmkhtotalCount: 0,
+            xmkhFrom: {
+                pageNo: 1,
+                pageSize: 5
+            },
+            xmysDates: {},
+            xmxyDates: {},
+            xmkhDates: {},
+            xmysShow: false,
+            xmxyShow: false,
+            xmkhShow: false
+        };
+    },
+    props: {
+        isActive: Boolean,
+        propFrom: {
+            default: () => {}
+        },
+        zjxq: {
+            type: Object,
+            default: () => {}
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    khjgDic(row) {
-      if(row.khjg=="1"){
-        return "同意";
-      }else{
-        return "不同意";
-      }
-      
     },
-    getXzqh(row) {
-      return getDicTab("xzqh", row.xzqh);
+    watch: {
+        isActive(val) {
+            this.secondPage = !val;
+        },
+        propFrom: {
+            handler: function(val) {
+                if (val) {
+                    this.searchList.zjId = val.zjId;
+                    this.searchList.bmbm = val.bmbm;
+                    this.getXmgkDate(
+                        this.xmbfFrom.pageNo,
+                        this.xmbfFrom.pageSize,
+                        this.searchList
+                    );
+                    this.activeName = "first_one";
+                }
+            },
+            deep: true
+        }
     },
-    getBmbm(row) {
-      return getDicTab("bmbm", row.bmbm);
-    },
-    //项目概述查询xmid
-    getXmgkDate(pageNo, pageSize, option) {
-      let _this = this;
-      let obj = {
-        pageNo: pageNo,
-        pageSize: pageSize
-      };
-      option.zjId ? (obj.zjId = option.zjId) : "";
-      option.bmbm ? (obj.bmbm = option.bmbm) : "";
-      xmlbList(obj).then(res => {
-        let data = res.data.data.elements;
-        if (data) {
-          if (data.length) {
-            _this.xmgkList = Object.assign({}, data[0]);
-            _this.xmid = res.data.data.elements[0].id;
-            _this.xmjdSearch(_this.xmid);
-            _this.xmbfSearch(_this.xmid);
-            _this.xmysSearch(_this.xmid);
-            _this.xmxySearch(_this.xmid);
-            _this.xmkhSearch(_this.xmid);
-          } else {
-            _this.$message({
-              message: "此资金暂未挂接项目",
-              type: "success"
-            });
-            // _this.secondPage = false;
-            // _this.$emit("secondPage", this.secondPage);
-            _this.xmgkList = {
-              xzqh: this.$store.state.user.user.uUser.xzqh
+    methods: {
+        khjgDic(row) {
+            if (row.khjg == "1") {
+                return "同意";
+            } else {
+                return "不同意";
+            }
+        },
+        getXzqh(row) {
+            return getDicTab("xzqh", row.xzqh);
+        },
+        getBmbm(row) {
+            return getDicTab("bmbm", row.bmbm);
+        },
+        //项目概述查询xmid
+        getXmgkDate(pageNo, pageSize, option) {
+            let _this = this;
+            let obj = {
+                pageNo: pageNo,
+                pageSize: pageSize
             };
-            _this.xmid = "";
-            _this.xmkhList = [];
-            _this.xmxyList = [];
-            _this.xmysList = [];
-            _this.xmbfList = [];
-            _this.xmjdList = [];
-          }
+            option.zjId ? (obj.zjId = option.zjId) : "";
+            option.bmbm ? (obj.bmbm = option.bmbm) : "";
+            xmlbList(obj).then(res => {
+                let data = res.data.data.elements;
+                if (data) {
+                    if (data.length) {
+                        _this.xmgkList = Object.assign({}, data[0]);
+                        _this.xmid = res.data.data.elements[0].id;
+                        _this.xmjdSearch(_this.xmid);
+                        _this.xmbfSearch(_this.xmid);
+                        _this.xmysSearch(_this.xmid);
+                        _this.xmxySearch(_this.xmid);
+                        _this.xmkhSearch(_this.xmid);
+                    } else {
+                        _this.$message({
+                            message: "此资金暂未挂接项目",
+                            type: "success"
+                        });
+                        // _this.secondPage = false;
+                        // _this.$emit("secondPage", this.secondPage);
+                        _this.xmgkList = {
+                            xzqh: this.$store.state.user.user.uUser.xzqh
+                        };
+                        _this.xmid = "";
+                        _this.xmkhList = [];
+                        _this.xmxyList = [];
+                        _this.xmysList = [];
+                        _this.xmbfList = [];
+                        _this.xmjdList = [];
+                    }
+                }
+            });
+        },
+        //选项卡点击事件
+        handleClick(tab) {
+            if (tab.name == "first") {
+                this.getXmgkDate(this.searchList);
+            } else if (tab.name == "second") {
+                this.xmjdSearch(this.xmid);
+            } else if (tab.name == "third") {
+                this.xmbfSearch(this.xmid);
+            } else if (tab.name == "five") {
+                this.xmxySearch(this.xmid);
+            } else if (tab.name == "six") {
+                this.xmkhSearch(this.xmid);
+            } else {
+                return false;
+            }
+            // else if (tab.name == "fourth") {
+            //     this.xmysSearch(this.xmid);
+            // }
+        },
+        //返回
+        backBtn() {
+            this.secondPage = false;
+            this.$emit("secondPage", this.secondPage);
+            if (this.$refs.bfFrom) {
+                this.$refs.bfFrom.resetFields();
+            }
+            this.searchList = {};
+        },
+        //项目拨付查询
+        xmbfSearch(option) {
+            let obj = {
+                pageNo: this.xmbfFrom.pageNo,
+                pageSize: this.xmbfFrom.pageSize
+            };
+            if (option) {
+                obj.xmid = option;
+                appropRecord(obj).then(res => {
+                    if (res.data.msg.data.length) {
+                        this.xmbfList = res.data.msg.data;
+                        this.xmbftotalCount = res.data.msg.totalCount;
+                    } else {
+                        this.xmbfList = [];
+                        this.xmbftotalCount = 0;
+                    }
+                });
+            } else {
+                this.xmbfList = [];
+            }
+        },
+        xmbfChange(val) {
+            this.xmbfFrom.pageNo = val;
+            this.xmbfSearch(this.xmid);
+        },
+        //项目进度查询
+        xmjdSearch(option) {
+            let obj = {
+                pageNo: this.xmjdFrom.pageNo,
+                pageSize: this.xmjdFrom.pageSize
+            };
+            if (option) {
+                obj.xmid = option;
+                xmjdSelect(obj).then(res => {
+                    if (res.data.msg.data.length) {
+                        this.xmjdList = res.data.msg.data;
+                        this.xmjdtotalCount = res.data.msg.totalCount;
+                    } else {
+                        this.xmjdList = [];
+                        this.xmjdtotalCount = 0;
+                    }
+                });
+            } else {
+                this.xmjdList = [];
+            }
+        },
+        xmjdChange(val) {
+            this.xmjdFrom.pageNo = val;
+            this.xmjdSearch(this.xmid);
+        },
+        //项目验收查询
+        xmysSearch(option) {
+            let obj = {
+                pageNo: this.xmysFrom.pageNo,
+                pageSize: this.xmysFrom.pageSize
+            };
+            if (option) {
+                obj.xmId = option;
+                xmysSelect(obj).then(res => {
+                    if (res.data.msg.data.length) {
+                        this.xmysListDate = res.data.msg.data;
+                        this.xmystotalCount = res.data.msg.totalCount;
+                    } else {
+                        this.xmysListDate = [];
+                        this.xmystotalCount = 0;
+                    }
+                });
+            } else {
+                this.xmysListDate = [];
+            }
+        },
+        xmysChange(val) {
+            this.xmysFrom.pageNo = val;
+            this.xmysSearch(this.xmid);
+        },
+        xmys_detail(row) {
+            this.xmysDates = Object.assign({}, row);
+            this.xmysShow = true;
+        },
+        xmysSecond(val) {
+            this.xmysShow = val;
+        },
+        //项目效益
+        xmxySearch(option) {
+            let obj = {
+                pageNo: this.xmxyFrom.pageNo,
+                pageSize: this.xmxyFrom.pageSize
+            };
+            if (option) {
+                obj.xmId = option;
+                xmxySelect(obj).then(res => {
+                    if (res.data.msg.data.length) {
+                        this.xmxyList = res.data.msg.data;
+                        this.xmxytotalCount = res.data.msg.totalCount;
+                    } else {
+                        this.xmxyList = [];
+                        this.xmxytotalCount = 0;
+                    }
+                });
+            } else {
+                this.xmxyList = [];
+            }
+        },
+        xmxyChange(val) {
+            this.xmxyFrom.pageNo = val;
+            this.xmysSearch(this.xmid);
+        },
+        xmxy_detail(row) {
+            this.xmxyDates = Object.assign({}, row);
+            this.xmxyShow = true;
+        },
+        xmxySecond(val) {
+            this.xmxyShow = val;
+        },
+        //项目考核
+        xmkhSearch(option) {
+            let obj = {
+                pageNo: this.xmkhFrom.pageNo,
+                pageSize: this.xmkhFrom.pageSize
+            };
+            if (option) {
+                obj.xmId = option;
+                assessSelect(obj).then(res => {
+                    if (res.data.msg.data.length) {
+                        this.xmkhList = res.data.msg.data;
+                        this.xmkhtotalCount = res.data.msg.totalCount;
+                    } else {
+                        this.xmkhList = [];
+                        this.xmkhtotalCount = 0;
+                    }
+                });
+            } else {
+                this.xmkhList = [];
+            }
+        },
+        xmkhChange(val) {
+            this.xmkhFrom.pageNo = val;
+            this.xmysSearch(this.xmid);
+        },
+        xmkh_detail(row) {
+            this.xmkhDates = Object.assign({}, row);
+            this.xmkhShow = true;
+        },
+        xmkhSecond(val) {
+            this.xmkhShow = val;
+        },
+        index_xmkh(index) {
+            let start = (this.xmkhFrom.pageNo - 1) * this.xmkhFrom.pageSize;
+            return start + index + 1;
+        },
+        index_xmys(index) {
+            let start = (this.xmysFrom.pageNo - 1) * this.xmysFrom.pageSize;
+            return start + index + 1;
+        },
+        index_xmxy(index) {
+            let start = (this.xmxyFrom.pageNo - 1) * this.xmxyFrom.pageSize;
+            return start + index + 1;
+        },
+        index_xmjd(index) {
+            let start = (this.xmjdFrom.pageNo - 1) * this.xmjdFrom.pageSize;
+            return start + index + 1;
+        },
+        index_xmbf(index) {
+            let start = (this.xmbfFrom.pageNo - 1) * this.xmbfFrom.pageSize;
+            return start + index + 1;
+        },
+        formatterDatekssj(row) {
+            return formatDate(row.kssj, "yyyy-MM-dd");
+        },
+        formatterDatejssj(row) {
+            return formatDate(row.jssj, "yyyy-MM-dd");
+        },
+        formatterDatelrsj(row) {
+            return formatDate(row.lrsj, "yyyy-MM-dd");
+        },
+        formatterDatebfsj(row) {
+            return formatDate(row.bfsj, "yyyy-MM-dd");
+        },
+        formatterDateyssj(row) {
+            return formatDate(row.yssj, "yyyy-MM-dd");
+        },
+        formatterDatekhsj(row) {
+            return formatDate(row.khsj, "yyyy-MM-dd");
         }
-      });
-    },
-    //选项卡点击事件
-    handleClick(tab) {
-      if (tab.name == "first") {
-        this.getXmgkDate(this.searchList);
-      } else if (tab.name == "second") {
-        this.xmjdSearch(this.xmid);
-      } else if (tab.name == "third") {
-        this.xmbfSearch(this.xmid);
-      } else if (tab.name == "fourth") {
-        this.xmysSearch(this.xmid);
-      } else if (tab.name == "five") {
-        this.xmxySearch(this.xmid);
-      } else if (tab.name == "six") {
-        this.xmkhSearch(this.xmid);
-      } else {
-        return false;
-      }
-    },
-    //返回
-    backBtn() {
-      this.secondPage = false;
-      this.$emit("secondPage", this.secondPage);
-      if (this.$refs.bfFrom) {
-        this.$refs.bfFrom.resetFields();
-      }
-      this.searchList = {};
-    },
-    //项目拨付查询
-    xmbfSearch(option) {
-      let obj = {
-        pageNo: this.xmbfFrom.pageNo,
-        pageSize: this.xmbfFrom.pageSize
-      };
-      if (option) {
-        obj.xmid = option;
-        appropRecord(obj).then(res => {
-          if (res.data.msg.data.length) {
-            this.xmbfList = res.data.msg.data;
-            this.xmbftotalCount = res.data.msg.totalCount;
-          } else {
-            this.xmbfList = [];
-            this.xmbftotalCount = 0;
-          }
-        });
-      } else {
-        this.xmbfList = [];
-      }
-    },
-    xmbfChange(val) {
-      this.xmbfFrom.pageNo = val;
-      this.xmbfSearch(this.xmid);
-    },
-    //项目进度查询
-    xmjdSearch(option) {
-      let obj = {
-        pageNo: this.xmjdFrom.pageNo,
-        pageSize: this.xmjdFrom.pageSize
-      };
-      if (option) {
-        obj.xmid = option;
-        xmjdSelect(obj).then(res => {
-          if (res.data.msg.data.length) {
-            this.xmjdList = res.data.msg.data;
-            this.xmjdtotalCount = res.data.msg.totalCount;
-          } else {
-            this.xmjdList = [];
-            this.xmjdtotalCount = 0;
-          }
-        });
-      } else {
-        this.xmjdList = [];
-      }
-    },
-    xmjdChange(val) {
-      this.xmjdFrom.pageNo = val;
-      this.xmjdSearch(this.xmid);
-    },
-    //项目验收查询
-    xmysSearch(option) {
-      let obj = {
-        pageNo: this.xmysFrom.pageNo,
-        pageSize: this.xmysFrom.pageSize
-      };
-      if (option) {
-        obj.xmId = option;
-        xmysSelect(obj).then(res => {
-          if (res.data.msg.data.length) {
-            this.xmysListDate = res.data.msg.data;
-            this.xmystotalCount = res.data.msg.totalCount;
-          } else {
-            this.xmysListDate = [];
-            this.xmystotalCount = 0;
-          }
-        });
-      } else {
-        this.xmysListDate = [];
-      }
-    },
-    xmysChange(val) {
-      this.xmysFrom.pageNo = val;
-      this.xmysSearch(this.xmid);
-    },
-    xmys_detail(row) {
-      this.xmysDates = Object.assign({}, row);
-      this.xmysShow = true;
-    },
-    xmysSecond(val) {
-      this.xmysShow = val;
-    },
-    //项目效益
-    xmxySearch(option) {
-      let obj = {
-        pageNo: this.xmxyFrom.pageNo,
-        pageSize: this.xmxyFrom.pageSize
-      };
-      if (option) {
-        obj.xmId = option;
-        xmxySelect(obj).then(res => {
-          if (res.data.msg.data.length) {
-            this.xmxyList = res.data.msg.data;
-            this.xmxytotalCount = res.data.msg.totalCount;
-          } else {
-            this.xmxyList = [];
-            this.xmxytotalCount = 0;
-          }
-        });
-      } else {
-        this.xmxyList = [];
-      }
-    },
-    xmxyChange(val) {
-      this.xmxyFrom.pageNo = val;
-      this.xmysSearch(this.xmid);
-    },
-    xmxy_detail(row) {
-      this.xmxyDates = Object.assign({}, row);
-      this.xmxyShow = true;
-    },
-    xmxySecond(val) {
-      this.xmxyShow = val;
-    },
-    //项目考核
-    xmkhSearch(option) {
-      let obj = {
-        pageNo: this.xmkhFrom.pageNo,
-        pageSize: this.xmkhFrom.pageSize
-      };
-      if (option) {
-        obj.xmId = option;
-        assessSelect(obj).then(res => {
-          if (res.data.msg.data.length) {
-            this.xmkhList = res.data.msg.data;
-            this.xmkhtotalCount = res.data.msg.totalCount;
-          } else {
-            this.xmkhList = [];
-            this.xmkhtotalCount = 0;
-          }
-        });
-      } else {
-        this.xmkhList = [];
-      }
-    },
-    xmkhChange(val) {
-      this.xmkhFrom.pageNo = val;
-      this.xmysSearch(this.xmid);
-    },
-    xmkh_detail(row) {
-      this.xmkhDates = Object.assign({}, row);
-      this.xmkhShow = true;
-    },
-    xmkhSecond(val) {
-      this.xmkhShow = val;
-    },
-    index_xmkh(index) {
-      let start = (this.xmkhFrom.pageNo - 1) * this.xmkhFrom.pageSize;
-      return start + index + 1;
-    },
-    index_xmys(index) {
-      let start = (this.xmysFrom.pageNo - 1) * this.xmysFrom.pageSize;
-      return start + index + 1;
-    },
-    index_xmxy(index) {
-      let start = (this.xmxyFrom.pageNo - 1) * this.xmxyFrom.pageSize;
-      return start + index + 1;
-    },
-    index_xmjd(index) {
-      let start = (this.xmjdFrom.pageNo - 1) * this.xmjdFrom.pageSize;
-      return start + index + 1;
-    },
-    index_xmbf(index) {
-      let start = (this.xmbfFrom.pageNo - 1) * this.xmbfFrom.pageSize;
-      return start + index + 1;
-    },
-    formatterDatekssj(row) {
-      return formatDate(row.kssj, "yyyy-MM-dd");
-    },
-    formatterDatejssj(row) {
-      return formatDate(row.jssj, "yyyy-MM-dd");
-    },
-    formatterDatelrsj(row) {
-      return formatDate(row.lrsj, "yyyy-MM-dd");
-    },
-    formatterDatebfsj(row) {
-      return formatDate(row.bfsj, "yyyy-MM-dd");
-    },
-    formatterDateyssj(row) {
-      return formatDate(row.yssj, "yyyy-MM-dd");
-    },
-    formatterDatekhsj(row) {
-      return formatDate(row.khsj, "yyyy-MM-dd");
     }
-  }
 };
 </script>
 
 
 <style lang="scss">
 .money_details {
-  .el-form-item {
-    width: 100%;
-    .el-form-item__content {
-      width: 70%;
-      .el-cascader {
+    .el-form-item {
         width: 100%;
-      }
+        .el-form-item__content {
+            width: 70%;
+            .el-cascader {
+                width: 100%;
+            }
+        }
+        & > div {
+            width: 100%;
+        }
     }
-    & > div {
-      width: 100%;
+    .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+        color: #fff;
     }
-  }
-  .el-tabs--border-card > .el-tabs__header .el-tabs__item {
-    color: #fff;
-  }
-  .el-tabs--border-card > .el-tabs__header {
-    background-color: #317ecc;
-  }
-  .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
-    background-color: #317ecc;
-    border: 0;
-    opacity: 0.8;
-  }
-  .el-tabs--border-card > .el-tabs__header .el-tabs__item {
-    border: 0;
-    margin: 0;
-  }
-  .el-tabs--border-card
-    > .el-tabs__header
-    .el-tabs__item:not(.is-disabled):hover {
-    color: #fff;
-    opacity: 0.8;
-  }
-  .el-tabs__nav {
-    display: flex;
-  }
-  .el-tabs__item {
-    flex: 1;
-    text-align: center;
-  }
-  .el-tabs__nav {
-    width: 100%;
-  }
-  .el-date-editor.el-input,
-  .el-date-editor.el-input__inner {
-    width: 100%;
-  }
+    .el-tabs--border-card > .el-tabs__header {
+        background-color: #317ecc;
+    }
+    .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+        background-color: #317ecc;
+        border: 0;
+        opacity: 0.8;
+    }
+    .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+        border: 0;
+        margin: 0;
+    }
+    .el-tabs--border-card
+        > .el-tabs__header
+        .el-tabs__item:not(.is-disabled):hover {
+        color: #fff;
+        opacity: 0.8;
+    }
+    .el-tabs__nav {
+        display: flex;
+    }
+    .el-tabs__item {
+        flex: 1;
+        text-align: center;
+    }
+    .el-tabs__nav {
+        width: 100%;
+    }
+    .el-date-editor.el-input,
+    .el-date-editor.el-input__inner {
+        width: 100%;
+    }
 }
 </style>
 
