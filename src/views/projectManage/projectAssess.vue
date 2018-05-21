@@ -296,7 +296,8 @@ export default {
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
-                flag:"1"
+                flag:"1",
+                xzqh:this.$store.state.user.user.uUser.xzqh
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",

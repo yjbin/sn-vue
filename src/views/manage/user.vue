@@ -211,7 +211,7 @@ export default {
         .el-input__inner {
             background: #5998d6;
             border: none;
-            margin: 3px 0;
+            height: 38px;
         }
         .el-button {
             position: absolute;
@@ -219,7 +219,7 @@ export default {
             right: 0;
             background: transparent;
             border: none;
-            height: 46px;
+            height: 36px;
             .el-icon-search {
                 color: #fff;
             }

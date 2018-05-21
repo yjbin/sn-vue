@@ -241,7 +241,6 @@ export default {
   watch: {
     xmgkList: {
       handler: function(val) {
-          debugger
         if (val) {
           this.xmForm = Object.assign({}, val);
           if (val.fj) {

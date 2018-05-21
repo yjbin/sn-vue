@@ -159,43 +159,6 @@ export default {
                 margin: 10px 0;
             }
         }
-        .role-right {
-            position: relative;
-        }
-    }
-}
-</style>
-<style lang="scss">
-.role {
-    .el-input__inner {
-        border-radius: 15px;
-    }
-    .role-right {
-        .el-input__inner {
-            background: #5998d6;
-            border: none;
-            margin: 3px 0;
-        }
-        .el-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: transparent;
-            border: none;
-            height: 46px;
-            .el-icon-search {
-                color: #fff;
-            }
-            &:hover {
-                .el-icon-search {
-                    color: #fff;
-                }
-            }
-        }
-    }
-
-    .el-icon-search {
-        cursor: pointer;
     }
 }
 </style>

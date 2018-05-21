@@ -51,9 +51,14 @@ import ZhprojectApplication from '@/views/integratedQuery/projectApplication'
 import ZhcapitalSource from '@/views/integratedQuery/capitalSource'
 import ZhprojectOutline from '@/views/integratedQuery/projectOutline'
 import ZhwarningInformation from '@/views/integratedQuery/warningInformation'
-
-
-
+//统计分析
+import projectCollect from '@/views/statisticAnalysis/projectCollect'
+import AbnormalCapital from '@/views/statisticAnalysis/AbnormalCapital'
+import capitalCollect from '@/views/statisticAnalysis/capitalCollect'
+import projectFund from '@/views/statisticAnalysis/projectFund'
+import projectProgress from '@/views/statisticAnalysis/projectProgress'
+//领导指挥舱
+import CommandModule from '@/views/CommandModule/CommandModule'
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -99,7 +104,8 @@ export default new Router({
   }),
   routes: constantRouterMap
 })
-export let asyncRouterMap = [{
+export let asyncRouterMap = [
+  {
     path: '/system',
     component: Layout,
     redirect: '/system/largetSet',
@@ -579,6 +585,80 @@ export let asyncRouterMap = [{
       name: 'originhost',
       meta: {
         title: '组织活动',
+        icon: '',
+        rid: "-1"
+      }
+    }]
+  }, {
+    path: '/statisticAnalysis',
+    component: Layout,
+    redirect: '/statisticAnalysis/projectCollect',
+    meta: {
+      title: '统计分析',
+      icon: ["statistic.png", "statistic-c.png"],
+      rid: ""
+    },
+    children: [{
+      path: 'projectCollect',
+      component: projectCollect,
+      name: 'projectCollect',
+      meta: {
+        title: '项目申报汇总表',
+        icon: '',
+        rid: "-1"
+      }
+    }, {
+      path: 'capitalCollect',
+      component: capitalCollect,
+      name: 'capitalCollect',
+      meta: {
+        title: '资金来源统计表',
+        icon: '',
+        rid: "-1"
+      }
+    }, {
+      path: 'projectFund',
+      component: projectFund,
+      name: 'projectFund',
+      meta: {
+        title: '项目资金分布表',
+        icon: '',
+        rid: "-1"
+      }
+    }, {
+      path: 'projectProgress',
+      component: projectProgress,
+      name: 'projectProgress',
+      meta: {
+        title: '项目进度汇总表',
+        icon: '',
+        rid: "-1"
+      }
+    }, {
+      path: 'AbnormalCapital',
+      component: AbnormalCapital,
+      name: 'AbnormalCapital',
+      meta: {
+        title: '资金异常分析表',
+        icon: '',
+        rid: "-1"
+      }
+    }]
+  }, {
+    path: '/CommandModule',
+    component: Layout,
+    redirect: '/CommandModule/CommandModule',
+    meta: {
+      title: '统计分析',
+      icon: ["lead.png", "lead-c.png"],
+      rid: ""
+    },
+    children: [{
+      path: 'CommandModule',
+      component: CommandModule,
+      name: 'CommandModule',
+      meta: {
+        title: '领导指挥舱',
         icon: '',
         rid: "-1"
       }

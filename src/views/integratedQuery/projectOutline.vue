@@ -105,7 +105,9 @@ export default {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xmlx: "0"
+                xzqh:this.$store.state.user.user.uUser.xzqh,
+                xmlx: "0",
+                flag:"1"
             };
             this.searchList.nd ? (obj.nd = this.searchList.nd) : "";
             this.searchList.zjjb ? (obj.zjjb = this.searchList.zjjb) : "";

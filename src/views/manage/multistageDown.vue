@@ -1,23 +1,25 @@
 <template>
   <div class="multistage">
     <div class="source_tree">
-      <el-form :inline="true">
-        <el-form-item label="选择字典">
-          <el-select v-model="typeVal" @change="duojiChange">
-            <el-option v-for="(item,index) in Djoptions" :key="index" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
-          <span>{{ node.label }}</span>
-          <span>
-            <i class="el-icon-plus" @click.stop="() => append(data)"></i>
-            <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
-            <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
-          </span>
-        </span>
-      </el-tree>
+         <el-scrollbar class="page-component__scroll">
+            <el-form :inline="true">
+                <el-form-item label="选择字典">
+                <el-select v-model="typeVal" @change="duojiChange">
+                    <el-option v-for="(item,index) in Djoptions" :key="index" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+                </el-form-item>
+            </el-form>
+            <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
+                <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
+                <span>
+                    <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                    <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                    <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
+                </span>
+                </span>
+            </el-tree>
+         </el-scrollbar>
     </div>
     <div class="source_form">
       <el-form :inline="true" :model="formData" label-width="90px" ref="treeForm" class="demo-form-inline" :rules="rules">
@@ -190,36 +192,19 @@ export default {
     height: 100%;
     .source_tree {
         float: left;
-        width: 350px;
+        width: 300px;
+        height: 81vh;
+        overflow: auto;
     }
     .source_form {
         float: left;
-        width: calc(100% - 350px);
+        width: calc(100% - 300px);
         height: 100%;
         padding: 20px;
         border-left: 1px dotted #999;
     }
-}
-</style>
-<style lang="scss" scoped>
-.multistage {
     .showHide{
       display: none;
-    }
-}
-</style>
-<style lang="scss">
-.multistage {
-    .el-form-item {
-        width: 100%;
-        .el-form-item__content {
-            width: 70%;
-        }
-        &.none {
-            .el-form-item__label {
-                color: transparent;
-            }
-        }
     }
 }
 </style>

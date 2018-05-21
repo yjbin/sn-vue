@@ -284,8 +284,8 @@ export default {
                 pageNo: this.pageNo,
                 bmbm:this.$store.state.user.user.uUser.bmbm,
                 xmlx:"0",
-                flag:"1"
-                // xzqh: this.$store.state.user.user.uUser.xzqh,
+                flag:"1",
+                xzqh: this.$store.state.user.user.uUser.xzqh,
                 // bm: this.$store.state.user.user.uUser.bmbm,
                 // fgks: "0"
             };

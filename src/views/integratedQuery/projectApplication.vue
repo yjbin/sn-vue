@@ -84,7 +84,8 @@ export default {
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "1",
-                flag:"1"
+                flag:"1",
+                xzqh:this.$store.state.user.user.uUser.xzqh
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";

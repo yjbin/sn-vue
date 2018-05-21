@@ -110,7 +110,7 @@ export default {
                 zjmc: this.seatch_name,
                 nd: this.seatch_nd,
                 xzqh: this.$store.state.user.user.uUser.xzqh,
-                // bmbm: this.$store.state.user.user.uUser.bmbm
+                bmbm: this.$store.state.user.user.uUser.bmbm
             };
             moneyTracking(obj).then(res => {
                 let data = res.data;

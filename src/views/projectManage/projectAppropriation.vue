@@ -102,7 +102,8 @@ export default {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xmlx: "0"
+                xmlx: "0",
+                xzqh:this.$store.state.user.user.uUser.xzqh
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",

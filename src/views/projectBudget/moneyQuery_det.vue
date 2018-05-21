@@ -130,31 +130,12 @@ export default {
         },
         xmjdChange(val) {
             this.xmjdFrom.pageNo = val;
-            let obj = {
-                pageNo: this.xmjdFrom.pageNo,
-                pageSize: this.xmjdFrom.pageSize,
-                xmId: this.xmid
-            };
-            xmjdSelect(obj).then(res => {
-                this.xmjdList = res.data.msg.data;
-                this.xmjdtotalCount = res.data.msg.totalCount;
-            });
+            this.QueryListXmjd()
         },
         xmbfChange(val) {
             this.xmbfFrom.pageNo = val;
             //查询
-            let obj2 = {
-                pageNo: this.xmbfFrom.pageNo,
-                pageSize: this.xmbfFrom.pageSize,
-                xmid: this.xmid
-            };
-            appropRecord(obj2).then(res => {
-                let data = res.data;
-                if (data.success) {
-                    this.xmbfList = data.msg.data;
-                    this.xmbftotalCount = data.msg.totalCount;
-                }
-            });
+            this.QueryListXmbk() ;
         },
         QueryListXmjd() {
             if (this.xmid) {
@@ -165,7 +146,7 @@ export default {
                 };
                 xmjdSelect(obj).then(res => {
                     let data = res.data;
-                    if (data.success) {
+                    if (data.success &&res.data.msg.data.length) {
                         this.xmjdList = res.data.msg.data;
                         this.xmjdtotalCount = res.data.msg.totalCount;
                     } else {
@@ -190,8 +171,7 @@ export default {
                 appropRecord(obj2).then(res => {
                     let data = res.data;
                     if (data.success) {
-                        
-                        if (data.success) {
+                        if (res.data.msg.data.length) {
                             _this.xmbfList = data.msg.data;
                             _this.xmbftotalCount = data.msg.totalCount;
                         } else {

@@ -353,13 +353,15 @@ export default {
                     data.zjgc[1] || 0,
                     data.zjgc[2] || 0,
                     data.zjgc[3] || 0,
-                    data.zjgc[4] || 0
+                    data.zjgc[4] || 0,
+                    data.zjgc[5] || 0,
                 ];
                 this.zjbfData = [
                     data.zjbf[1] || 0,
                     data.zjbf[2] || 0,
                     data.zjbf[3] || 0,
-                    data.zjbf[4] || 0
+                    data.zjbf[4] || 0,
+                    data.zjbf[5] || 0,
                 ];
 
                 this.drawBar();
@@ -592,7 +594,7 @@ export default {
                             },
                             data: [
                                 { value: data.ybfzj || 0, name: "已拨付资金" },
-                                { value: data.total || 0, name: "剩余资金" }
+                                { value: (data.total-data.ybfzj) || 0, name: "剩余资金" }
                             ]
                         }
                     ]
@@ -613,7 +615,7 @@ export default {
 <style lang="scss" scoped>
 .homeBigbox {
     width: 100%;
-    height: 100%;
+    height: 81vh;
     .homeBigboxTop {
         height: 48%;
         display: flex;
@@ -673,6 +675,9 @@ export default {
                         float: left;
                         margin: 3% 0 0 5%;
                         display: flex;
+                        img{
+                            height: 100%;
+                        }
                     }
                     .divLeft {
                         width: 38%;

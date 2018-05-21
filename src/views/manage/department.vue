@@ -1,16 +1,18 @@
 <template>
     <div class="source">
         <div class="source_tree">
-            <el-tree :data="bm_treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick" :expand-on-click-node="false">
-                <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
-                    <span>
-                        <i class="el-icon-plus" @click.stop="() => append(data)"></i>
-                        <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
-                        <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
+            <el-scrollbar class="page-component__scroll">
+                <el-tree :data="bm_treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick" :expand-on-click-node="false">
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <span>{{ node.label }}</span>
+                        <span>
+                            <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                            <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                            <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
+                        </span>
                     </span>
-                </span>
-            </el-tree>
+                </el-tree>
+            </el-scrollbar>
         </div>
         <div class="source_form">
             <el-form :inline="true" :model="formData" label-width="100px" ref="treeForm" class="demo-form-inline" :rules="rules">
@@ -444,11 +446,13 @@ export default {
     height: 100%;
     .source_tree {
         float: left;
-        width: 270px;
+        width: 300px;
+        height: 81vh;
+        overflow: auto;
     }
     .source_form {
         float: left;
-        width: calc(100% - 270px);
+        width: calc(100% - 300px);
         height: 100%;
         border-left: 1px dotted #999;
     }

@@ -30,7 +30,7 @@
             <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
             <el-table-column prop="zjjb" label="资金级别" :formatter="formatterzjjb" show-overflow-tooltip></el-table-column>
             <el-table-column prop="qrje" label="挂接金额(万元)" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="sjbfje" label="拨付金额(万元)" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sjbfje" label="拨付金额(万元)" :formatter="numbersjbfje" show-overflow-tooltip></el-table-column>
             <el-table-column prop="zjlrr" label="挂接人" show-overflow-tooltip></el-table-column>
             <el-table-column prop="zjlrsj" :formatter="formatterDatezjlrsj" label="挂接时间" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" width="180">
@@ -242,6 +242,9 @@ export default {
             } else if (tab.name == "third") {
                 this.detailList();
             }
+        },
+        numbersjbfje(row){
+            return row.sjbfje || 0;
         }
     }
 };

@@ -121,7 +121,7 @@ export default {
                 zjmc: this.seatch_name.trim(),
                 nd: this.seatch_nd,
                 xzqh: this.$store.state.user.user.uUser.xzqh,
-                // bmbm: this.$store.state.user.user.uUser.bmbm
+                bmbm: this.$store.state.user.user.uUser.bmbm
             };
             moneyQuery(obj).then(res => {
                 let data = res.data;

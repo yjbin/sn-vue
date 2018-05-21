@@ -139,6 +139,7 @@ export default {
                 pageNo: this.pageNo,
                 pageSize:this.pageSize,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
+                xzqh:this.$store.state.user.user.uUser.xzqh,
                 yujing: "1",
                 nd:this.seatch_nd,
                 xmmc:this.seatch_name

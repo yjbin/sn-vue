@@ -29,7 +29,7 @@
             <el-table-column prop="zjmc" label="资金名称" show-overflow-tooltip></el-table-column>
             <el-table-column prop="zjjb" label="资金级别" :formatter="formatterzjjb" show-overflow-tooltip></el-table-column>
             <el-table-column prop="qrje" label="挂接金额(万元)" :formatter="Numberqrje" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="sjbfje" label="拨付金额(万元)" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sjbfje" label="拨付金额(万元)" :formatter="Numbersjbfje" show-overflow-tooltip></el-table-column>
             <el-table-column prop="zjlrr" label="挂接人" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmzjlrsh" label="挂接时间" :formatter="formatterxmzjlrsh"  show-overflow-tooltip></el-table-column>
             <el-table-column label="操作">
@@ -283,9 +283,9 @@ export default {
                 }
             });
         },
-    bfreChange(row){
+    bfreChange(val){
       this.bfreFrom.pageNo = val;
-      bf_record();
+      this.bf_record();
     },
     //项目效益
     xmxySearch() {
@@ -293,7 +293,7 @@ export default {
         let obj = {
           pageNo: this.xmxyFrom.pageNo,
           pageSize: this.xmxyFrom.pageSize,
-          xmid:this.xmid
+          xmId:this.xmid
         };
         xmxySelect(obj).then(res => {
           if (res.data.msg.data.length) {
@@ -327,12 +327,12 @@ export default {
         let obj = {
           pageNo: this.xmkhFrom.pageNo,
           pageSize: this.xmkhFrom.pageSize,
-          xmid:this.xmid
+          xmId:this.xmid
         };
         assessSelect(obj).then(res => {
           if (res.data.msg.data.length) {
             this.xmkhList = res.data.msg.data;
-            this.xmkhtotalCount = res.data.msg.totalCount;
+            this.xmkhFrom.totalCount = res.data.msg.totalCount;
           } else {
             this.xmkhList = [];
             this.xmkhFrom.totalCount = 0;
@@ -403,6 +403,9 @@ export default {
     },
     formatterzjjb(row){
       return getDicTab("zjjb", row.zjjb);
+    },
+    Numbersjbfje(row){
+       return row.qrje || "0";
     },
     Numberqrje(row) {
       return row.qrje || "0";

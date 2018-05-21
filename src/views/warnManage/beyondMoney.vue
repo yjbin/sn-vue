@@ -240,6 +240,7 @@ export default {
                 pageNo: this.pageNo,
                 chaoqi:"1",
                 bmbm: this.$store.state.user.user.uUser.bmbm,
+                xzqh:this.$store.state.user.user.uUser.xzqh
             };
             option
                 ? (option.zjmc ? (obj.zjmc = option.zjmc) : "",
