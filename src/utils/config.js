@@ -2,19 +2,43 @@ let dicMap = window.sessionStorage;
 let obj = {};
 
 
-
+//发文状态
 obj = [{
-  value: '0',
-  label: '已挂接'
+  value: '',
+  label: '全部'
 }, {
+  value: '0',
+  label: '未发布'
+},{
   value: '1',
-  label: '未挂接'
+  label: '已发布'
 }];
 
-dicMap.setItem("zt", JSON.stringify(obj));
-
-
-
+dicMap.setItem("fwzt", JSON.stringify(obj));
+//阅读状态
+obj = [{
+  value: '',
+  label: '全部'
+}, {
+  value: '0',
+  label: '未读'
+},{
+  value: '1',
+  label: '已读'
+}];
+dicMap.setItem("ydzt", JSON.stringify(obj));
+//资金状态
+obj = [{
+  value: '0',
+  label: '未挂接'
+},{
+  value: '1',
+  label: '已挂接'
+},{
+  value: '2',
+  label: '挂接完成'
+}];
+dicMap.setItem("zjzt", JSON.stringify(obj));
 import {
   dictionaries, xzqhDict, bmbmDict, duojiDict
 } from "@/api/config";

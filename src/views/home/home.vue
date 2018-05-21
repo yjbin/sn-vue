@@ -175,6 +175,40 @@
             </div>
         </div>
         <div class="homeBigboxButtom">
+            <div class="homeBigboxButtomLeft">
+                <div class="homeBigboxTopLeftrightHeader">
+                    使用层级
+                </div>
+                <div class="homeBigboxButtomLeftBody">
+                    <div class="homeBigboxButtomLeftBodybig">
+                        <div id="sycjmyChartBig" :style="{width: '100%', height: '100%'}">
+
+                        </div>
+                    </div>
+                    <div class="homeBigboxButtomLeftBodysamll">
+                        <div id="sycjmyChartSamll" :style="{width: '100%', height: '100%'}">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="homeBigboxButtomCenter">
+                <div class="homeBigboxTopLeftrightHeader">
+                    发文通知
+                </div>
+                <div class="homeBigboxButtomLeftBody">
+                    <fwtz-echarts></fwtz-echarts>
+                </div>
+            </div>
+            <div class="homeBigboxButtomRight">
+                <div class="homeBigboxTopLeftrightHeader">
+                    预警管理
+                </div>
+                <div class="homeBigboxButtomLeftBody">
+                    <yjtj-echarts></yjtj-echarts>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -182,15 +216,24 @@
 
 
 <script>
+import fwtzEcharts from "./fwtzEcharts";
+import yjtjEcharts from "./yjtjEcharts";
 import {
     zjtjQuery,
     zjtjlineQuery,
     xmtjQuery,
-    xmtjlineQuery
+    xmtjlineQuery,
+    sycjPieBigQuery,
+    sycjPieSmallQuery,
+    FwtzQuery
 } from "@/api/statistics";
 import { dictionaries } from "@/api/config";
 import { doCreate } from "@/utils/config";
 export default {
+    components: {
+        fwtzEcharts,
+        yjtjEcharts
+    },
     data() {
         return {
             xzqh: "",
@@ -306,26 +349,20 @@ export default {
             });
             xmtjlineQuery(obj).then(res => {
                 let data = res.data;
-                for (let j = 1; j <= 5; j++) {
-                    for(let i in data.zjgc){
-                        if(j == i){
-                            this.zjdwData.push(data.zjgc[i]);
-                            break;
-                        }
-                    }
-                    this.zjdwData.push("0");
-                }
-                for (let j = 1; j <= 5; j++) {
-                    for(let i in data.zjbf){
-                        if(j == i){
-                            this.zjbfData.push(data.zjbf[i]);
-                            break;
-                        }
-                    }
-                    this.zjbfData.push("0");
-                }
-                this.drawBar();
+                this.zjdwData = [
+                    data.zjgc[1] || 0,
+                    data.zjgc[2] || 0,
+                    data.zjgc[3] || 0,
+                    data.zjgc[4] || 0
+                ];
+                this.zjbfData = [
+                    data.zjbf[1] || 0,
+                    data.zjbf[2] || 0,
+                    data.zjbf[3] || 0,
+                    data.zjbf[4] || 0
+                ];
 
+                this.drawBar();
             });
         },
         drawLine() {
@@ -372,17 +409,16 @@ export default {
                     type: "value",
                     name: "单位：万元"
                 },
+                color: ["#37a0ef", "#fed62e"],
                 series: [
                     {
                         name: "资金到位",
                         type: "line",
-                        stack: "总量",
                         data: this.zjdwData
                     },
                     {
                         name: "拨付",
                         type: "line",
-                        stack: "总量",
                         data: this.zjbfData
                     }
                 ]
@@ -406,13 +442,7 @@ export default {
                 xAxis: [
                     {
                         type: "category",
-                        data: [
-                            "中央",
-                            "省",
-                            "市",
-                            "区/县",
-                            "乡/镇"
-                        ]
+                        data: ["中央", "省", "市", "区/县", "乡/镇"]
                     }
                 ],
                 yAxis: [
@@ -421,18 +451,152 @@ export default {
                         name: "单位：万元"
                     }
                 ],
+                color: [ "#fed62e","#37a0ef"],
                 series: [
                     {
                         name: "资金构成",
                         type: "bar",
+                        barWidth: 30,
                         data: this.zjdwData
                     },
                     {
                         name: "资金拨付",
                         type: "bar",
+                        barWidth: 30,
                         data: this.zjbfData
                     }
                 ]
+            });
+        },
+        sycjBigEchars() {
+            let _this = this;
+            let date = new Date();
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                nd: date.getFullYear()
+            };
+            sycjPieBigQuery(obj).then(res => {
+                // 基于准备好的dom，初始化echarts实例
+                let data = res.data;
+                let sycjmyChartBig = this.$echarts.init(
+                    document.getElementById("sycjmyChartBig")
+                );
+                // 绘制图表
+                sycjmyChartBig.setOption({
+                    tooltip: {
+                        trigger: "item",
+                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                    },
+                    legend: {
+                        x: "center",
+                        y: "bottom",
+                        data: ["本级使用", "下级使用", "上级使用"]
+                    },
+                    color: ["#64d3e3", "#86aadb", "#a6db69"],
+                    series: [
+                        {
+                            name: "单位（万元）",
+                            type: "pie",
+                            radius: ["50%", "70%"],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: "center"
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: "24",
+                                        fontWeight: "bold",
+                                        color:"#2e3743"
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [
+                                { value: data["1"] || 0, name: "本级使用" },
+                                { value: data["2"] || 0, name: "下级使用" },
+                                { value: data["3"] || 0, name: "上级使用" }
+                            ]
+                        }
+                    ]
+                });
+                sycjmyChartBig.on("click", function(params) {
+                    console.log(params);
+                    if (params.name == "本级使用") {
+                        _this.sycjSamllEchars({ sycj: "1", name: "本级使用" });
+                    } else if (params.name == "下级使用") {
+                        _this.sycjSamllEchars({ sycj: "2", name: "下级使用" });
+                    } else if (params.name == "上级使用") {
+                        _this.sycjSamllEchars({ sycj: "3", name: "上级使用" });
+                    }
+                });
+            });
+        },
+        sycjSamllEchars(row) {
+            let date = new Date();
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                nd: date.getFullYear(),
+                sycj: row.sycj
+            };
+            sycjPieSmallQuery(obj).then(res => {
+                // 基于准备好的dom，初始化echarts实例
+                let data = res.data;
+                let sycjmyChartSamll = this.$echarts.init(
+                    document.getElementById("sycjmyChartSamll")
+                );
+                // 绘制图表
+                sycjmyChartSamll.setOption({
+                    tooltip: {
+                        trigger: "item",
+                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                    },
+                    // legend: {
+                    //     x: "center",
+                    //     y: "bottom",
+                    //     data: ["已拨付资金", "剩余资金"]
+                    // },
+                    color: ["#64d3e3","#ffa336"],
+                    series: [
+                        {
+                            name: "单位（万元）",
+                            type: "pie",
+                            radius: ["50%", "70%"],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: "center"
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: "15",
+                                        fontWeight: "bold",
+                                        color:"#2e3743"
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [
+                                { value: data.ybfzj || 0, name: "已拨付资金" },
+                                { value: data.total || 0, name: "剩余资金" }
+                            ]
+                        }
+                    ]
+                });
             });
         }
     },
@@ -442,6 +606,7 @@ export default {
         this.bmbm = doCreate("bmbm");
         this.duojiDic = doCreate("duojiDic");
         this.zjtjClick();
+        this.sycjBigEchars();
     }
 };
 </script>
@@ -450,7 +615,7 @@ export default {
     width: 100%;
     height: 100%;
     .homeBigboxTop {
-        height: 50%;
+        height: 48%;
         display: flex;
 
         .homeBigboxTopLeft {
@@ -564,7 +729,49 @@ export default {
     }
     .homeBigboxButtom {
         height: 50%;
-        background: #cccccc;
+        margin-top: 1.5vh;
+        display: flex;
+        .homeBigboxButtomLeft {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e7eaec;
+            .homeBigboxButtomLeftBody {
+                flex: 1;
+                display: flex;
+                .homeBigboxButtomLeftBodybig {
+                    width: 60%;
+                }
+                .homeBigboxButtomLeftBodysamll {
+                    flex: 1;
+                }
+            }
+        }
+        .homeBigboxButtomCenter {
+            border: 1px solid #e7eaec;
+            flex: 1;
+            margin: 0 1vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .homeBigboxButtomRight {
+            border: 1px solid #e7eaec;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .homeBigboxTopLeftrightHeader {
+            height: 5vh;
+            background: #fbfbfd;
+            line-height: 5vh;
+            font-size: 18px;
+            color: #307ecd;
+            border-bottom: 1px solid #e7eaec;
+            padding-left: 20px;
+        }
+        .homeBigboxButtomLeftBody {
+            flex: 1;
+        }
     }
 }
 </style>

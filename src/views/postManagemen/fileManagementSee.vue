@@ -7,6 +7,12 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="阅读状态">
+                <el-select suffix-icon="el-icon-date" v-model="seatch_fwzt">
+                    <el-option v-for="(item,index) in fwztoptions" :key="index" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="文件名称">
                 <el-input placeholder="请输入文件名称" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
             </el-form-item>
@@ -36,12 +42,7 @@
                 <el-table-column prop="lrr" label="发布人" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrsj" label="发布时间" :formatter="formatterDatefbsj" show-overflow-tooltip></el-table-column>
                 <!-- <el-table-column prop="zt" label="状态" :formatter="ztDic" ></el-table-column> -->
-                <el-table-column prop="zt" label="状态">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.qrzj>0" style="color:#67C23A;">已发布</span>
-                        <span v-else style="color:#409EFF;">未发布</span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="by3" label="状态" :formatter="fwztDic"> </el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
                         <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
@@ -85,6 +86,7 @@ export default {
         return {
             seatch_nd: "",
             seatch_name: "",
+            seatch_fwzt: "",
             textTit: "",
             pageTit: "",
             newModal: false,
@@ -96,7 +98,8 @@ export default {
             ndoptions: [],
             editObj: {},
             pageObj: {},
-            fileList: []
+            fileList: [],
+            fwztoptions: []
         };
     },
     methods: {
@@ -108,6 +111,9 @@ export default {
         },
         wjjbDic(row) {
             return getDicTab("wjjb", row.jb);
+        },
+        fwztDic(row) {
+            return getDicTab("fwzt", row.by3);
         },
         formatterDatefbsj(row) {
             return formatDate(row.lrsj, "yyyy-MM-dd");
@@ -127,22 +133,21 @@ export default {
             this.newModal = true;
             this.textTit = "编辑";
             this.editObj = row;
-            
+
             let obj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 name: row.name,
                 ydr: this.$store.state.user.user.uUser.nickname,
-                ydrId:this.$store.state.user.user.uUser.id,
+                ydrId: this.$store.state.user.user.uUser.id,
                 count: "1",
                 fwtzId: row.id
             };
             pageQueryAdd(obj).then(res => {
                 let data = res.data;
-                if(data.success){
+                if (data.success) {
                     this.ListQuery();
                 }
-
             });
         },
         listDel(row) {
@@ -178,8 +183,6 @@ export default {
         ydsClick(row) {
             this.pageModal = true;
             this.pageTit = "阅读人信息";
-            
-
         },
         newToggle(val) {
             this.newModal = val;
@@ -194,9 +197,11 @@ export default {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
                 lx: "1",
+                by3: "1",
                 nd: this.seatch_nd,
                 name: this.seatch_name,
-                jsdw: this.$store.state.user.user.uUser.bmbm
+                jsdw: this.$store.state.user.user.uUser.bmbm,
+                read: this.seatch_fwzt
             };
             fileQuery(obj).then(res => {
                 let data = res.data;
@@ -217,6 +222,7 @@ export default {
     mounted() {
         this.ListQuery();
         this.ndoptions = doCreate("ndTit");
+        this.fwztoptions = doCreate("ydzt");
     }
 };
 </script>

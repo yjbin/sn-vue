@@ -78,6 +78,7 @@
                     <el-row>
                         <el-col :span="20" :offset="3">
                             <el-button size="small" type="primary" @click="addJsdwMoudel">添加接收单位</el-button>
+                            <el-button type="success" size="small" @click="fileClick">附件</el-button>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -88,10 +89,13 @@
             </span>
         </el-dialog>
         <xzqhor-bm-modal :xzqhModel="xzqhModel" @xzqhOrToggle="xzqhOrToggle" @xzqhBm="xzqhBm" :modelTit="modelTit" :jsdwStr="jsdwStr"></xzqhor-bm-modal>
-        
+        <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="activeShow"></accessory-Model>
+
     </div>
 </template>
 <script>
+import accessoryModel from "@/components/accessoryModel";
+
 import {
     noticeQuery,
     noticeAdd,
@@ -103,12 +107,17 @@ import { doCreate, getDicTab, moreMenu } from "@/utils/config";
 import xzqhorBmModal from "./xzqhorBmModal";
 export default {
     components: {
-        xzqhorBmModal
+        xzqhorBmModal,
+        accessoryModel
     },
     data() {
         return {
             newModalToggle: false,
             xzqhModel: false,
+            accessoryModalInt: false,
+            upShowhide: true,
+            textTitFile: "",
+            fileSrc: "",
             fileForm: {},
             ndoptions: [],
             wjjboptions: [],
@@ -135,6 +144,7 @@ export default {
                     let _this = this;
                     let obj = Object.assign({}, this.fileForm);
                     obj.lx = "0";
+                    obj.by3 = "0";
                     if (this.fileForm.id) {
                         noticeUpdate(obj).then(res => {
                             let data = res.data;
@@ -166,18 +176,29 @@ export default {
             });
         },
         addJsdwMoudel() {
-            this.xzqhModel =true;
+            this.xzqhModel = true;
             this.modelTit = "接收单位选择";
             this.jsdwStr = {
-                    num:Math.random(),
-                    jsdw:this.fileForm.jsdw
-                }
+                num: Math.random(),
+                jsdw: this.fileForm.jsdw
+            };
         },
         xzqhOrToggle(val) {
             this.xzqhModel = val;
         },
-        xzqhBm(val){
+        xzqhBm(val) {
             this.fileForm.jsdw = val;
+        },
+
+        colseTog(val) {
+            this.accessoryModalInt = val;
+        },
+        chileFile(val) {
+            this.fileForm.fj = val;
+        },
+        fileClick() {
+            this.accessoryModalInt = true;
+            this.textTitFile = "附件";
         }
     },
     props: {
@@ -192,13 +213,17 @@ export default {
         newModal(val) {
             this.newModalToggle = val;
         },
+     
         editObj(val) {
             if (val) {
                 if (this.$refs.fileForm) {
                     this.$refs.fileForm.resetFields();
                 }
-
                 this.fileForm = Object.assign({}, val);
+                this.fileSrc = {
+                    num: Math.random(),
+                    fileStr: this.fileForm.fj
+                };
             }
         }
     },

@@ -3,7 +3,7 @@
     <div v-bind:class="{isShow:firstPage}">
       <el-form :inline="true" v-model="searchMember" class="demo-form-inline">
         <el-form-item label="年度">
-          <el-select v-model="searchMember.nd" @keyup.enter.native="search" placeholder="请选择..." prefix-icon="el-icon-search">
+          <el-select v-model="searchMember.nd" placeholder="请选择..." prefix-icon="el-icon-search">
             <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
@@ -281,8 +281,8 @@ export default {
             xzqhoptions: [],
             bmbmoptions: [],
             searchMember: {
-                nd: null,
-                xmmc: null,
+                nd: "",
+                xmmc: "",
                 bmbm: ""
             },
             firstPage: false,
@@ -388,8 +388,6 @@ export default {
                 this.xmid = row.id;
                 this.xmmc = row.xmmc;
                 this.xmbh = row.xmbh;
-                this.xzqh = row.xzqh;
-                this.bmbm = row.bmbm;
                 this.xmxyFrom = {};
                 this.xmjdFromInt(); //默认查询的参数
             }
@@ -495,8 +493,8 @@ export default {
             };
             this.xmxyFrom.xmmc = this.xmmc;
             this.xmxyFrom.xmbh = this.xmbh;
-            this.xmxyFrom.bmbm = this.bmbm;
-            this.xmxyFrom.xzqh = this.xzqh;
+            this.xzqh = this.$store.state.user.user.uUser.xzqh;
+            this.bmbm = this.$store.state.user.user.uUser.bmbm;
             this.xmxyFrom.lrr = this.$store.state.user.user.uUser.nickname;
         },
         colseTog(val) {

@@ -108,7 +108,7 @@
                   <template slot-scope="scope">
                       <el-button size="mini" type="primary" @click="xmkh_detail(scope.row)">详情</el-button>
                   </template>
-              </el-table-column>
+            </el-table-column>
           </el-table>
           <div class="mar10 fr">
             <el-pagination @current-change="xmkhChange" :current-page.sync="xmkhFrom.pageNo" :page-size="xmkhFrom.pageSize" layout="total, prev, pager, next" :total="xmkhtotalCount">

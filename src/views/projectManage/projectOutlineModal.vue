@@ -74,36 +74,36 @@
                     <el-row>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="项目总额" prop="xmze">
-                                <el-input v-model="editForm.xmze" placeholder="项目总额" :disabled="true"></el-input>
+                                <el-input v-model.number="editForm.xmze" placeholder="项目总额" :disabled="true"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="中央资金" prop="zyZj">
-                                <el-input v-model="editForm.zyZj" placeholder="中央资金"></el-input>
+                                <el-input v-model.number="editForm.zyZj" placeholder="中央资金"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="省级资金" prop="shengZj">
-                                <el-input v-model="editForm.shengZj" placeholder="省级资金"></el-input>
+                                <el-input v-model.number="editForm.shengZj" placeholder="省级资金"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="市级资金" prop="shiZj">
-                                <el-input v-model="editForm.shiZj" placeholder="市级资金"></el-input>
+                                <el-input v-model.number="editForm.shiZj" placeholder="市级资金"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="县级资金" prop="xianZj">
-                                <el-input v-model="editForm.xianZj" placeholder="县级资金"></el-input>
+                                <el-input v-model.number="editForm.xianZj" placeholder="县级资金"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="乡级资金" prop="xiangZj">
-                                <el-input v-model="editForm.xiangZj" placeholder="乡级资金"></el-input>
+                                <el-input v-model.number="editForm.xiangZj" placeholder="乡级资金"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -373,7 +373,6 @@ export default {
             handler: function(val,oldval) {
                 // console.log(val,oldval)
                 if (val) {
-                
                     this.editForm.xmze =
                         Number(this.editForm.zyZj || 0) +
                         Number(this.editForm.shengZj || 0) +

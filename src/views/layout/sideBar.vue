@@ -1,7 +1,7 @@
 <template>
-  <el-menu mode="vertical" unique-opened :default-active="$route.path"   @open="handleopen"  class="el-menu-vertical-demo">
+  <el-menu mode="vertical" unique-opened :default-active="$route.path"   @select="handleselect"  class="el-menu-vertical-demo">
     <el-menu-item index="" class="sideBar_title">功能菜单</el-menu-item>
-    <sidebar-item :routes="permission_routers" :todo="actMenu"></sidebar-item>
+    <sidebar-item :routes="permission_routers"  :proObj="aloneMenu"></sidebar-item>
   </el-menu>
 </template>
 
@@ -16,27 +16,26 @@ export default {
   },
   data() {
     return {
-      actMenu: {
+      aloneMenu:{
         path:null,
         num:""
       }
     };
   },
   methods:{
-      // handleopen(key, keyPath){
-      //   this.actMenu = key;
-      // },
-      handleopen(key, keyPath){
-        this.actMenu = {  
-          path:key,
+      handleselect(key, keyPath){
+        let str = key;
+        str = str.substring(str.indexOf('/')+1,str.indexOf('/',2)),
+        this.aloneMenu = {  
+          path:"/"+str,
           num:Math.random()
         } 
-      }
+      },
   },
   mounted(){
     let str = this.$route.path;
     str = str.substring(str.indexOf('/')+1,str.indexOf('/',2));
-     this.actMenu = {
+     this.aloneMenu = {
        path:"/"+str,
        num:Math.random()
      }

@@ -47,3 +47,11 @@ export function pageQueryAdd(option) {
     data: option
   })
 }
+//发布接口
+export function pageQueryRelease(option) {
+  return request({
+    url: '/fwtz/updateFb',
+    method: 'post',
+    data: option
+  })
+}

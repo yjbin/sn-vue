@@ -3,7 +3,7 @@
     <div v-bind:class="{isShow:firstPage}">
       <el-form :inline="true" v-model="searchMember" class="demo-form-inline">
         <el-form-item label="年度">
-          <el-select v-model="searchMember.nd" @keyup.enter.native="search" prefix-icon="el-icon-search">
+          <el-select v-model="searchMember.nd" prefix-icon="el-icon-search">
             <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
@@ -196,8 +196,8 @@ export default {
             xzqhoptions:[],
             bmbmoptions:[],
             searchMember: {
-                nd: null,
-                zjmc: null
+                nd: "",
+                zjmc: ""
             },
             firstPage: false,
             secondPage: true,

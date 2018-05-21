@@ -21,7 +21,7 @@
                     <el-table-column prop="qrje" label="挂接金额(万元)" :formatter="Numberqrje" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="sjbfje" label="拨付金额(万元)" :formatter="Numbersjbfje" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="zjlrr" label="挂接人" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="zjlrsj" :formatter="formatterDatezjlrsj" label="挂接时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmzjlrsh" :formatter="formatterDatexmzjlrsh" label="挂接时间" show-overflow-tooltip></el-table-column>
                     <el-table-column label="操作" width="180">
                         <template slot-scope="scope">
                             <el-button size="mini" type="primary" @click="appropriate(scope.row)">拨付</el-button>
@@ -105,7 +105,7 @@
                         </el-col>
                         <el-col :span="9" :offset="2">
                             <el-form-item label="录入时间" prop="lrsj">
-                                <el-date-picker type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间" :disabled="true"></el-date-picker>
+                                <el-date-picker  type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间" :disabled="true"></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -151,305 +151,316 @@
 </template>
 <script>
 import {
-    appropSelect,
-    appropDel,
-    appropSave,
-    appropRecord
+  appropSelect,
+  appropDel,
+  appropSave,
+  appropRecord
 } from "@/api/projectAppropriation";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
 import { validateNumber, validMoney } from "@/utils/validate";
 import accessoryModel from "@/components/accessoryModel";
 export default {
-    components: {
-        accessoryModel
+  components: {
+    accessoryModel
+  },
+  data() {
+    const validOfMoney = (rule, value, callback) => {
+      if (!validMoney(value)) {
+        callback(new Error("请输入正确的金额~"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      zjList: [],
+      recordList: [],
+      bfzjFrom: {
+        bfje: "",
+        bfr: "",
+        bfsm: "",
+        zjye: "",
+        bfsj: ""
+      },
+      secondPage: true,
+      secondPage_one: true,
+      secondPage_two: true,
+      xmid: "",
+      xmzjId: "",
+      pageNo: 1,
+      pageSize: 4,
+      totalCount: 1,
+      pageNo_record: 1,
+      pageSize_record: 4,
+      totalCount_record: 1,
+      //附件
+      accessoryModalInt: false,
+      upShowhide: true,
+      textTitFile: "",
+      fileSrc: "",
+      rules: {
+        bfje: [{ required: true, trigger: "blur", validator: validOfMoney }],
+        bfr: [{ required: true, message: "不能为空", trigger: "blur" }],
+        bfsm: [{ required: true, message: "不能为空", trigger: "blur" }],
+        bfsj: [{ required: true, message: "不能为空" }],
+        lrsj: [{ required: true, message: "不能为空", trigger: "blur" }]
+      }
+    };
+  },
+  props: {
+    firstPage: Boolean,
+    propFrom: {
+      default: () => {}
+    }
+  },
+  watch: {
+    firstPage(val) {
+      this.secondPage = !val;
     },
-    data() {
-        const validOfMoney = (rule, value, callback) => {
-            if (!validMoney(value)) {
-                callback(new Error("请输入正确的金额~"));
+    propFrom: {
+      handler: function(val) {
+        if (val) {
+          this.xmid = val.xmId;
+          this.detailList(this.xmid);
+        }
+      },
+      deep: true
+    }
+  },
+  methods: {
+    //返回
+    backBtn() {
+      this.secondPage = true;
+      this.secondPage_one = true;
+      this.secondPage_two = true;
+      this.$emit("secondPage", this.secondPage);
+      if (this.$refs.bfFrom) {
+        this.$refs.bfFrom.resetFields();
+      }
+    },
+    //挂接资金列表
+    detailList(option) {
+        let obj = {
+          pageNo: this.pageNo,
+          pageSize: this.pageSize
+        };
+        option ? (obj.xmId = option) : "";
+      return new Promise((resolve, reject) => { 
+        appropSelect(obj).then(res => {
+          if (res.data.success) {
+            if (res.data.msg.data.length) {
+              this.zjList = res.data.msg.data;
+              this.totalCount = res.data.msg.totalCount;
             } else {
-                callback();
+              this.zjList = [];
+              this.totalCount = 0;
             }
-        };
-        return {
-            zjList: [],
-            recordList: [],
-            bfzjFrom: {
-                bfje: "",
-                bfr: "",
-                bfsm: "",
-                zjye: ""
-            },
-            secondPage: true,
-            secondPage_one: true,
-            secondPage_two: true,
-            xmid: "",
-            xmzjId: "",
-            pageNo: 1,
-            pageSize: 4,
-            totalCount: 1,
-            pageNo_record: 1,
-            pageSize_record: 4,
-            totalCount_record: 1,
-            //附件
-            accessoryModalInt: false,
-            upShowhide: true,
-            textTitFile: "",
-            fileSrc: "",
-            rules: {
-                bfje: [
-                    { required: true, trigger: "blur", validator: validOfMoney }
-                ],
-                bfr: [{ required: true, message: "不能为空", trigger: "blur" }],
-                bfsm: [
-                    { required: true, message: "不能为空", trigger: "blur" }
-                ],
-                bfsj: [
-                    { required: true, message: "不能为空", trigger: "blur" }
-                ],
-                lrsj: [{ required: true, message: "不能为空", trigger: "blur" }]
-            }
-        };
+            resolve();
+          }
+        }).catch(error => {
+          reject(error)
+        });
+      });
     },
-    props: {
-        firstPage: Boolean,
-        propFrom: {
-            default: () => {}
+    //拨付
+    appropriate(row) {
+      if (row) {
+        this.secondPage_one = false;
+        this.secondPage_two = true;
+        if (this.$refs.bfFrom) {
+          this.$refs.bfFrom.resetFields();
         }
+        // this.bfzjFrom = Object.assign({}, row);
+        this.xmzjId = row.xmzjId;
+        this.bfzjFrom.xmzjId = this.xmzjId ? this.xmzjId : row.xmzjId;
+        this.bfzjFrom.xmmc = row.xmmc;
+        this.bfzjFrom.xmbh = row.xmbh;
+        this.bfzjFrom.zjmc = row.zjmc;
+        this.bfzjFrom.zjid = row.zjId;
+        this.bfzjFrom.xmid = this.xmid;
+        this.bfzjFrom.zjye = row.zjye;
+        this.fileSrc = {
+          num: Math.random(),
+          fileStr: ""
+        };
+        this.xmFromInt();
+      }
     },
-    watch: {
-        firstPage(val) {
-            this.secondPage = !val;
-        },
-        propFrom: {
-            handler: function(val) {
-                if (val) {
-                    this.xmid = val.xmId;
-                    this.detailList(this.xmid);
-                }
-            },
-            deep: true
+    //拨付记录
+    record(row) {
+      this.secondPage_two = false;
+      this.secondPage_one = true;
+      if (row) {
+        this.xmzjId = row.xmzjId;
+      }
+      //查询
+      let obj = {
+        pageNo: this.pageNo_record,
+        pageSize: this.pageSize_record,
+        xmzjId: this.xmzjId
+      };
+      appropRecord(obj).then(res => {
+        let data = res.data;
+        if (data.success) {
+          this.recordList = data.msg.data;
+          this.totalCount_record = data.msg.totalCount;
         }
+      });
     },
-    methods: {
-        //返回
-        backBtn() {
-            this.secondPage = true;
-            this.secondPage_one = true;
-            this.secondPage_two = true;
-            this.$emit("secondPage", this.secondPage);
-            if (this.$refs.bfFrom) {
-                this.$refs.bfFrom.resetFields();
-            }
-            this.xmid = "";
-        },
-        //挂接资金列表
-        detailList(option) {
-            let obj = {
-                pageNo: this.pageNo,
-                pageSize: this.pageSize
-            };
-            option ? (obj.xmId = option) : "";
-            appropSelect(obj).then(res => {
-                if(res.data.msg.data.length){
-                    this.zjList = res.data.msg.data;
-                    this.totalCount = res.data.msg.totalCount;
-                }else{
-                    this.zjList = [];
-                    this.totalCount = 0;
-                }
-            });
-        },
-        //拨付
-        appropriate(row) {
-            this.secondPage_one = false;
-            this.secondPage_two = true;
-            if (this.$refs.bfFrom) {
-                this.$refs.bfFrom.resetFields();
-            }
-            // this.bfzjFrom = Object.assign({}, row);
-            this.xmzjId = row.xmzjId;
-            this.bfzjFrom.xmzjId = this.xmzjId ? this.xmzjId : row.xmzjId;
-            this.bfzjFrom.xmmc = row.xmmc;
-            this.bfzjFrom.xmbh = row.xmbh;
-            this.bfzjFrom.zjmc = row.zjmc;
-            this.bfzjFrom.zjid = row.zjId;
-            this.bfzjFrom.xmid = this.xmid;
-            this.bfzjFrom.zjye = row.zjye;
-            this.fileSrc = {
-                num: Math.random(),
-                fileStr: ""
-            };
-            this.xmFromInt();
-        },
-        //拨付记录
-        record(row) {
-            this.secondPage_two = false;
-            this.secondPage_one = true;
-            if (row) {
-                this.xmzjId = row.xmzjId;
-            }
-            //查询
-            let obj = {
-                pageNo: this.pageNo_record,
-                pageSize: this.pageSize_record,
-                xmzjId: this.xmzjId
-            };
-            appropRecord(obj).then(res => {
+    //编辑or添加
+    submitForm() {
+      let _this = this;
+      this.$refs.bfFrom.validate(valid => {
+        if (valid) {
+          let obj = Object.assign({}, this.bfzjFrom);
+          if (obj.xmid) {
+            if (obj.bfje * 1 > obj.zjye * 1 || obj.bfje == 0) {
+              this.$message({
+                message: "拨付的金额不能超过剩余金额!(不为0)",
+                type: "success"
+              });
+              return false;
+            } else {
+              delete obj.zjye;
+              appropSave(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
-                    this.recordList = data.msg.data;
-                    this.totalCount_record = data.msg.totalCount;
-                }
-            });
-        },
-        //编辑or添加
-        submitForm() {
-            this.$refs.bfFrom.validate(valid => {
-                if (valid) {
-                    let _this = this;
-                    let obj = Object.assign({}, this.bfzjFrom);
-                    // this.xmid ? obj.xmid = this.xmid: "";
-                    // this.xmzjId ? obj.xmzjId = this.xmzjId :"";
-                    if (obj.bfje * 1 > obj.zjye * 1 || obj.bfje == 0) {
-                        _this.$message({
-                            message: "拨付的金额不能超过剩余金额!(不为0)",
-                            type: "success"
-                        });
-                        return false;
-                    } else {
-                        delete obj.zjye;
-                        appropSave(obj).then(res => {
-                            let data = res.data;
-                            if (data.success) {
-                                _this.detailList(_this.xmid);
-                                _this.bfzjFrom = {
-                                    bfje: "",
-                                    bfr: "",
-                                    bfsm: "",
-                                    zjye: "",
-                                    lrsj: "",
-                                    bfsj: ""
-                                };
-                                if (_this.$refs.bfFrom) {
-                                    _this.$refs.bfFrom.resetFields();
-                                }
-                                _this.fileSrc = {
-                                    num: Math.random(),
-                                    fileStr: ""
-                                };
-                                _this.$message({
-                                    message: data.msg,
-                                    type: "success"
-                                });
-                            }
-                        });
-                    }
-                }
-            });
-        },
-        //删除拨款记录
-        delRecord(row) {
-            this.$confirm("此操作将删除该记录, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            })
-                .then(() => {
-                    appropDel({ id: row.id }).then(res => {
-                        this.record();
-                        this.detailList(this.xmid);
-                        this.$message({
-                            type: "success",
-                            message: "删除成功!"
-                        });
+                  if (this.$refs.bfFrom) {
+                    this.$refs.bfFrom.resetFields();
+                  }
+                  _this.detailList(_this.xmid).then(res => {
+                    _this.zjList.map(i => {
+                      debugger;
+                      if (i.xmzjId == _this.xmzjId) {
+                        _this.bfzjFrom.zjye = i.zjye;
+                      }
                     });
-                })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除"
-                    });
-                });
-        },
-        handleCurrentChange(val) {
-            this.pageNo = val;
-            this.detailList();
-        },
-        CurrentChange(val) {
-            this.pageNo_record = val;
-            this.record();
-        },
-        indexMethod_sec(index) {
-            let start = (this.pageNo_record - 1) * this.pageSize_record;
-            return start + index + 1;
-        },
-        indexMethod(index) {
-            let start = (this.pageNo - 1) * this.pageSize;
-            return start + index + 1;
-        },
-        Numberqrje(row) {
-            return row.qrje || "0";
-        },
-        Numbersjbfje(row) {
-            return row.sjbfje || "0";
-        },
-        formatterDatebfsj(row) {
-            return formatDate(row.bfsj, "yyyy-MM-dd");
-        },
-        formatterDatezjlrsj(row) {
-            return formatDate(row.zjlrsj, "yyyy-MM-dd");
-        },
-        formatterzjjb(row) {
-            return getDicTab("zjjb", row.zjjb);
-        },
-        xmFromInt() {
-            this.bfzjFrom.lrr = this.$store.state.user.user.uUser.nickname;
-            this.bfzjFrom.lrrId = this.$store.state.user.user.uUser.id;
-            this.getNowDate();
-        },
-        colseTog(val) {
-            this.accessoryModalInt = val;
-        },
-        chileFile(val) {
-            this.xmxyFrom.fj = val;
-        },
-        //附件
-        fileClick() {
-            this.accessoryModalInt = true;
-            this.textTitFile = "附件";
-        },
-        getNowDate() {
-            let d = new Date();
-            this.bfzjFrom.lrsj = d.getTime();
+                  });
+
+                  // this.bfzjFrom.zjye = (this.bfzjFrom.zjye - obj.bfje).toFixed(3);
+                  this.xmFromInt();
+                  this.fileSrc = {
+                    num: Math.random(),
+                    fileStr: ""
+                  };
+                  this.$message({
+                    message: data.msg,
+                    type: "success"
+                  });
+                }
+              });
+            }
+          } else {
+            this.$message({
+              message: "请选择需拨付的项目再进行拨付操作!!!",
+              type: "success"
+            });
+            return false;
+          }
         }
+      });
+    },
+    //删除拨款记录
+    delRecord(row) {
+      this.$confirm("此操作将删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          appropDel({ id: row.id }).then(res => {
+            this.record();
+            this.detailList(this.xmid);
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    handleCurrentChange(val) {
+      this.pageNo = val;
+      this.detailList();
+    },
+    CurrentChange(val) {
+      this.pageNo_record = val;
+      this.record();
+    },
+    indexMethod_sec(index) {
+      let start = (this.pageNo_record - 1) * this.pageSize_record;
+      return start + index + 1;
+    },
+    indexMethod(index) {
+      let start = (this.pageNo - 1) * this.pageSize;
+      return start + index + 1;
+    },
+    Numberqrje(row) {
+      return row.qrje || "0";
+    },
+    Numbersjbfje(row) {
+      return row.sjbfje || "0";
+    },
+    formatterDatebfsj(row) {
+      return formatDate(row.bfsj, "yyyy-MM-dd");
+    },
+    formatterDatexmzjlrsh(row) {
+      return formatDate(row.xmzjlrsh, "yyyy-MM-dd");
+    },
+    formatterzjjb(row) {
+      return getDicTab("zjjb", row.zjjb);
+    },
+    xmFromInt() {
+      this.bfzjFrom.lrr = this.$store.state.user.user.uUser.nickname;
+      this.bfzjFrom.lrrId = this.$store.state.user.user.uUser.id;
+      this.getNowDate();
+    },
+    colseTog(val) {
+      this.accessoryModalInt = val;
+    },
+    chileFile(val) {
+      this.xmxyFrom.fj = val;
+    },
+    //附件
+    fileClick() {
+      this.accessoryModalInt = true;
+      this.textTitFile = "附件";
+    },
+    getNowDate() {
+      let d = new Date();
+      this.bfzjFrom.lrsj = d.getTime();
     }
+  }
 };
 </script>
 <style lang="scss" scoped>
 #hook {
-    .isShow {
-        display: none;
+  .isShow {
+    display: none;
+  }
+  .capit-tit {
+    background: #317ecc;
+    margin: 20px 0 0 0;
+    .user-left {
+      span {
+        color: #fff;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        margin: 10px 20px;
+      }
     }
-    .capit-tit {
-        background: #317ecc;
-        margin: 20px 0 0 0;
-        .user-left {
-            span {
-                color: #fff;
-                display: inline-block;
-                text-align: center;
-                cursor: pointer;
-                margin: 10px 20px;
-            }
-        }
-        .backBtn {
-            float: right;
-            margin-top: 5px;
-            margin-right: 20px;
-        }
+    .backBtn {
+      float: right;
+      margin-top: 5px;
+      margin-right: 20px;
     }
+  }
 }
 </style>
 

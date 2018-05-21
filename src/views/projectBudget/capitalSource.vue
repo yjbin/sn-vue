@@ -50,8 +50,9 @@
                 <el-table-column prop="xdsysj" label="限定使用时间" :formatter="xdsysjFormat" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="zt" label="状态">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.qrzj>0" style="color:#67C23A;cursor: pointer" @click="ygjMoudel(scope.row)">已挂接</span>
-                        <span v-else style="color:#409EFF;cursor: pointer" @click="wgjMoudel(scope.row)">未挂接</span>
+                        <span v-if="scope.row.zt=='1'" style="color:#67C23A;cursor: pointer" @click="wgjMoudel(scope.row)">已挂接</span>
+                        <span v-else-if="scope.row.zt=='0'" style="color:#409EFF;cursor: pointer" @click="wgjMoudel(scope.row)">未挂接</span>
+                        <span v-else-if="scope.row.zt=='2'" style="color:#409EFF;cursor: pointer" @click="ygjMoudel(scope.row)">挂接完成</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="address" label="操作" width="150">
@@ -849,7 +850,7 @@ export default {
     mounted() {
         this.zjlyQuery();
         this.ndoptions = doCreate("ndTit");
-        this.ndoptions2 = doCreate("nd");
+        this.ndoptions2 = doCreate("ndTit");
         this.zjjboptions = doCreate("zjjb");
         this.zjlboptions = doCreate("zjlb");
         this.zjxzoptions = doCreate("zjxz");

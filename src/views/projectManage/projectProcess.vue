@@ -3,7 +3,7 @@
         <div v-bind:class="{boxFist:fistActive}">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item label="年度">
-                    <el-select v-model="seatch_nd" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-select v-model="seatch_nd" placeholder="请选择..." prefix-icon="el-icon-search">
                         <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>

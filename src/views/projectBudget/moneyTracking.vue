@@ -4,7 +4,7 @@
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item label="年度">
           <el-select suffix-icon="el-icon-date" v-model="seatch_nd" @keyup.enter.native="SearchList">
-            <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value" >
+            <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -13,7 +13,7 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary"  @click="SearchList">查询</el-button>
+          <el-button type="primary" @click="SearchList">查询</el-button>
         </el-form-item>
       </el-form>
       <div class="capit-tit">
@@ -39,8 +39,10 @@
           <el-table-column prop="xdsysj" label="限定使用时间" :formatter="xdsysjFormat" show-overflow-tooltip></el-table-column>
           <el-table-column prop="zt" label="状态">
             <template slot-scope="scope">
-              <span v-if="scope.row.qrzj>0" style="color:#67C23A;cursor: pointer">已挂接</span>
-              <span v-else style="color:#409EFF;cursor: pointer">未挂接</span>
+              <span v-if="scope.row.zt=='1'" style="color:#67C23A;cursor: pointer">已挂接</span>
+              <span v-else-if="scope.row.zt=='0'" style="color:#409EFF;cursor: pointer">未挂接</span>
+              <span v-else-if="scope.row.zt=='2'" style="color:#409EFF;cursor: pointer">挂接完成</span>
+
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150">
@@ -55,7 +57,7 @@
         </div>
       </div>
     </div>
-     <moneyquery-det :isActive="isActive" @secondPage="secondPage" :propFrom="propFrom"></moneyquery-det>
+    <moneyquery-det :isActive="isActive" @secondPage="secondPage" :propFrom="propFrom"></moneyquery-det>
   </div>
 </template>
 
@@ -67,100 +69,100 @@ import { formatDate } from "@/utils/data";
 import moneyqueryDet from "./moneyTracking_det";
 import { moneyTracking } from "@/api/moneyTracking";
 export default {
-  components: {
-    moneyqueryDet
-  },
-  data() {
-    return {
-      seatch_nd: "",
-      seatch_name: "",
-      ndOptions: [],
-      tableData: [],
-      propFrom:{
-        zjId:"",
-        bmbm:""
-      },
-      pageNo: 1,
-      pageSize: 10,
-      totalCount: 0,
-      isActive: true,
-    };
-  },
-  methods: {
-    secondPage(val){
-      this.isActive = !val;
+    components: {
+        moneyqueryDet
     },
-    query_details(row) {
-      if(row){
-        this.propFrom.zjId = row.id;
-        this.propFrom.bmbm = row.bmbm;
-      }
-      this.isActive = false;
+    data() {
+        return {
+            seatch_nd: "",
+            seatch_name: "",
+            ndOptions: [],
+            tableData: [],
+            propFrom: {
+                zjId: "",
+                bmbm: ""
+            },
+            pageNo: 1,
+            pageSize: 10,
+            totalCount: 0,
+            isActive: true
+        };
     },
-    handleCurrentChange(page) {
-      this.pageNo = page;
-      this.SearchList();
-    },
-    SearchList() {
-      let obj = {
-        pageNo: this.pageNo,
-        pageSize: this.pageSize,
-        zjmc: this.seatch_name,
-        nd: this.seatch_nd,
-        xzqh: this.$store.state.user.user.uUser.xzqh,
-        bmbm: this.$store.state.user.user.uUser.bmbm
-      };
-      moneyTracking(obj).then(res => {
-        let data = res.data;
-        if (data.success) {
-          if(data.msg.data.length){
-            this.tableData = data.msg.data;
-            this.totalCount = data.msg.totalCount;
-          }else{
-              this.tableData = [];
-               this.totalCount = 0;
-          }
+    methods: {
+        secondPage(val) {
+            this.isActive = !val;
+        },
+        query_details(row) {
+            if (row) {
+                this.propFrom.zjId = row.id;
+                this.propFrom.bmbm = row.bmbm;
+            }
+            this.isActive = false;
+        },
+        handleCurrentChange(page) {
+            this.pageNo = page;
+            this.SearchList();
+        },
+        SearchList() {
+            let obj = {
+                pageNo: this.pageNo,
+                pageSize: this.pageSize,
+                zjmc: this.seatch_name,
+                nd: this.seatch_nd,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                // bmbm: this.$store.state.user.user.uUser.bmbm
+            };
+            moneyTracking(obj).then(res => {
+                let data = res.data;
+                if (data.success) {
+                    if (data.msg.data.length) {
+                        this.tableData = data.msg.data;
+                        this.totalCount = data.msg.totalCount;
+                    } else {
+                        this.tableData = [];
+                        this.totalCount = 0;
+                    }
+                }
+            });
+        },
+        indexMethod(index) {
+            let start = (this.pageNo - 1) * this.pageSize;
+            return start + index + 1;
+        },
+        getXzqh(row) {
+            return getDicTab("xzqh", row.xzqh);
+        },
+        getBmbm(row) {
+            return getDicTab("bmbm", row.bmbm);
+        },
+        xdsysjFormat(row) {
+            return formatDate(row.xdsysj, "yyyy-MM-dd");
+        },
+        formatterzjjb(row) {
+            return getDicTab("zjjb", row.zjjb);
         }
-      });
     },
-    indexMethod(index) {
-      let start = (this.pageNo - 1) * this.pageSize;
-      return start + index + 1;
-    },
-    getXzqh(row) {
-      return getDicTab("xzqh", row.xzqh);
-    },
-    getBmbm(row) {
-      return getDicTab("bmbm", row.bmbm);
-    },
-    xdsysjFormat(row) {
-      return formatDate(row.xdsysj, "yyyy-MM-dd");
-    },
-    formatterzjjb(row){
-      return getDicTab('zjjb',row.zjjb);
+    mounted() {
+        this.ndOptions = doCreate("ndTit");
+        this.SearchList();
     }
-  },
-  mounted() {
-    this.ndOptions = doCreate("ndTit");
-    this.SearchList();
-  }
 };
 </script>
 
 
 <style lang="scss" scoped>
 .moneyTracking {
-  .capit-tit {
-    background: #317ecc;
-    .user-left {
-      span {
-        color: #fff;
-        display: inline-block;
-        text-align: center;
-        cursor: pointer;
-        margin: 10px 20px;
-      }
+    .capit-tit {
+        background: #317ecc;
+        .user-left {
+            span {
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                margin: 10px 20px;
+            }
+        }
     }
-  }
 }
 </style>

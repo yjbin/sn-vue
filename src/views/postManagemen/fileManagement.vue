@@ -7,12 +7,19 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="状态">
+                <el-select suffix-icon="el-icon-date" v-model="seatch_fwzt">
+                    <el-option v-for="(item,index) in fwztoptions" :key="index" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="文件名称">
                 <el-input placeholder="请输入文件名称" prefix-icon="el-icon-search" v-model.trim="seatch_name"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="ListQuery">查询</el-button>
                 <el-button type="success" @click="fileAdd">新增</el-button>
+                <el-button type="success" @click="fileRelease">发布</el-button>
             </el-form-item>
         </el-form>
         <div class="capit-tit">
@@ -25,7 +32,8 @@
             </el-row>
         </div>
         <div class="capit-list">
-            <el-table :data="fileList" stripe border style="width: 100%">
+            <el-table :data="fileList" stripe border style="width: 100%" @selection-change="checkboxChange">
+                <el-table-column type="selection"></el-table-column>
                 <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
                 <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="bmbm" label="部门处室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
@@ -36,11 +44,8 @@
                 <el-table-column prop="lrr" label="发布人" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrsj" label="发布时间" :formatter="formatterDatefbsj" show-overflow-tooltip></el-table-column>
                 <!-- <el-table-column prop="zt" label="状态" :formatter="ztDic" ></el-table-column> -->
-                <el-table-column prop="zt" label="状态">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.qrzj>0" style="color:#67C23A;">已发布</span>
-                        <span v-else style="color:#409EFF;">未发布</span>
-                    </template>
+                <el-table-column prop="by3" label="状态" :formatter="fwztDic">
+
                 </el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
@@ -50,7 +55,7 @@
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="fileEdit(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="listDel(scope.row)">删除</el-button>
+                        <el-button size="mini" type="danger" @click="listDel(scope.row)" :disabled="(scope.row.by3=='1'?true:false)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -71,7 +76,8 @@ import {
     fileAdd,
     fileUpdate,
     fileDel,
-    pageQuery
+    pageQuery,
+    pageQueryRelease
 } from "@/api/postManagemen/fileManagement";
 import { doCreate, getDicTab, moreMenu } from "@/utils/config";
 import { formatDate } from "@/utils/data";
@@ -84,6 +90,7 @@ export default {
         return {
             seatch_nd: "",
             seatch_name: "",
+            seatch_fwzt: "",
             textTit: "",
             pageTit: "",
             newModal: false,
@@ -95,7 +102,9 @@ export default {
             ndoptions: [],
             editObj: {},
             pageObj: {},
-            fileList: []
+            fileList: [],
+            fwztoptions: [],
+            multipleSelection: []
         };
     },
     methods: {
@@ -107,6 +116,9 @@ export default {
         },
         wjjbDic(row) {
             return getDicTab("wjjb", row.jb);
+        },
+        fwztDic(row) {
+            return getDicTab("fwzt", row.by3);
         },
         formatterDatefbsj(row) {
             return formatDate(row.lrsj, "yyyy-MM-dd");
@@ -126,6 +138,11 @@ export default {
             this.newModal = true;
             this.textTit = "编辑";
             this.editObj = row;
+            if (row.by3 == "1") {
+                this.activeShow = false;
+            } else {
+                this.activeShow = true;
+            }
         },
         listDel(row) {
             this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -181,7 +198,8 @@ export default {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 lx: "1",
                 nd: this.seatch_nd,
-                name: this.seatch_name
+                name: this.seatch_name,
+                by3: this.seatch_fwzt
             };
             fileQuery(obj).then(res => {
                 let data = res.data;
@@ -189,6 +207,34 @@ export default {
                     this.fileList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
                 }
+            });
+        },
+        checkboxChange(val) {
+            this.multipleSelection = val;
+        },
+        fileRelease() {
+            console.log(this.multipleSelection);
+            if (!this.multipleSelection.length) {
+                this.$message({
+                    message: "请选择发布数据",
+                    type: "warning"
+                });
+                return;
+            }
+            let idsArr = [];
+            this.multipleSelection.map(i => {
+                idsArr.push(i.id);
+            });
+            let obj = {
+                ids: idsArr.join(",")
+            };
+            pageQueryRelease(obj).then(res => {
+                let data = res.data;
+                this.$message({
+                    message: data.msg,
+                    type: "success"
+                });
+                this.ListQuery();
             });
         },
         FormInt() {
@@ -202,6 +248,7 @@ export default {
     mounted() {
         this.ListQuery();
         this.ndoptions = doCreate("ndTit");
+        this.fwztoptions = doCreate("fwzt");
     }
 };
 </script>

@@ -264,6 +264,7 @@ export default {
         },
         handleCurrentChange(val) {
             this.pageNo = val;
+            this.getList();
         },
         handleCurrentChange2(val) {
             this.pageNo2 = val;

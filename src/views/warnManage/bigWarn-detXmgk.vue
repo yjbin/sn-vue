@@ -40,7 +40,7 @@
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="录入时间" prop="lrsj">
-                        <el-input v-model="xmForm.lrsj" placeholder="录入时间" :disabled="true"></el-input>
+                        <el-date-picker v-model="xmForm.lrsj" placeholder="录入时间" :disabled="true" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -214,7 +214,8 @@ export default {
       options: [],
       xmlbArr: [],
       xmForm: {
-          xzqh:this.$store.state.user.user.uUser.xzqh
+          xzqh:this.$store.state.user.user.uUser.xzqh,
+          
       },
       //附件参数
       accessoryModalInt: false,
@@ -240,6 +241,7 @@ export default {
   watch: {
     xmgkList: {
       handler: function(val) {
+          debugger
         if (val) {
           this.xmForm = Object.assign({}, val);
           if (val.fj) {

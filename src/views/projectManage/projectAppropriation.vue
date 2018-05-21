@@ -3,7 +3,7 @@
         <div v-bind:class="{isShow:firstPage}">
             <el-form :inline="true" v-model="searchMember" class="demo-form-inline">
                 <el-form-item label="年度">
-                    <el-select v-model="searchMember.nd" @keyup.enter.native="search" placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-select v-model="searchMember.nd" placeholder="请选择..." prefix-icon="el-icon-search">
                         <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
@@ -55,8 +55,8 @@ export default {
             tableData: [],
             ndOptions: [],
             searchMember: {
-                nd: null,
-                xmmc: null,
+                nd: "",
+                xmmc: "",
                 bmbm: ""
             },
             firstPage: false,
@@ -65,7 +65,7 @@ export default {
             totalCount: 1,
             propFrom: {
                 xmId: "",
-                zjId: ""
+                // num:""
             }
         };
     },
@@ -133,6 +133,7 @@ export default {
         detailModel(row) {
             if (row) {
                 this.propFrom.xmId = row.id;
+                // this.propFrom.num = new Date().getTime();
             }
             this.firstPage = true;
         }

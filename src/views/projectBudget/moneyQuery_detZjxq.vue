@@ -150,7 +150,7 @@ export default {
         this.zjxzoptions = doCreate("zjxz");
         this.sycjoptions = doCreate("sycj");
         this.xzqhoptions = doCreate("xzqh");
-        this.bmbmoptions = doCreate("bmbm");
+        this.bmbmoptions = doCreate("bmcs");
     }
 };
 </script>

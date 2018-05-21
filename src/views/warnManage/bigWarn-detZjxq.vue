@@ -55,8 +55,8 @@
             </el-row>
             <el-row>
                   <el-col :span="11" :offset="1">
-                    <el-form-item label="资金金额(万元)" prop="sqzj">
-                        <el-input v-model="zjlyForm.sqzj" placeholder="资金金额"></el-input>
+                    <el-form-item label="资金金额(万元)" prop="fpzj">
+                        <el-input v-model="zjlyForm.fpzj" placeholder="资金金额"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
