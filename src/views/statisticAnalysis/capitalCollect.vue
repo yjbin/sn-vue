@@ -14,7 +14,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="部门处室">
-                <el-select v-model="seatch_bmbm" @keyup.enter.native="searchFun" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                <el-select v-model="seatch_bmbm"  filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
                     <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
