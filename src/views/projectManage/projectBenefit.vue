@@ -25,7 +25,7 @@
           <el-table-column prop="xmze" label="项目总额(万元)" show-overflow-tooltip></el-table-column>
           <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
           <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="detailModel(scope.row)">效益</el-button>
             </template>

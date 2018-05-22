@@ -96,7 +96,7 @@
                             </el-table-column>
                             <el-table-column prop="address" label="地址" show-overflow-tooltip>
                             </el-table-column>
-                            <el-table-column label="操作">
+                            <el-table-column label="操作" width="150">
                                 <template slot-scope="scope">
                                     <el-button @click="handleClick(scope.row)" type="primary" size="mini">修改</el-button>
                                     <el-button type="danger" size="mini" @click="deleteMember(scope.row)">删除</el-button>

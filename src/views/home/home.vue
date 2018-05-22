@@ -28,7 +28,8 @@
                             <div class="divRight">
                                 <p class="divRightp1">资金总额</p>
                                 <p class="divRightp2">
-                                    <span>{{zjtjObj.zjze || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj.zjze || 0}}</span>
+                                    万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -38,7 +39,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">拨付总额</p>
                                 <p class="divRightp2">
-                                    <span>{{zjtjObj.ybfzj || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj.ybfzj || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -48,7 +49,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">中央资金</p>
                                 <p class="divRightp2">
-                                    <span>{{zjtjObj["1"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["1"] || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -58,7 +59,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">省级资金</p>
                                 <p class="divRightp2">
-                                    <span>{{zjtjObj["2"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["2"] || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -68,7 +69,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">市级资金</p>
                                 <p class="divRightp2">
-                                    <span>{{zjtjObj["3"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["3"] || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -78,7 +79,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">县级资金</p>
                                 <p class="divRightp2">
-                                    <span>{{zjtjObj["4"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["4"] || 0}}</span>万元</p>
                             </div>
                         </div>
                     </div>
@@ -97,7 +98,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">项目总数</p>
                                 <p class="divRightp2">
-                                    <span>{{xmtjObj.xmsl || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmsl || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -107,7 +108,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">项目总额</p>
                                 <p class="divRightp2">
-                                    <span>{{xmtjObj.xmze || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmze || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -117,7 +118,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">中央资金</p>
                                 <p class="divRightp2">
-                                    <span>{{xmtjObj["1"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["1"] || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -127,7 +128,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">省级资金</p>
                                 <p class="divRightp2">
-                                    <span>{{xmtjObj["2"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["2"] || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -137,7 +138,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">市级资金</p>
                                 <p class="divRightp2">
-                                    <span>{{xmtjObj["3"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["3"] || 0}}</span>万元</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -147,7 +148,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">县级资金</p>
                                 <p class="divRightp2">
-                                    <span>{{xmtjObj["4"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["4"] || 0}}</span>万元</p>
                             </div>
                         </div>
                     </div>
@@ -211,6 +212,7 @@
             </div>
 
         </div>
+        <span v-show="toptitShow" transition="fade" :style="{top:topX,left:leftY}" class="toptit">{{toptitText}}</span>
     </div>
 </template>
 
@@ -242,6 +244,10 @@ export default {
             xmtjPic: "",
             duojiDic: "",
             zjOrxm: true,
+            toptitShow: false,
+            toptitText: "",
+            topX: "10px",
+            leftY: "10px",
             headerTit: "资金统计",
             zjtjObj: {
                 zjze: 0,
@@ -600,6 +606,18 @@ export default {
                     ]
                 });
             });
+        },
+        dataDetails(event){
+            let el = event.currentTarget;
+            this.toptitText = el.innerText;
+            let x1 = event.clientX-event.offsetX-200,y1 = event.clientY-event.offsetY-140;
+            console.log(event,x1,y1)
+            this.topX = y1+"px";
+            this.leftY =x1 +"px";
+            this.toptitShow = true;
+        },
+        hiddenDetail(event){
+            this.toptitShow = false;
         }
     },
     mounted() {
@@ -616,6 +634,17 @@ export default {
 .homeBigbox {
     width: 100%;
     height: 81vh;
+    .toptit{
+        display: block;
+        position: absolute;
+        min-width: 100px;
+        height: 30px;
+        border-radius: 4px 4px 4px 4px;
+        color: #e7eaec;
+        background: rgba($color: #000000, $alpha: 0.6);
+        text-align: center;
+        line-height: 30px;
+    };
     .homeBigboxTop {
         height: 48%;
         display: flex;

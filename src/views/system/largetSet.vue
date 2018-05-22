@@ -103,8 +103,8 @@
                         </el-form-item>
                         <el-button type="primary" size="medium" @click.enter="search">查询</el-button>
                     </el-form>
-                    <el-table :data="tableData" border style="width: 100%">
-                        <el-table-column width="50" label="序号" type="index" :index="indexMethod">
+                    <el-table :data="tableData" border stripe style="width: 100%">
+                        <el-table-column width="80" label="序号" type="index" :index="indexMethod">
                         </el-table-column>
                         <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划" show-overflow-tooltip>
                         </el-table-column>
@@ -120,7 +120,7 @@
                         </el-table-column>
                         <el-table-column prop="zt" label="状态" :formatter="status" show-overflow-tooltip>
                         </el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="操作" width="80">
                             <template slot-scope="scope">
                                 <el-button @click="handleClick(scope.row)" type="primary" size="mini">查看</el-button>
                             </template>

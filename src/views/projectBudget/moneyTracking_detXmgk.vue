@@ -41,7 +41,7 @@
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="录入时间">
-                        <el-input v-model="xmForm.lrsj" placeholder="录入时间" :disabled="true"></el-input>
+                        <el-date-picker type="date" v-model="xmForm.lrsj" placeholder="录入时间" :disabled="true"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
