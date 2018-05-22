@@ -56,7 +56,7 @@
                         </div>
                     </el-table-column>  
                 </el-table-column>
-                <el-table-column label="合计(万元)" sortable show-overflow-tooltip width="150">
+                <el-table-column label="合计(万元)" show-overflow-tooltip width="150">
                     <el-table-column prop="ze" label="总额" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="zybf" label="已拨付" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="zbfbl" label="拨付比率(%)" show-overflow-tooltip></el-table-column>

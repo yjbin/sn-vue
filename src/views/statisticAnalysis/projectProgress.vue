@@ -1,7 +1,7 @@
 <template>
     <div id="projectProgress">
         <el-form :inline="true" class="demo-form-inline">
-            <el-form-item label="资金年度">
+            <el-form-item label="项目年度">
                 <el-select v-model="seatch_nd" placeholder="请选择..." prefix-icon="el-icon-search">
                     <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
                     </el-option>
@@ -57,7 +57,7 @@
                         <el-table-column prop="bilv4" label="拨付进度%" show-overflow-tooltip></el-table-column>
                     </el-table-column>
                 </el-table-column>
-                <el-table-column label="合计(万元)" sortable  width="150">
+                <el-table-column label="合计(万元)" width="150">
                     <el-table-column prop="counthj" label="数量" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="xmzehj" label="金额" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="ybfhj" label="已拨付" show-overflow-tooltip></el-table-column>
