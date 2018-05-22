@@ -356,8 +356,8 @@ export default {
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
-                flag:"1",
-                xzqh:this.$store.state.user.user.uUser.xzqh
+                flag: "1",
+                xzqh: this.$store.state.user.user.uUser.xzqh
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc.trim()) : "",
@@ -365,13 +365,13 @@ export default {
                   option.bmbm ? (obj.bmbm = option.bmbm) : "")
                 : "";
             xmlbList(obj).then(res => {
-              if(res.data.data.elements.length){
-                this.tableData = res.data.data.elements;
-                this.totalCount = res.data.data.totalCount;
-              }else{
-                 this.tableData = [];
-                 this.totalCount = 0;
-              }
+                if (res.data.data.elements.length) {
+                    this.tableData = res.data.data.elements;
+                    this.totalCount = res.data.data.totalCount;
+                } else {
+                    this.tableData = [];
+                    this.totalCount = 0;
+                }
             });
         },
         //搜索
@@ -398,13 +398,13 @@ export default {
                 xmId: this.xmid
             };
             xmxySelect(obj).then(res => {
-              if(res.data.msg.data.length){
-                this.xmxyList = res.data.msg.data;
-                this.totalCount2 = res.data.msg.totalCount;
-              }else{
-                 this.xmxyList = [];
-                 this.totalCount2 = 0;
-              }         
+                if (res.data.msg.data.length) {
+                    this.xmxyList = res.data.msg.data;
+                    this.totalCount2 = res.data.msg.totalCount;
+                } else {
+                    this.xmxyList = [];
+                    this.totalCount2 = 0;
+                }
             });
             this.firstPage = true;
             this.secondPage = false;
@@ -441,14 +441,14 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                    xmxyDel({ id: row.id }).then(() =>{
-                       this.$message({
-                        type: "success",
-                        message: "删除成功!"
-                      });
-                      this.$refs.xmxyFrom.resetFields();
-                      this.detailModel();
-                      this.xmjdFromInt();
+                    xmxyDel({ id: row.id }).then(() => {
+                        this.$message({
+                            type: "success",
+                            message: "删除成功!"
+                        });
+                        this.$refs.xmxyFrom.resetFields();
+                        this.detailModel();
+                        this.xmjdFromInt();
                     });
                 })
                 .catch(() => {
@@ -487,6 +487,7 @@ export default {
             this.xmxyFrom.lrsj = d.getTime();
         },
         xmjdFromInt() {
+            this.xmxyFrom = {};
             this.getNowDate();
             this.fileSrc = {
                 num: Math.random(),
@@ -494,8 +495,8 @@ export default {
             };
             this.xmxyFrom.xmmc = this.xmmc;
             this.xmxyFrom.xmbh = this.xmbh;
-            this.xzqh = this.$store.state.user.user.uUser.xzqh;
-            this.bmbm = this.$store.state.user.user.uUser.bmbm;
+            this.xmxyFrom.xzqh = this.$store.state.user.user.uUser.xzqh;
+            this.xmxyFrom.bmbm = this.$store.state.user.user.uUser.bmbm;
             this.xmxyFrom.lrr = this.$store.state.user.user.uUser.nickname;
         },
         colseTog(val) {

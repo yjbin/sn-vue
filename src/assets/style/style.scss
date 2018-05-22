@@ -88,3 +88,6 @@ a {
 .el-date-editor.el-input__inner {
   width: 100%;
 }
+[v-cloak] {
+  display: none !important;
+}

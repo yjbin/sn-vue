@@ -281,8 +281,8 @@ export default {
                 {
                     pageNo: pageNo,
                     pageSize: pageSize,
-                    xzqh: _this.xzqh,
-                    bm: _this.bm
+                    xzqh: _this.xzqh?_this.xzqh:this.$store.state.user.user.uUser.xzqh,
+                    bm: _this.bm?(_this.xzqh+"-"+_this.bm):(this.$store.state.user.user.uUser.bmbm)
                 }
             );
             name ? (obj.name = name) : "";

@@ -98,7 +98,7 @@
                             <div class="divRight">
                                 <p class="divRightp1">项目总数</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmsl || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmsl || 0}}</span>个</p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -492,6 +492,15 @@ export default {
                 );
                 // 绘制图表
                 sycjmyChartBig.setOption({
+                    title: {
+                        text: '使用层级',
+                        x: 'center',
+                        y: 'center',
+                        textStyle: {
+                            fontWeight: "bold",
+                            fontSize: 22
+                        }
+                    },
                     tooltip: {
                         trigger: "item",
                         formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -513,14 +522,13 @@ export default {
                                     show: false,
                                     position: "center"
                                 },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: "24",
-                                        fontWeight: "bold",
-                                        color:"#2e3743"
-                                    }
-                                }
+                                // emphasis: {
+                                //     show: true,
+                                //     textStyle: {
+                                //         fontSize: "18",
+                                //         color:"#2e3743",
+                                //     }
+                                // }
                             },
                             labelLine: {
                                 normal: {
@@ -536,7 +544,6 @@ export default {
                     ]
                 });
                 sycjmyChartBig.on("click", function(params) {
-                    console.log(params);
                     if (params.name == "本级使用") {
                         _this.sycjSamllEchars({ sycj: "1", name: "本级使用" });
                     } else if (params.name == "下级使用") {
@@ -563,6 +570,15 @@ export default {
                 );
                 // 绘制图表
                 sycjmyChartSamll.setOption({
+                    title: {
+                        text: '使用情况',
+                        x: 'center',
+                        y: 'center',
+                        textStyle: {
+                            fontWeight: "bold",
+                            fontSize: 22
+                        }
+                    },
                     tooltip: {
                         trigger: "item",
                         formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -584,14 +600,14 @@ export default {
                                     show: false,
                                     position: "center"
                                 },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: "15",
-                                        fontWeight: "bold",
-                                        color:"#2e3743"
-                                    }
-                                }
+                                // emphasis: {
+                                //     show: true,
+                                //     textStyle: {
+                                //         fontSize: "10",
+                                //         fontWeight: "bold",
+                                //         color:"#2e3743",
+                                //     }
+                                // }
                             },
                             labelLine: {
                                 normal: {

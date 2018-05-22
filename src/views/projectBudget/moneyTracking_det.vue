@@ -245,11 +245,12 @@ export default {
           if (data.length) {
             _this.xmgkList = Object.assign({}, data[0]);
             _this.xmid = res.data.data.elements[0].id;
-            _this.xmjdSearch(_this.xmid);
-            _this.xmbfSearch(_this.xmid);
-            _this.xmysSearch(_this.xmid);
-            _this.xmxySearch(_this.xmid);
-            _this.xmkhSearch(_this.xmid);
+            // _this.xmjdSearch(_this.xmid);
+            // _this.xmbfSearch(_this.xmid);
+            // _this.xmysSearch(_this.xmid);
+            // _this.xmxySearch(_this.xmid);
+            // _this.xmkhSearch(_this.xmid);
+            
           } else {
             _this.$message({
               message: "此资金暂未挂接项目",
@@ -261,17 +262,13 @@ export default {
               xzqh: this.$store.state.user.user.uUser.xzqh
             };
             _this.xmid = "";
-            _this.xmkhList = [];
-            _this.xmxyList = [];
-            _this.xmysList = [];
-            _this.xmbfList = [];
-            _this.xmjdList = [];
           }
         }
       });
     },
     //选项卡点击事件
     handleClick(tab) {
+      this.tablesSet();
       if (tab.name == "first") {
         this.getXmgkDate(this.searchList);
       } else if (tab.name == "second") {
@@ -296,6 +293,11 @@ export default {
         this.$refs.bfFrom.resetFields();
       }
       this.searchList = {};
+      this.xmkhList = [];
+      this.xmxyList = [];
+      this.xmysList = [];
+      this.xmbfList = [];
+      this.xmjdList = [];
     },
     //项目拨付查询
     xmbfSearch(option) {
@@ -480,6 +482,16 @@ export default {
     },
     formatterDatekhsj(row) {
       return formatDate(row.khsj, "yyyy-MM-dd");
+    },
+    tablesSet(){
+        var tables=document.querySelectorAll('table');
+        for(var i=0;i<tables.length;i++){
+          tables[i].style.width='100%'
+        };
+        var elHeaders=document.querySelectorAll('.el-table__header');
+        for(var j=0;j<elHeaders.length;j++){
+          elHeaders[j].style.tableLayout='inherit'
+        }
     }
   }
 };

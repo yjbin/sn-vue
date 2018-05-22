@@ -99,7 +99,6 @@ export default {
                 pageSize: 10,
                 pageNo: 1,
                 zjId: row.id,
-                bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0"
             };
             xmlbList(obj).then(res => {

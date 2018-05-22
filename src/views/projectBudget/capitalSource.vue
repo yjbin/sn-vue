@@ -51,7 +51,7 @@
                 <el-table-column prop="zt" label="状态">
                     <template slot-scope="scope">
                         <span v-if="scope.row.zt=='1'" style="color:#67C23A;cursor: pointer" @click="wgjMoudel(scope.row)">已挂接</span>
-                        <span v-else-if="scope.row.zt=='0'" style="color:#409EFF;cursor: pointer" @click="wgjMoudel(scope.row)">未挂接</span>
+                        <span v-else-if="scope.row.zt=='0'" style="color:#f56c6c;cursor: pointer" @click="wgjMoudel(scope.row)">未挂接</span>
                         <span v-else-if="scope.row.zt=='2'" style="color:#409EFF;cursor: pointer" @click="ygjMoudel(scope.row)">挂接完成</span>
                     </template>
                 </el-table-column>
@@ -839,6 +839,7 @@ export default {
                     message: res.msg,
                     type: "success"
                 });
+                this.zjlyQuery();
             } else {
                 this.$message({
                     message: res.msg,

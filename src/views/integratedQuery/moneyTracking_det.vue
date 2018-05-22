@@ -253,11 +253,7 @@ export default {
                     if (data.length) {
                         _this.xmgkList = Object.assign({}, data[0]);
                         _this.xmid = res.data.data.elements[0].id;
-                        _this.xmjdSearch(_this.xmid);
-                        _this.xmbfSearch(_this.xmid);
-                        _this.xmysSearch(_this.xmid);
-                        _this.xmxySearch(_this.xmid);
-                        _this.xmkhSearch(_this.xmid);
+                   
                     } else {
                         _this.$message({
                             message: "此资金暂未挂接项目",

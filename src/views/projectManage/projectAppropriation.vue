@@ -22,10 +22,10 @@
                     <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="xmze" label="项目总额(元)" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmze" label="项目总额(万元)" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="ljsdzj" label="已拨付(元)" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="ljsdzj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button size="mini" type="primary" @click="detailModel(scope.row)">拨款</el-button>
