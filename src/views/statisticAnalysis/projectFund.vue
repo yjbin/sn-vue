@@ -38,7 +38,7 @@
 
                 </el-table-column>
                 <el-table-column label="资金级别" show-overflow-tooltip>
-                    <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label" :key="item.value"></el-table-column>
+                    <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label+'(万元)'" :key="item.value"></el-table-column>
                 </el-table-column>
                 <el-table-column label="合计" show-summary show-overflow-tooltip>
                     <el-table-column label="总额" prop="ze" show-overflow-tooltip>
@@ -47,7 +47,7 @@
                     <el-table-column label="已拨付" prop="ybf" show-overflow-tooltip>
 
                     </el-table-column>
-                    <el-table-column label="拨付比率" prop="bilv" show-overflow-tooltip>
+                    <el-table-column label="拨付比率%" prop="bilv" show-overflow-tooltip>
 
                     </el-table-column>
                 </el-table-column>

@@ -41,7 +41,7 @@
                     <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label" :key="item.id"></el-table-column>
 
                 </el-table-column>
-                <el-table-column prop="heji" label="合计" show-overflow-tooltip width="150"></el-table-column>
+                <el-table-column prop="heji" label="合计(万元)" show-overflow-tooltip width="150"></el-table-column>
             </el-table>
         </div>
     </div>

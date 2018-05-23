@@ -238,7 +238,7 @@ export default {
         pageSize:this.xmgkFrom.pageSize
       };
       option.zjId ? (obj.zjId = option.zjId) : "";
-      option.bmbm ? (obj.bmbm = option.bmbm) : "";
+      // option.bmbm ? (obj.bmbm = option.bmbm) : "";
       xmlbList(obj).then(res => {
         let data = res.data.data.elements;
         if (data) {

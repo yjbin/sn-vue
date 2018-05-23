@@ -4,7 +4,10 @@
             <el-scrollbar class="page-component__scroll">
                 <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick" :expand-on-click-node="false">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
-                        <span>{{ node.label }}</span>
+                        <el-tooltip v-if="node.label.length>8" class="item" effect="dark" :content="node.label" placement="top">
+                            <span class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        </el-tooltip>
+                        <span v-else class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
                         <span>
                             <i class="el-icon-plus" @click="() => append(data)"></i>
 
@@ -249,6 +252,13 @@ export default {
         height: 100%;
         padding: 20px;
         border-left: 1px dotted #999;
+    }
+    .nodeLabel {
+        width: 126px;
+        overflow: hidden;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 </style>

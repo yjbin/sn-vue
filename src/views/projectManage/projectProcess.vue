@@ -205,7 +205,6 @@ export default {
             xmid: "",
             xmmc: "",
             xmbh: "",
-
             rulesXmjd: {
                 xmjd: [
                     {
@@ -308,6 +307,9 @@ export default {
                         let obj = Object.assign({}, this.xmjdFrom);
 
                         obj.xmid = this.xmid;
+                        obj.by1 = this.$store.state.user.user.uUser.xzqh;
+                        obj.by2 = this.$store.state.user.user.uUser.bmbm;
+
                         this.fileSrc = {
                             num: Math.random(),
                             fileStr: ""
@@ -365,6 +367,7 @@ export default {
         xmjdEdit(row) {
             this.$refs.xmjdFrom.resetFields();
             let obj = Object.assign({}, row);
+            
 
             this.xmjdFrom = obj;
 

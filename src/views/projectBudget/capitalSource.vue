@@ -729,6 +729,7 @@ export default {
                 weiguajie: 1,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
+                sycj: row.sycj,
                 flag: "1"
             };
             xmlbList(obj).then(res => {

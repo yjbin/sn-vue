@@ -1,58 +1,64 @@
 <template>
-  <div class="multistage">
-    <div class="source_tree">
-         <el-scrollbar class="page-component__scroll">
-            <el-form :inline="true">
-                <el-form-item label="选择字典">
-                <el-select v-model="typeVal" @change="duojiChange">
-                    <el-option v-for="(item,index) in Djoptions" :key="index" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-                </el-form-item>
-            </el-form>
-            <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
-                <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>{{ node.label }}</span>
-                <span>
-                    <i class="el-icon-plus" @click.stop="() => append(data)" @mouseenter="addxjdataDetail" @mouseleave="xjhiddenDetail"></i>
-                    <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)" @mouseenter="dataDetails" @mouseleave="hiddenDetail"></i>
-                    <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
-                </span>
-                </span>
-            </el-tree>
-         </el-scrollbar>
-    </div>
-    <div class="source_form">
-      <el-form :inline="true" :model="formData" label-width="90px" ref="treeForm" class="demo-form-inline" :rules="rules">
-        <el-row>
-          <el-col :span="10" :offset="1">
-            <el-form-item label="编码" prop="dictcode">
-              <el-input v-model="formData.dictcode" placeholder="资源路径"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" :offset="3">
-            <el-form-item label="编码名称" prop="dictname">
-              <el-input v-model="formData.dictname" placeholder="资源名称"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- <el-row>
+    <div class="multistage">
+        <div class="source_tree">
+            <el-scrollbar class="page-component__scroll">
+                <el-form :inline="true">
+                    <el-form-item label="选择字典">
+                        <el-select v-model="typeVal" @change="duojiChange">
+                            <el-option v-for="(item,index) in Djoptions" :key="index" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <el-tooltip v-if="node.label.length>8" class="item" effect="dark" :content="node.label" placement="top">
+                            <span class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        </el-tooltip>
+                        <span v-else class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        <span>
+                            <el-tooltip class="item" effect="dark" content="添加下级" placement="top">
+                                <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="添加本级" placement="top">
+                                <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                            </el-tooltip>
+                            <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
+                        </span>
+                    </span>
+                </el-tree>
+            </el-scrollbar>
+        </div>
+        <div class="source_form">
+            <el-form :inline="true" :model="formData" label-width="90px" ref="treeForm" class="demo-form-inline" :rules="rules">
+                <el-row>
+                    <el-col :span="10" :offset="1">
+                        <el-form-item label="编码" prop="dictcode">
+                            <el-input v-model="formData.dictcode" placeholder="资源路径"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="10" :offset="3">
+                        <el-form-item label="编码名称" prop="dictname">
+                            <el-input v-model="formData.dictname" placeholder="资源名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <!-- <el-row>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="资源图标" prop="pIcon">
                             <el-input v-model="formData.pIcon" placeholder="资源图标"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row> -->
-        <el-row>
-          <el-col :span="10" :offset="1">
-            <el-form-item label="." class="none">
-              <el-button type="primary" @click="formSave" v-bind:class="{showHide:showHide}" >确定</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+                <el-row>
+                    <el-col :span="10" :offset="1">
+                        <el-form-item label="." class="none">
+                            <el-button type="primary" @click="formSave" v-bind:class="{showHide:showHide}">确定</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
     </div>
-    <span v-show="toptitShow" transition="fade" :style="{top:topX,left:leftY}" class="toptit">{{toptitText}}</span>
-  </div>
 </template>
 <script>
 import { treeQuery, formSave, treeDel } from "@/api/multistageDown";
@@ -70,11 +76,7 @@ export default {
             rules: {
                 label: [{ required: true, message: "不能为空" }],
                 pIcon: [{ required: true, message: "不能为空" }]
-            },
-            toptitText: "",
-            topX: "10px",
-            leftY: "10px",
-            toptitShow:false
+            }
         };
     },
     methods: {
@@ -148,11 +150,11 @@ export default {
                 if (data.length) {
                     this.treeData = data;
                     this.formData = data[0];
-                    this.showHide=false;
-                }else{
-                  this.treeData = [];
-                  this.formData = {};
-                  this.showHide=true;
+                    this.showHide = false;
+                } else {
+                    this.treeData = [];
+                    this.formData = {};
+                    this.showHide = true;
                 }
             });
         },
@@ -181,32 +183,9 @@ export default {
                 }
             });
         },
+        
         duojiChange() {
             this.treeQuery(this.typeVal);
-        },
-        dataDetails(event) {
-            let el = event.currentTarget;
-                this.toptitText = "添加同级";
-                let x1 = event.clientX - event.offsetX - 230,
-                    y1 = event.clientY - event.offsetY - 110;
-                this.topX = y1 + "px";
-                this.leftY = x1 + "px";
-                this.toptitShow = true;
-        },
-        hiddenDetail(event) {
-            this.toptitShow = false;
-        },
-        addxjdataDetail(event){
-             let el = event.currentTarget;
-                this.toptitText = "添加下级";
-                let x1 = event.clientX - event.offsetX - 230,
-                    y1 = event.clientY - event.offsetY - 110;
-                this.topX = y1 + "px";
-                this.leftY = x1 + "px";
-                this.toptitShow = true;
-        },
-        xjhiddenDetail(event){
-             this.toptitShow = false;
         }
     },
     mounted() {
@@ -232,20 +211,15 @@ export default {
         padding: 20px;
         border-left: 1px dotted #999;
     }
-    .showHide{
-      display: none;
+    .showHide {
+        display: none;
     }
-     .toptit {
-        display: block;
-        position: absolute;
-        padding: 0 10px;
-        min-width: 80px;
-        height: 30px;
-        border-radius: 4px 4px 4px 4px;
-        color: #e7eaec;
-        background: rgba($color: #000000, $alpha: 0.6);
-        text-align: center;
-        line-height: 30px;
+    .nodeLabel {
+        width: 126px;
+        overflow: hidden;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 </style>

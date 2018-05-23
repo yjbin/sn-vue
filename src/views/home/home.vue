@@ -582,7 +582,7 @@ export default {
                 // 绘制图表
                 sycjmyChartSamll.setOption({
                     title: {
-                        text: "拨付情况",
+                        text: row.name,
                         x: "center",
                         y: "center",
                         textStyle: {

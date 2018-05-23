@@ -271,8 +271,7 @@ export default {
             this.firstPage = true;
             this.secondPage = false;
         },
-        FromInt() {
-            this.ndOptions = doCreate("ndTit");
+        fromInt() {
             this.ndoptions2 = doCreate("nd");
             this.zjjboptions = doCreate("zjjb");
             this.zjlboptions = doCreate("zjlb");
@@ -280,12 +279,10 @@ export default {
             this.sycjoptions = doCreate("sycj");
             this.xzqhoptions = doCreate("xzqh");
             this.bmbmoptions = doCreate("bmbm");
-            this.cylxoptions = doCreate("cylb");
         }
     },
     mounted() {
-        this.FromInt();
-        this.getList();
+        this.fromInt();
     }
 };
 </script>

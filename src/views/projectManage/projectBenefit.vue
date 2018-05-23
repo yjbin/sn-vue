@@ -253,7 +253,7 @@
           </el-row>
         </el-form>
         <span slot="footer" class="dialog-footer" style="margin-left:45%;">
-          <el-button type="primary" @click="btn_Save">保 存</el-button>
+          <el-button type="primary" @click="btn_Save" v-show="yesNoUpdara">保 存</el-button>
           <el-button @click="backBtn()">取 消</el-button>
         </span>
       </div>
@@ -291,6 +291,8 @@ export default {
             editModal: false,
             accessoryModalInt: false,
             upShowhide: true,
+            userBmbm: this.$store.state.user.user.uUser.bmbm,
+            yesNoUpdara: false,
             textTitFile: "",
             fileSrc: "",
             editTitle: "",
@@ -421,6 +423,11 @@ export default {
                 this.$refs.xmxyFrom.resetFields();
             }
             this.xmxyFrom = Object.assign({}, row);
+            if (row.bmbm == this.userBmbm) {
+                this.yesNoUpdara = true;
+            } else {
+                this.yesNoUpdara = false;
+            }
             if (row.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -493,6 +500,7 @@ export default {
                 num: Math.random(),
                 fileStr: ""
             };
+            this.yesNoUpdara = true;
             this.xmxyFrom.xmmc = this.xmmc;
             this.xmxyFrom.xmbh = this.xmbh;
             this.xmxyFrom.xzqh = this.$store.state.user.user.uUser.xzqh;

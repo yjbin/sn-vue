@@ -164,7 +164,7 @@
                 </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer" style="margin-left:45%;">
-                <el-button type="primary" @click="btn_xmjdSave">保 存</el-button>
+                <el-button type="primary" @click="btn_xmjdSave" v-show="yesNoUpdara">保 存</el-button>
                 <el-button @click="backBtn()">取 消</el-button>
             </span>
         </div>
@@ -201,6 +201,7 @@ export default {
             seatch_nd: "",
             seatch_name: "",
             fistActive: false,
+            yesNoUpdara: false,
             secondActive: true,
             newModal: false,
             editModal: false,
@@ -218,6 +219,7 @@ export default {
             xmid: "",
             xmmc: "",
             xmbh: "",
+            userBmbm:this.$store.state.user.user.uUser.bmbm,
             rulesXmys: {
                 ysr: [{ required: true, message: "不能为空" }],
                 yssj: [{ required: true, message: "不能为空" }],
@@ -361,6 +363,11 @@ export default {
             }
             this.xmysFrom =  Object.assign({}, row);
             this.addUpdatePd = false;
+            if(row.bmbm==this.userBmbm){
+                this.yesNoUpdara = true
+            }else{
+                this.yesNoUpdara = false
+            }
             if(row.fj){
               this.fileSrc = {
                             num: Math.random(),
@@ -406,6 +413,7 @@ export default {
             this.xmysFrom = {};
             this.$refs.xmysFrom.resetFields();
             this.addUpdatePd = true;
+            this.yesNoUpdara = true
             this.xmysFromInt();
         },
         changeModal(row) {

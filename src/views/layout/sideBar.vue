@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar class="page-component__scroll">
     <el-menu mode="vertical" unique-opened :default-active="$route.path"   @select="handleselect"  class="el-menu-vertical-demo">
-      <el-menu-item index="" class="sideBar_title">功能菜单</el-menu-item>
+      <!-- <el-menu-item index="" class="sideBar_title">功能菜单</el-menu-item> -->
       <sidebar-item :routes="permission_routers"  :proObj="aloneMenu"></sidebar-item>
     </el-menu>
   </el-scrollbar>

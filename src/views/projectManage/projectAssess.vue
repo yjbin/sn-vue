@@ -1,185 +1,185 @@
 <template>
-  <div class="assess">
-    <div v-bind:class="{isShow:firstPage}">
-      <el-form :inline="true" v-model="searchMember" class="demo-form-inline">
-        <el-form-item label="年度">
-          <el-select v-model="searchMember.nd"  placeholder="请选择..." prefix-icon="el-icon-search">
-            <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="项目名称">
-          <el-input v-model.trim="searchMember.xmmc" @keyup.enter.native="search" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="medium" @click="search">查询</el-button>
-        </el-form-item>
-      </el-form>
-      <div class="tabList">
-        <el-table :data="tableData" stripe border style="width: 100%">
-          <el-table-column type="index" label="序号" width="80"></el-table-column>
-          <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmze" label="项目总额(万元)" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="detailModel(scope.row)">考核</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="fr mar10">
-          <el-pagination @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
-          </el-pagination>
-        </div>
-      </div>
-    </div>
-    <div v-bind:class="{isShow:secondPage}">
-      <div class="capit-tit">
-        <el-row>
-          <el-col :span="12">
-            <div class="user-left">
-              <span>考核列表</span>
+    <div class="assess">
+        <div v-bind:class="{isShow:firstPage}">
+            <el-form :inline="true" v-model="searchMember" class="demo-form-inline">
+                <el-form-item label="年度">
+                    <el-select v-model="searchMember.nd" placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="项目名称">
+                    <el-input v-model.trim="searchMember.xmmc" @keyup.enter.native="search" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" size="medium" @click="search">查询</el-button>
+                </el-form-item>
+            </el-form>
+            <div class="tabList">
+                <el-table :data="tableData" stripe border style="width: 100%">
+                    <el-table-column type="index" label="序号" width="80"></el-table-column>
+                    <el-table-column prop="xzqh" :formatter="getXzqh" label="行政区划" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="bmcs" :formatter="getBmbm" label="部门处室" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmze" label="项目总额(万元)" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column label="操作" width="150">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="primary" @click="detailModel(scope.row)">考核</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="fr mar10">
+                    <el-pagination @current-change="currentPage" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+                    </el-pagination>
+                </div>
             </div>
-          </el-col>
-          <el-button class="backBtn" size="mini" type="success" @click="backBtn()" plain>返回</el-button>
-        </el-row>
-      </div>
-      <div class="capit-list">
-        <el-table :data="xmxyList" stripe border style="width: 100%">
-          <el-table-column type="index" :index="indexMethod_sec" label="序号" width="80"></el-table-column>
-          <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khr" label="考核人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khsj" :formatter="formatterDatekhsj" label="考核时间" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khyj" label="考核意见" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="khpf" label="综合评分" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="bmbm" label="部门科室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="lrsj" :formatter="formatterDatelrsj" label="录入时间" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="xyEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="xyDel(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="fr">
-          <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo2" :page-size="pageSize2" layout="total, prev, pager, next" :total="totalCount2">
-          </el-pagination>
         </div>
-      </div>
-      <div class="capit-tit" style="margin:44px 0 20px 0">
-        <el-row>
-          <el-col :span="12">
-            <div class="user-left">
-              <span>考核详情</span>
+        <div v-bind:class="{isShow:secondPage}">
+            <div class="capit-tit">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="user-left">
+                            <span>考核列表</span>
+                        </div>
+                    </el-col>
+                    <el-button class="backBtn" size="mini" type="success" @click="backBtn()" plain>返回</el-button>
+                </el-row>
             </div>
-          </el-col>
-          <el-button class="backBtn" size="mini" type="success" @click="addList()">新增</el-button>
-        </el-row>
-      </div>
-      <div class="assessEdit">
-        <el-form :inline="true" :model="xmxyFrom" ref="xmxyFrom" class="demo-form-inline" label-width="100px" :rules="rulesXmkh">
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="项目名称" prop="xmmc">
-                <el-input v-model="xmxyFrom.xmmc" placeholder="项目名称" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="项目编号" prop="xmbh">
-                <el-input v-model="xmxyFrom.xmbh" placeholder="项目编号" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="行政单位" prop="xzqh">
+            <div class="capit-list">
+                <el-table :data="xmxyList" stripe border style="width: 100%">
+                    <el-table-column type="index" :index="indexMethod_sec" label="序号" width="80"></el-table-column>
+                    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="khr" label="考核人" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="khsj" :formatter="formatterDatekhsj" label="考核时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="khyj" label="考核意见" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="khpf" label="综合评分" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="bmbm" label="部门科室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="lrsj" :formatter="formatterDatelrsj" label="录入时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column label="操作" width="150">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="primary" @click="xyEdit(scope.row)">编辑</el-button>
+                            <el-button size="mini" type="danger" @click="xyDel(scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="fr">
+                    <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo2" :page-size="pageSize2" layout="total, prev, pager, next" :total="totalCount2">
+                    </el-pagination>
+                </div>
+            </div>
+            <div class="capit-tit" style="margin:44px 0 20px 0">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="user-left">
+                            <span>考核详情</span>
+                        </div>
+                    </el-col>
+                    <el-button class="backBtn" size="mini" type="success" @click="addList()">新增</el-button>
+                </el-row>
+            </div>
+            <div class="assessEdit">
+                <el-form :inline="true" :model="xmxyFrom" ref="xmxyFrom" class="demo-form-inline" label-width="100px" :rules="rulesXmkh">
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="项目名称" prop="xmmc">
+                                <el-input v-model="xmxyFrom.xmmc" placeholder="项目名称" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="项目编号" prop="xmbh">
+                                <el-input v-model="xmxyFrom.xmbh" placeholder="项目编号" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="行政单位" prop="xzqh">
 
-                <!-- <el-input v-model="xmxyFrom.xzqh" placeholder="行政单位" :disabled="true"></el-input> -->
-                <el-select v-model="xmxyFrom.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
-                  <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="部门科室" prop="bmbm">
-                <!-- <el-input v-model="xmxyFrom.bmbm" placeholder="部门科室" :disabled="true"></el-input> -->
-                <el-select v-model="xmxyFrom.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
-                  <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="录入人" prop="lrr">
-                <el-input v-model="xmxyFrom.lrr" placeholder="录入人" :disabled="true"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="录入时间" prop="lrsj">
-                <el-date-picker type="datetime" v-model="xmxyFrom.lrsj" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
+                                <!-- <el-input v-model="xmxyFrom.xzqh" placeholder="行政单位" :disabled="true"></el-input> -->
+                                <el-select v-model="xmxyFrom.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                                    <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="部门科室" prop="bmbm">
+                                <!-- <el-input v-model="xmxyFrom.bmbm" placeholder="部门科室" :disabled="true"></el-input> -->
+                                <el-select v-model="xmxyFrom.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                                    <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="录入人" prop="lrr">
+                                <el-input v-model="xmxyFrom.lrr" placeholder="录入人" :disabled="true"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="录入时间" prop="lrsj">
+                                <el-date-picker type="datetime" v-model="xmxyFrom.lrsj" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="考核人" prop="khr">
-                <el-input v-model="xmxyFrom.khr" placeholder="考核人"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="考核时间" prop="khsj">
-                <el-date-picker type="datetime" v-model="xmxyFrom.khsj" placeholder="考核时间" style="width:100%"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="考核结果" prop="khjg">
-                <el-select v-model="xmxyFrom.khjg" placeholder="考核结果" style="width:100%">
-                  <el-option v-for="(item,index) in khjg" :key="index" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="9" :offset="2">
-              <el-form-item label="综合评分" prop="khpf">
-                <el-input v-model="xmxyFrom.khpf" placeholder="综合评分"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="20" :offset="2">
-              <el-form-item label="考核意见" prop="khyj">
-                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="xmxyFrom.khyj" placeholder="考核意见"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :offset="4" :span="3">
-              <el-button type="success" size="small" @click="fileClick">附件</el-button>
-            </el-col>
-          </el-row>
-        </el-form>
-        <span slot="footer" class="dialog-footer" style="margin-left:45%;">
-          <el-button type="primary" @click="submitForm()">保 存</el-button>
-          <el-button @click="backBtn()">取 消</el-button>
-        </span>
-      </div>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="考核人" prop="khr">
+                                <el-input v-model="xmxyFrom.khr" placeholder="考核人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="考核时间" prop="khsj">
+                                <el-date-picker type="datetime" v-model="xmxyFrom.khsj" placeholder="考核时间" style="width:100%"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="考核结果" prop="khjg">
+                                <el-select v-model="xmxyFrom.khjg" placeholder="考核结果" style="width:100%">
+                                    <el-option v-for="(item,index) in khjg" :key="index" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="2">
+                            <el-form-item label="综合评分" prop="khpf">
+                                <el-input v-model="xmxyFrom.khpf" placeholder="综合评分"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="20" :offset="2">
+                            <el-form-item label="考核意见" prop="khyj">
+                                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="xmxyFrom.khyj" placeholder="考核意见"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :offset="4" :span="3">
+                            <el-button type="success" size="small" @click="fileClick">附件</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer" style="margin-left:45%;">
+                    <el-button type="primary" @click="submitForm()" v-show="yesNoUpdara">保 存</el-button>
+                    <el-button @click="backBtn()">取 消</el-button>
+                </span>
+            </div>
+        </div>
+        <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
+
     </div>
-    <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
-
-  </div>
 </template>
 <script>
 import { xmlbList } from "@/api/projectOutline";
@@ -228,6 +228,8 @@ export default {
             editModal: false,
             accessoryModalInt: false,
             upShowhide: true,
+            userBmbm: this.$store.state.user.user.uUser.bmbm,
+            yesNoUpdara: false,
             textTitFile: "",
             fileSrc: "",
             editTitle: "",
@@ -296,8 +298,8 @@ export default {
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
-                flag:"1",
-                xzqh:this.$store.state.user.user.uUser.xzqh
+                flag: "1",
+                xzqh: this.$store.state.user.user.uUser.xzqh
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",
@@ -305,10 +307,10 @@ export default {
                   option.bmbm ? (obj.bmbm = option.bmbm) : "")
                 : "";
             xmlbList(obj).then(res => {
-                if(res.data.data.elements.length){
+                if (res.data.data.elements.length) {
                     this.tableData = res.data.data.elements;
                     this.totalCount = res.data.data.totalCount;
-                }else{
+                } else {
                     this.tableData = [];
                     this.totalCount = 0;
                 }
@@ -339,13 +341,13 @@ export default {
                 xmId: this.xmid
             };
             assessSelect(obj).then(res => {
-                if(res.data.msg.data.length){
+                if (res.data.msg.data.length) {
                     this.xmxyList = res.data.msg.data;
                     this.totalCount2 = res.data.msg.totalCount;
-                }else{
+                } else {
                     this.xmxyList = [];
                     this.totalCount2 = 0;
-                }             
+                }
             });
             this.firstPage = true;
             this.secondPage = false;
@@ -363,7 +365,11 @@ export default {
                 this.$refs.xmxyFrom.resetFields();
             }
             this.xmxyFrom = Object.assign({}, row);
-            this.xmjdFromInt(); 
+            if (row.bmbm == this.userBmbm) {
+                this.yesNoUpdara = true;
+            } else {
+                this.yesNoUpdara = false;
+            }
             if (row.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -434,14 +440,15 @@ export default {
         },
         xmjdFromInt() {
             this.getNowDate();
+            this.yesNoUpdara = true;
             this.fileSrc = {
                 num: Math.random(),
                 fileStr: ""
             };
             this.xmxyFrom.xmmc = this.xmmc;
             this.xmxyFrom.xmbh = this.xmbh;
-            this.xzqh = this.$store.state.user.user.uUser.xzqh;
-            this.bmbm = this.$store.state.user.user.uUser.bmbm;
+            this.xmxyFrom.xzqh = this.$store.state.user.user.uUser.xzqh;
+            this.xmxyFrom.bmbm = this.$store.state.user.user.uUser.bmbm;
             this.xmxyFrom.lrr = this.$store.state.user.user.uUser.nickname;
         },
         colseTog(val) {

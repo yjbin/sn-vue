@@ -115,7 +115,8 @@ export default {
     watch: {
         clickxmDet: {
             handler: function(val) {
-                this.xmgkList = val;
+                this.xmgkList = {};
+                this.xmgkList = Object.assign({},val);
                 this.xmid = val.id;
                 this.xmjdList = [];
                 this.xmbfList = [];

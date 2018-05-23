@@ -37,30 +37,30 @@
                 <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip width="150"></el-table-column>
                 <el-table-column label="项目进度">
                     <el-table-column label="0% -- 30%">
-                        <el-table-column prop="count1" label="数量" show-overflow-tooltip></el-table-column>
-                        <el-table-column prop="xmze1" label="金额" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="count1" label="数量(个)" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="xmze1" label="金额(万元)" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="bilv1" label="拨付进度%" show-overflow-tooltip></el-table-column>
                     </el-table-column>
                     <el-table-column label="30% -- 50%">
-                        <el-table-column prop="count2" label="数量" show-overflow-tooltip></el-table-column>
-                        <el-table-column prop="xmze2" label="金额" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="count2" label="数量(个)" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="xmze2" label="金额(万元)" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="bilv2" label="拨付进度%" show-overflow-tooltip></el-table-column>
                     </el-table-column>
                     <el-table-column label="50% -- 80%">
-                        <el-table-column prop="count3" label="数量" show-overflow-tooltip></el-table-column>
-                        <el-table-column prop="xmze3" label="金额" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="count3" label="数量(个)" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="xmze3" label="金额(万元)" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="bilv3" label="拨付进度%" show-overflow-tooltip></el-table-column>
                     </el-table-column>
                     <el-table-column label="80% -- 100%">
-                        <el-table-column prop="count4" label="数量" show-overflow-tooltip></el-table-column>
-                        <el-table-column prop="xmze4" label="金额" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="count4" label="数量(个)" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="xmze4" label="金额(万元)" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="bilv4" label="拨付进度%" show-overflow-tooltip></el-table-column>
                     </el-table-column>
                 </el-table-column>
-                <el-table-column label="合计(万元)" width="150">
-                    <el-table-column prop="counthj" label="数量" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="xmzehj" label="金额" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="ybfhj" label="已拨付" show-overflow-tooltip></el-table-column>
+                <el-table-column label="合计" width="150">
+                    <el-table-column prop="counthj" label="数量(个)" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="xmzehj" label="金额(万元)" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="ybfhj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
                 </el-table-column>
             </el-table>
         </div>
