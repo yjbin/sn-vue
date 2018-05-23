@@ -26,10 +26,10 @@
                                 <img src="../../../static/showye/pic5.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">资金总额</p>
+                                <p class="divRightp1">资金总额(万元)</p>
                                 <p class="divRightp2">
                                     <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj.zjze || 0}}</span>
-                                    万元</p>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -37,9 +37,10 @@
                                 <img src="../../../static/showye/pic6.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">拨付总额</p>
+                                <p class="divRightp1">拨付总额(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj.ybfzj || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj.ybfzj || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -47,9 +48,10 @@
                                 <img src="../../../static/showye/pic1.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">中央资金</p>
+                                <p class="divRightp1">中央资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["1"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["1"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -57,9 +59,10 @@
                                 <img src="../../../static/showye/pic2.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">省级资金</p>
+                                <p class="divRightp1">省级资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["2"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["2"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -67,9 +70,10 @@
                                 <img src="../../../static/showye/pic3.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">市级资金</p>
+                                <p class="divRightp1">市级资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["3"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["3"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -77,9 +81,10 @@
                                 <img src="../../../static/showye/pic4.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">县级资金</p>
+                                <p class="divRightp1">县级资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["4"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{zjtjObj["4"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -96,9 +101,10 @@
                                 <img src="../../../static/showye/pic7.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">项目总数</p>
+                                <p class="divRightp1">项目总数(个)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmsl || 0}}</span>个</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmsl || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -106,9 +112,10 @@
                                 <img src="../../../static/showye/pic6.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">项目总额</p>
+                                <p class="divRightp1">项目总额(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmze || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj.xmze || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -116,9 +123,10 @@
                                 <img src="../../../static/showye/pic1.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">中央资金</p>
+                                <p class="divRightp1">中央资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["1"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["1"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -126,9 +134,10 @@
                                 <img src="../../../static/showye/pic2.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">省级资金</p>
+                                <p class="divRightp1">省级资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["2"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["2"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -136,9 +145,10 @@
                                 <img src="../../../static/showye/pic3.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">市级资金</p>
+                                <p class="divRightp1">市级资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["3"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["3"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="homeBigboxTopLeftrightbodydiv">
@@ -146,9 +156,10 @@
                                 <img src="../../../static/showye/pic4.png" alt="">
                             </div>
                             <div class="divRight">
-                                <p class="divRightp1">县级资金</p>
+                                <p class="divRightp1">县级资金(万元)</p>
                                 <p class="divRightp2">
-                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["4"] || 0}}</span>万元</p>
+                                    <span v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail">{{xmtjObj["4"] || 0}}</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -360,14 +371,14 @@ export default {
                     data.zjgc[2] || 0,
                     data.zjgc[3] || 0,
                     data.zjgc[4] || 0,
-                    data.zjgc[5] || 0,
+                    data.zjgc[5] || 0
                 ];
                 this.zjbfData = [
                     data.zjbf[1] || 0,
                     data.zjbf[2] || 0,
                     data.zjbf[3] || 0,
                     data.zjbf[4] || 0,
-                    data.zjbf[5] || 0,
+                    data.zjbf[5] || 0
                 ];
 
                 this.drawBar();
@@ -459,7 +470,7 @@ export default {
                         name: "单位：万元"
                     }
                 ],
-                color: [ "#fed62e","#37a0ef"],
+                color: ["#fed62e", "#37a0ef"],
                 series: [
                     {
                         name: "资金构成",
@@ -493,9 +504,9 @@ export default {
                 // 绘制图表
                 sycjmyChartBig.setOption({
                     title: {
-                        text: '使用层级',
-                        x: 'center',
-                        y: 'center',
+                        text: "使用层级",
+                        x: "center",
+                        y: "center",
                         textStyle: {
                             fontWeight: "bold",
                             fontSize: 22
@@ -521,7 +532,7 @@ export default {
                                 normal: {
                                     show: false,
                                     position: "center"
-                                },
+                                }
                                 // emphasis: {
                                 //     show: true,
                                 //     textStyle: {
@@ -571,9 +582,9 @@ export default {
                 // 绘制图表
                 sycjmyChartSamll.setOption({
                     title: {
-                        text: '使用情况',
-                        x: 'center',
-                        y: 'center',
+                        text: "拨付情况",
+                        x: "center",
+                        y: "center",
                         textStyle: {
                             fontWeight: "bold",
                             fontSize: 22
@@ -588,7 +599,7 @@ export default {
                     //     y: "bottom",
                     //     data: ["已拨付资金", "剩余资金"]
                     // },
-                    color: ["#64d3e3","#ffa336"],
+                    color: ["#64d3e3", "#ffa336"],
                     series: [
                         {
                             name: "单位（万元）",
@@ -599,7 +610,7 @@ export default {
                                 normal: {
                                     show: false,
                                     position: "center"
-                                },
+                                }
                                 // emphasis: {
                                 //     show: true,
                                 //     textStyle: {
@@ -616,23 +627,30 @@ export default {
                             },
                             data: [
                                 { value: data.ybfzj || 0, name: "已拨付资金" },
-                                { value: (data.total-data.ybfzj) || 0, name: "剩余资金" }
+                                {
+                                    value: data.total - data.ybfzj || 0,
+                                    name: "剩余资金"
+                                }
                             ]
                         }
                     ]
                 });
             });
         },
-        dataDetails(event){
+        dataDetails(event) {
             let el = event.currentTarget;
-            this.toptitText = el.innerText;
-            let x1 = event.clientX-event.offsetX-200,y1 = event.clientY-event.offsetY-140;
-            console.log(event,x1,y1)
-            this.topX = y1+"px";
-            this.leftY =x1 +"px";
-            this.toptitShow = true;
+            if (el.innerText.length > 10) {
+                this.toptitText = el.innerText;
+                let x1 = event.clientX - event.offsetX - 200,
+                    y1 = event.clientY - event.offsetY - 140;
+                this.topX = y1 + "px";
+                this.leftY = x1 + "px";
+                this.toptitShow = true;
+                
+            }
+
         },
-        hiddenDetail(event){
+        hiddenDetail(event) {
             this.toptitShow = false;
         }
     },
@@ -650,9 +668,10 @@ export default {
 .homeBigbox {
     width: 100%;
     height: 81vh;
-    .toptit{
+    .toptit {
         display: block;
         position: absolute;
+        padding: 0 20px;
         min-width: 100px;
         height: 30px;
         border-radius: 4px 4px 4px 4px;
@@ -660,7 +679,7 @@ export default {
         background: rgba($color: #000000, $alpha: 0.6);
         text-align: center;
         line-height: 30px;
-    };
+    }
     .homeBigboxTop {
         height: 48%;
         display: flex;
@@ -671,7 +690,7 @@ export default {
             margin-right: 6px;
             border: 1px solid #e7eaec;
             .homeBigboxTopLeftleft {
-                width: 30%;
+                width: 25%;
                 display: flex;
                 flex-direction: column;
                 background: #fbfbfd;
@@ -720,12 +739,12 @@ export default {
                         float: left;
                         margin: 3% 0 0 5%;
                         display: flex;
-                        img{
+                        img {
                             height: 100%;
                         }
                     }
                     .divLeft {
-                        width: 38%;
+                        width: 30%;
                     }
                     .divRight {
                         flex: 1;
@@ -733,15 +752,15 @@ export default {
                             padding-left: 1.6vh;
                         }
                         .divRightp1 {
-                            padding-top: 1.8vh;
-                            font-size: 2vh;
+                            padding-top: 1.6vh;
+                            padding-bottom: 0.8vh;
+                            font-size: 1rem;
                         }
                         .divRightp2 {
-                            font-size: 2vh;
                             height: 3vh;
                             line-height: 3vh;
                             span {
-                                font-size: 3.2vh;
+                                font-size: 1.6rem;
                                 font-weight: 900;
                                 padding-right: 0.2vh;
                                 color: #307ecd;
@@ -750,7 +769,7 @@ export default {
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                                width: 9vh;
+                                width: 17.6vh;
                             }
                         }
                     }

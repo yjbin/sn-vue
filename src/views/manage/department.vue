@@ -6,9 +6,9 @@
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>{{ node.label }}</span>
                         <span>
-                            <i class="el-icon-plus" @click.stop="() => append(data)"></i>
-                            <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
-                            <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
+                            <i class="el-icon-plus" @click.stop="() => append(data)" v-on:mouseenter="addxjdataDetail" v-on:mouseleave="xjhiddenDetail"></i>
+                            <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)" v-on:mouseenter="dataDetails" v-on:mouseleave="hiddenDetail"></i>
+                            <i class="el-icon-delete" @click.stop="() => remove(node, data)" ></i>
                         </span>
                     </span>
                 </el-tree>
@@ -109,6 +109,7 @@
             </el-form>
         </div>
         <member-modal :newModal="newModal" @newToggle="newToggle" :groupObj="groupObj" @groupMember="groupMember" :xzqh="xzqh" :bm="bm" :textTit="textTit"></member-modal>
+        <span v-show="toptitShow" transition="fade" :style="{top:topX,left:leftY}" class="toptit">{{toptitText}}</span>
     </div>
 </template>
 <script>
@@ -152,7 +153,11 @@ export default {
                 tel: [{ required: true, message: "不能为空" }],
                 address: [{ required: true, message: "不能为空" }],
                 gps: [{ required: true, message: "不能为空" }]
-            }
+            },
+            toptitText: "",
+            topX: "10px",
+            leftY: "10px",
+            toptitShow:false
         };
     },
     methods: {
@@ -424,8 +429,33 @@ export default {
                     });
                 }
             });
+        },
+        dataDetails(event) {
+            let el = event.currentTarget;
+                this.toptitText = "添加同级";
+                let x1 = event.clientX - event.offsetX - 230,
+                    y1 = event.clientY - event.offsetY - 110;
+                this.topX = y1 + "px";
+                this.leftY = x1 + "px";
+                this.toptitShow = true;
+        },
+        hiddenDetail(event) {
+            this.toptitShow = false;
+        },
+        addxjdataDetail(event){
+             let el = event.currentTarget;
+                this.toptitText = "添加下级";
+                let x1 = event.clientX - event.offsetX - 230,
+                    y1 = event.clientY - event.offsetY - 110;
+                this.topX = y1 + "px";
+                this.leftY = x1 + "px";
+                this.toptitShow = true;
+        },
+        xjhiddenDetail(event){
+             this.toptitShow = false;
         }
     },
+    
     mounted() {
         this.treeQueryBm();
         this.userList(this.pageSize, this.pageNo);
@@ -465,5 +495,19 @@ export default {
     .marr10 {
         margin: 15px 3% 15px 0;
     }
+    .toptit {
+        display: block;
+        position: absolute;
+        padding: 0 10px;
+        min-width: 80px;
+        height: 30px;
+        border-radius: 4px 4px 4px 4px;
+        color: #e7eaec;
+        background: rgba($color: #000000, $alpha: 0.6);
+        text-align: center;
+        line-height: 30px;
+    }
 }
 </style>
+
+

@@ -13,8 +13,8 @@
                 <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
                 <span>
-                    <i class="el-icon-plus" @click.stop="() => append(data)"></i>
-                    <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                    <i class="el-icon-plus" @click.stop="() => append(data)" @mouseenter="addxjdataDetail" @mouseleave="xjhiddenDetail"></i>
+                    <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)" @mouseenter="dataDetails" @mouseleave="hiddenDetail"></i>
                     <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
                 </span>
                 </span>
@@ -51,6 +51,7 @@
         </el-row>
       </el-form>
     </div>
+    <span v-show="toptitShow" transition="fade" :style="{top:topX,left:leftY}" class="toptit">{{toptitText}}</span>
   </div>
 </template>
 <script>
@@ -69,7 +70,11 @@ export default {
             rules: {
                 label: [{ required: true, message: "不能为空" }],
                 pIcon: [{ required: true, message: "不能为空" }]
-            }
+            },
+            toptitText: "",
+            topX: "10px",
+            leftY: "10px",
+            toptitShow:false
         };
     },
     methods: {
@@ -178,6 +183,30 @@ export default {
         },
         duojiChange() {
             this.treeQuery(this.typeVal);
+        },
+        dataDetails(event) {
+            let el = event.currentTarget;
+                this.toptitText = "添加同级";
+                let x1 = event.clientX - event.offsetX - 230,
+                    y1 = event.clientY - event.offsetY - 110;
+                this.topX = y1 + "px";
+                this.leftY = x1 + "px";
+                this.toptitShow = true;
+        },
+        hiddenDetail(event) {
+            this.toptitShow = false;
+        },
+        addxjdataDetail(event){
+             let el = event.currentTarget;
+                this.toptitText = "添加下级";
+                let x1 = event.clientX - event.offsetX - 230,
+                    y1 = event.clientY - event.offsetY - 110;
+                this.topX = y1 + "px";
+                this.leftY = x1 + "px";
+                this.toptitShow = true;
+        },
+        xjhiddenDetail(event){
+             this.toptitShow = false;
         }
     },
     mounted() {
@@ -205,6 +234,18 @@ export default {
     }
     .showHide{
       display: none;
+    }
+     .toptit {
+        display: block;
+        position: absolute;
+        padding: 0 10px;
+        min-width: 80px;
+        height: 30px;
+        border-radius: 4px 4px 4px 4px;
+        color: #e7eaec;
+        background: rgba($color: #000000, $alpha: 0.6);
+        text-align: center;
+        line-height: 30px;
     }
 }
 </style>
