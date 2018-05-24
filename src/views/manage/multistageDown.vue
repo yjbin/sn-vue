@@ -12,9 +12,9 @@
                 <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <el-tooltip v-if="node.label.length>8" class="item" effect="dark" :content="node.label" placement="top">
-                            <span class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                            <span class="nodeLabel">{{ node.label }}</span>
                         </el-tooltip>
-                        <span v-else class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        <span v-else class="nodeLabel">{{ node.label }}</span>
                         <span>
                             <el-tooltip class="item" effect="dark" content="添加下级" placement="top">
                                 <i class="el-icon-plus" @click.stop="() => append(data)"></i>

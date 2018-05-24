@@ -13,9 +13,9 @@
                                 <i class="el-icon-plus" @click.stop="() => append(data)"></i>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="添加本级" placement="top">
-                                 <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                                <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
                             </el-tooltip>
-                            <i class="el-icon-delete" @click.stop="() => remove(node, data)" ></i>
+                            <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
                         </span>
                     </span>
                 </el-tree>
@@ -120,366 +120,367 @@
 </template>
 <script>
 import {
-    treeQueryBm,
-    formSave,
-    findRoles,
-    deleteTree,
-    delMember,
-    xtszSelect
+  treeQueryBm,
+  formSave,
+  findRoles,
+  deleteTree,
+  delMember,
+  xtszSelect
 } from "@/api/department";
 import { doCreate, getDicTab } from "@/utils/config";
 import memberModal from "./memberModal";
 export default {
-    components: {
-        memberModal
+  components: {
+    memberModal
+  },
+  data() {
+    return {
+      pid: "",
+      pureClick: true,
+      formData: {},
+      bm_treeData: [],
+      tableData: [],
+      bmszNumber: [],
+      formBm: "",
+      newModal: false,
+      groupObj: {},
+      pageNo: 1,
+      pageSize: 3,
+      totalCount: 0,
+      xzqh: "",
+      userXzqh: "",
+      bm: "",
+      searchMember: "",
+      textTit: "",
+      rules: {
+        name: [{ required: true, message: "不能为空" }],
+        bm: [{ required: true, message: "不能为空" }],
+        fzr: [{ required: true, message: "不能为空" }],
+        tel: [{ required: true, message: "不能为空" }],
+        address: [{ required: true, message: "不能为空" }],
+        gps: [{ required: true, message: "不能为空" }]
+      }
+    };
+  },
+  methods: {
+    getZwlx(row) {
+      return getDicTab("zwlx", row.zw);
     },
-    data() {
-        return {
-            pid: "",
-            pureClick: true,
-            formData: {},
-            bm_treeData: [],
-            tableData: [],
-            bmszNumber: [],
-            formBm: "",
-            newModal: false,
-            groupObj: {},
-            pageNo: 1,
-            pageSize: 3,
-            totalCount: 0,
-            xzqh: "",
-            userXzqh: "",
-            bm: "",
-            searchMember: "",
-            textTit: "",
-            rules: {
-                name: [{ required: true, message: "不能为空" }],
-                bm: [{ required: true, message: "不能为空" }],
-                fzr: [{ required: true, message: "不能为空" }],
-                tel: [{ required: true, message: "不能为空" }],
-                address: [{ required: true, message: "不能为空" }],
-                gps: [{ required: true, message: "不能为空" }]
-            }
-        };
+    indexMethod(index) {
+      let start = (this.pageNo - 1) * this.pageSize;
+      return start + index + 1;
     },
-    methods: {
-        getZwlx(row) {
-            return getDicTab("zwlx", row.zw);
-        },
-        indexMethod(index) {
-            let start = (this.pageNo - 1) * this.pageSize;
-            return start + index + 1;
-        },
-        append(data) {
-            this.formBm = data.bm;
-            this.pid = data.bm;
-            this.pureClick = false;
-            const newChild = { label: "新增节点", bm: data.bm };
-            data.children.push(newChild);
-        },
-        appendTj(data) {
-            this.formBm = data.parentId;
-            this.pid = data.parentId;
-            this.pureClick = false;
-            const newChild = { label: "新增节点", bm: data.parentId };
-            if (data.parentId == "0") {
-                this.bm_treeData.push(newChild);
-            } else {
-                this.bm_treeData.map(t => {
-                    if (t.bm == data.parentId) {
-                        t.children.push(newChild);
-                    } else if (data.parentId == "0") {
-                        t.children.push(newChild);
-                    }
-                    return t;
-                });
+    append(data) {
+      this.formBm = data.bm;
+      this.pid = data.bm;
+      this.pureClick = false;
+      const newChild = { label: "新增节点", bm: data.bm };
+      data.children.push(newChild);
+    },
+    appendTj(data) {
+      this.formBm = data.parentId;
+      this.pid = data.parentId;
+      this.pureClick = false;
+      const newChild = { label: "新增节点", bm: data.parentId };
+      if (data.parentId == "0") {
+        this.bm_treeData.push(newChild);
+      } else {
+        this.bm_treeData.map(t => {
+          if (t.bm == data.parentId) {
+            t.children.push(newChild);
+          } else if (data.parentId == "0") {
+            t.children.push(newChild);
+          }
+          return t;
+        });
+      }
+    },
+    remove(node, data) {
+      this.pureClick = false;
+      if (node.childNodes.length) {
+        this.$message({
+          type: "warning",
+          message: "请删除子节点后再操作~"
+        });
+        return;
+      }
+      if (data.id) {
+        this.$confirm("你确定删除吗?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            deleteTree({ bm: data.bm, xzqh: "" }).then(res => {
+              let data = res.data;
+              this.$message({
+                type: "success",
+                message: data.msg
+              });
+              this.treeQueryBm();
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+          });
+      } else {
+        this.$message({
+          type: "success",
+          message: "操作成功"
+        });
+        this.treeQueryBm();
+      }
+    },
+    newMember() {
+      this.newModal = true;
+      this.textTit = "新建";
+    },
+    newToggle(val) {
+      this.newModal = val;
+    },
+    groupMember(val) {
+      this.tableData = val.data;
+      this.xzqh = val.xzqh;
+      this.bm = val.bm;
+      this.userList(this.pageSize, this.pageNo);
+    },
+    nodeClick(data) {
+      if (this.pureClick) {
+        this.xzqh = data.xzqh || "";
+        this.bm = data.bm || "";
+        this.userList(this.pageSize, this.pageNo);
+        this.formData = Object.assign({}, data);
+        this.$refs.treeForm.resetFields();
+      } else {
+        this.$refs.treeForm.resetFields();
+        this.formData = {};
+        this.formData.bm = this.formBm;
+        this.pureClick = true;
+      }
+    },
+    treeQueryBm() {
+      let obj = {
+        xzqh: this.$store.state.user.user.uUser.xzqh
+      };
+      treeQueryBm(obj).then(res => {
+        let data = res.data;
+        if (data) {
+          this.bm_treeData = data;
+          this.formData = Object.assign({}, data[0]);
+          this.$refs.treeForm.resetFields();
+        }
+      });
+    },
+    search() {
+      this.userList(this.pageSize, this.pageNo, this.searchMember);
+    },
+    currentPage(val) {
+      this.pageNo = val;
+      this.userList(this.pageSize, this.pageNo, this.searchMember);
+    },
+    userList(pageSize, pageNo, name) {
+      let _this = this;
+      let obj = Object.assign(
+        {},
+        {
+          pageNo: pageNo,
+          pageSize: pageSize,
+          xzqh: _this.xzqh
+            ? _this.xzqh
+            : this.$store.state.user.user.uUser.xzqh,
+          bm: _this.bm
+            ? _this.xzqh + "-" + _this.bm
+            : this.$store.state.user.user.uUser.bmbm
+        }
+      );
+      name ? (obj.name = name) : "";
+      findRoles(obj).then(res => {
+        let data = res.data;
+        if (data.success) {
+          _this.tableData = data.msg.data;
+          _this.totalCount = data.msg.totalCount;
+        }
+      });
+    },
+    handleClick(row) {
+      this.newModal = true;
+      this.textTit = "编辑";
+      this.groupObj = Object.assign({}, row);
+    },
+    deleteMember(row) {
+      this.$confirm("你确定删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          delMember({ id: row.id }).then(res => {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            this.userList(this.pageSize, this.pageNo);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    formSave() {
+      this.$refs.treeForm.validate(valid => {
+        if (valid) {
+          let _this = this;
+          let url = "update";
+          let obj = Object.assign({}, this.formData);
+          if (!obj.id) {
+            url = "add";
+            obj.parentId = this.pid;
+          }
+          obj.xzqh = this.$store.state.user.user.uUser.xzqh;
+
+          if (obj.parentId != "0") {
+            if (
+              obj.parentId !=
+                (obj.bm + "").substring(0, (obj.parentId + "").length) ||
+              ((obj.parentId + "").length < 6 &&
+                (obj.bm + "").length != (obj.parentId + "").length + 3)
+            ) {
+              this.$message({
+                showClose: true,
+                message: "请输入正确的部门编码编码",
+                duration: 3000,
+                type: "error"
+              });
+              return;
             }
-        },
-        remove(node, data) {
-            this.pureClick = false;
-            if (node.childNodes.length) {
+            if ((obj.parentId + "").length >= 6) {
+              if ((obj.bm + "").length != (obj.parentId + "").length + 2) {
                 this.$message({
-                    type: "warning",
-                    message: "请删除子节点后再操作~"
+                  showClose: true,
+                  message: "请输入正确的部门编码编码",
+                  duration: 3000,
+                  type: "error"
                 });
                 return;
+              }
             }
-            if (data.id) {
-                this.$confirm("你确定删除吗?", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                })
-                    .then(() => {
-                        deleteTree({ bm: data.bm, xzqh: "" }).then(res => {
-                            let data = res.data;
-                            this.$message({
-                                type: "success",
-                                message: data.msg
-                            });
-                            this.treeQueryBm();
-                        });
-                    })
-                    .catch(() => {
-                        this.$message({
-                            type: "info",
-                            message: "已取消删除"
-                        });
-                    });
-            } else {
-                this.$message({
-                    type: "success",
-                    message: "操作成功"
-                });
-                this.treeQueryBm();
+            if ((obj.parentId + "").length >= 8) {
+              this.$message({
+                showClose: true,
+                message: "请输入正确的部门编码编码",
+                duration: 3000,
+                type: "error"
+              });
+              return;
             }
-        },
-        newMember() {
-            this.newModal = true;
-            this.textTit = "新建";
-        },
-        newToggle(val) {
-            this.newModal = val;
-        },
-        groupMember(val) {
-            this.tableData = val.data;
-            this.xzqh = val.xzqh;
-            this.bm = val.bm;
-            this.userList(this.pageSize, this.pageNo);
-        },
-        nodeClick(data) {
-            if (this.pureClick) {
-                this.xzqh = data.xzqh || "";
-                this.bm = data.bm || "";
-                this.userList(this.pageSize, this.pageNo);
-                this.formData = Object.assign({}, data);
-                this.$refs.treeForm.resetFields();
-            } else {
-                this.$refs.treeForm.resetFields();
-                this.formData = {};
-                this.formData.bm = this.formBm;
-                this.pureClick = true;
+
+            // this.bmszNumber.map(i => {
+            //     if (
+            //         (obj.bm + "").length ==(obj.parentId + "").length + Number(i) && obj.parentId ==(obj.bm + "").substring(0,(obj.parentId + "").length)
+            //     ) {
+            //         formSave(url, obj).then(res => {
+            //             let data = res.data;
+            //             if (data.success) {
+            //                 _this.formData = {};
+            //                 _this.treeQueryBm();
+            //                 _this.$message({
+            //                     message: data.msg,
+            //                     type: "success"
+            //                 });
+            //             }
+            //         });
+            //         return;
+            //     }else{
+            //         this.$message({
+            //         showClose: true,
+            //         message: "请输入正确的部门编码编码",
+            //         type: "error"
+            //     });
+            //     }
+            // });
+          } else {
+            if ((obj.bm + "").length != 3) {
+              this.$message({
+                showClose: true,
+                message: "请输入正确的部门编码编码",
+
+                type: "error"
+              });
+              return;
             }
-        },
-        treeQueryBm() {
-            let obj = {
-                xzqh: this.$store.state.user.user.uUser.xzqh
-            };
-            treeQueryBm(obj).then(res => {
-                let data = res.data;
-                if (data) {
-                    this.bm_treeData = data;
-                    this.formData = Object.assign({}, data[0]);
-                    this.$refs.treeForm.resetFields();
-                }
-            });
-        },
-        search() {
-            this.userList(this.pageSize, this.pageNo, this.searchMember);
-        },
-        currentPage(val) {
-            this.pageNo = val;
-            this.userList(this.pageSize, this.pageNo, this.searchMember);
-        },
-        userList(pageSize, pageNo, name) {
-            let _this = this;
-            let obj = Object.assign(
-                {},
-                {
-                    pageNo: pageNo,
-                    pageSize: pageSize,
-                    xzqh: _this.xzqh?_this.xzqh:this.$store.state.user.user.uUser.xzqh,
-                    bm: _this.bm?(_this.xzqh+"-"+_this.bm):(this.$store.state.user.user.uUser.bmbm)
-                }
-            );
-            name ? (obj.name = name) : "";
-            findRoles(obj).then(res => {
-                let data = res.data;
-                if (data.success) {
-                    _this.tableData = data.msg.data;
-                    _this.totalCount = data.msg.totalCount;
-                }
-            });
-        },
-        handleClick(row) {
-            this.newModal = true;
-            this.textTit = "编辑";
-            this.groupObj = Object.assign({}, row);
-        },
-        deleteMember(row) {
-            this.$confirm("你确定删除吗?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            })
-                .then(() => {
-                    delMember({ id: row.id }).then(res => {
-                        this.$message({
-                            type: "success",
-                            message: "删除成功!"
-                        });
-                        this.userList(this.pageSize, this.pageNo);
-                    });
-                })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "已取消删除"
-                    });
-                });
-        },
-        formSave() {
-            this.$refs.treeForm.validate(valid => {
-                if (valid) {
-                    let _this = this;
-                    let url = "update";
-                    let obj = Object.assign({}, this.formData);
-                    if (!obj.id) {
-                        url = "add";
-                        obj.parentId = this.pid;
-                    }
-                    obj.xzqh = this.$store.state.user.user.uUser.xzqh;
-
-                    if (obj.parentId != "0") {
-                        if (
-                            obj.parentId !=
-                                (obj.bm + "").substring(
-                                    0,
-                                    (obj.parentId + "").length
-                                ) ||
-                            ((obj.parentId + "").length < 6 &&
-                                (obj.bm + "").length !=
-                                    (obj.parentId + "").length + 3)
-                        ) {
-                            this.$message({
-                                showClose: true,
-                                message: "请输入正确的部门编码编码",
-                                duration: 3000,
-                                type: "error"
-                            });
-                            return;
-                        }
-                        if ((obj.parentId + "").length >= 6) {
-                            if (
-                                (obj.bm + "").length !=
-                                (obj.parentId + "").length + 2
-                            ) {
-                                this.$message({
-                                    showClose: true,
-                                    message: "请输入正确的部门编码编码",
-                                    duration: 3000,
-                                    type: "error"
-                                });
-                                return;
-                            }
-                        }
-                        if ((obj.parentId + "").length >= 8) {
-                            this.$message({
-                                showClose: true,
-                                message: "请输入正确的部门编码编码",
-                                duration: 3000,
-                                type: "error"
-                            });
-                            return;
-                        }
-
-                        // this.bmszNumber.map(i => {
-                        //     if (
-                        //         (obj.bm + "").length ==(obj.parentId + "").length + Number(i) && obj.parentId ==(obj.bm + "").substring(0,(obj.parentId + "").length)
-                        //     ) {
-                        //         formSave(url, obj).then(res => {
-                        //             let data = res.data;
-                        //             if (data.success) {
-                        //                 _this.formData = {};
-                        //                 _this.treeQueryBm();
-                        //                 _this.$message({
-                        //                     message: data.msg,
-                        //                     type: "success"
-                        //                 });
-                        //             }
-                        //         });
-                        //         return;
-                        //     }else{
-                        //         this.$message({
-                        //         showClose: true,
-                        //         message: "请输入正确的部门编码编码",
-                        //         type: "error"
-                        //     });
-                        //     }
-                        // });
-                    } else {
-                        if ((obj.bm + "").length != 3) {
-                            this.$message({
-                                showClose: true,
-                                message: "请输入正确的部门编码编码",
-
-                                type: "error"
-                            });
-                            return;
-                        }
-                    }
-                    formSave(url, obj).then(res => {
-                        let data = res.data;
-                        if (data.success) {
-                            _this.formData = {};
-                            _this.treeQueryBm();
-                            _this.$message({
-                                message: data.msg,
-                                type: "success"
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    },
-    
-    mounted() {
-        this.treeQueryBm();
-        this.userList(this.pageSize, this.pageNo);
-        this.$refs.tree.setCurrentKey([1]);
-        this.userXzqh = this.$store.state.user.user.uUser.xzqh;
-        //调取部门验证规则接口
-        xtszSelect({ type: "bmbm" }).then(res => {
+          }
+          formSave(url, obj).then(res => {
             let data = res.data;
-            if (data.success && data.data.length) {
-                this.bmszNumber = data.data[0].value.split(",");
+            if (data.success) {
+              _this.formData = {};
+              _this.treeQueryBm();
+              _this.$message({
+                message: data.msg,
+                type: "success"
+              });
+            } else {
+              _this.$message({
+                message: data.msg
+              });
             }
-        });
+          });
+        }
+      });
     }
+  },
+
+  mounted() {
+    this.treeQueryBm();
+    this.userList(this.pageSize, this.pageNo);
+    this.$refs.tree.setCurrentKey([1]);
+    this.userXzqh = this.$store.state.user.user.uUser.xzqh;
+    //调取部门验证规则接口
+    xtszSelect({ type: "bmbm" }).then(res => {
+      let data = res.data;
+      if (data.success && data.data.length) {
+        this.bmszNumber = data.data[0].value.split(",");
+      }
+    });
+  }
 };
 </script>
 <style lang="scss" scoped>
 .source {
+  height: 100%;
+  .source_tree {
+    float: left;
+    width: 300px;
+    height: 81vh;
+    overflow: auto;
+  }
+  .source_form {
+    float: left;
+    width: calc(100% - 300px);
     height: 100%;
-    .source_tree {
-        float: left;
-        width: 300px;
-        height: 81vh;
-        overflow: auto;
-    }
-    .source_form {
-        float: left;
-        width: calc(100% - 300px);
-        height: 100%;
-        border-left: 1px dotted #999;
-    }
-    .page_middle {
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        background-color: #f3f3f3;
-    }
-    .marr10 {
-        margin: 15px 3% 15px 0;
-    }
-    .nodeLabel {
-        width: 126px;
-        overflow: hidden;
-        display: inline-block;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+    border-left: 1px dotted #999;
+  }
+  .page_middle {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #f3f3f3;
+  }
+  .marr10 {
+    margin: 15px 3% 15px 0;
+  }
+  .nodeLabel {
+    width: 126px;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>
 

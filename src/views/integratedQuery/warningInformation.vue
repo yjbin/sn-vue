@@ -440,8 +440,8 @@ export default {
           break;
         case "2":
           this.tabName =  "超期项目列表";
-          this.xminput = false;
-          this.zjinput = true;
+          this.xminput = true;
+          this.zjinput = false;
            this.getList();
           break;
         case "3":

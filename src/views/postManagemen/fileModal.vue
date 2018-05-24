@@ -158,6 +158,11 @@ export default {
                                     pageSize: 10
                                 };
                                 _this.$emit("ListQuery", objD);
+                            } else {
+                                this.$message({
+                                    message: data.msg,
+                                    type: "warning"
+                                });
                             }
                         });
                     } else {
@@ -176,6 +181,11 @@ export default {
                                     pageSize: 10
                                 };
                                 _this.$emit("ListQuery", objD);
+                            } else {
+                                this.$message({
+                                    message: data.msg,
+                                    type: "warning"
+                                });
                             }
                         });
                     }

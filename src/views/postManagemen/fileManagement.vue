@@ -49,7 +49,7 @@
                 </el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick">{{scope.row.by2}}</span>
+                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="address" label="操作" width="150">
@@ -156,10 +156,18 @@ export default {
                     };
                     fileDel(obj).then(res => {
                         let data = res.data;
-                        this.$message({
-                            message: data.msg,
-                            type: "success"
-                        });
+                        if (data.success) {
+                            this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                        } else {
+                            this.$message({
+                                message: data.msg,
+                                type: "warning"
+                            });
+                        }
+
                         this.ListQuery();
                     });
                 })
@@ -230,11 +238,18 @@ export default {
             };
             pageQueryRelease(obj).then(res => {
                 let data = res.data;
-                this.$message({
-                    message: data.msg,
-                    type: "success"
-                });
-                this.ListQuery();
+                if (data.success) {
+                    this.$message({
+                        message: data.msg,
+                        type: "success"
+                    });
+                    this.ListQuery();
+                }else{
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
+                }
             });
         },
         FormInt() {

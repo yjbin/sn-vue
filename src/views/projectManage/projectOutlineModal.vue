@@ -235,472 +235,474 @@ import { formatDate, operation } from "@/utils/data";
 import { treeQuery } from "@/api/multistageDown";
 import { validateNumber, validMoney } from "@/utils/validate";
 export default {
-    components: {
-        xianModal,
-        shiModal,
-        shengModal,
-        xiangModal,
-        accessoryModel
-    },
-    data() {
-        const validOfMoney = (rule, value, callback) => {
-            if (!validMoney(value)) {
-                callback(new Error("请输入正确的金额~"));
-            } else {
-                callback();
-            }
-        };
-        return {
-            //各模态框的开关
-            newModalToggle: false,
-            xianModalShow: false,
-            shiModalShow: false,
-            shengModalShow: false,
-            xiangModalShow: false,
-            ssdwVisible: false,
-            accessoryModalInt: false,
-            textTitFile: "",
-            fileSrc: "",
-            upShowhide: true,
-            textTitText: "",
-            ssdwtit: "",
-            ssdwSaveList: [],
-            ssdwArr: [],
-            ndoptions: [""],
-            tableData: [""],
-            multipleSelection: [],
-            cylxoptions: [""],
-            duojiOptions: [],
-            xzqhoptions: [],
-            bmbmoptions: [],
-            options: [],
-            checkBox: 0,
-            pageNo2: 1,
-            pageSize2: 6,
-            totalCount2: 1,
-            xianTit: "",
-            shiTit: "",
-            shengTit: "",
-            xiangTit: "",
-            //省市县乡的选中集合
-            shengChecked: [],
-            shiChecked: [],
-            xianChecked: [],
-            xiangChecked: [],
-            //单个控制的项目类别
-            xmlbArr: [],
-            editForm: {
-                xmmc: "",
-                nd: "",
-                xmbh: "",
-                cylx: "",
-                ssdw: "",
-                fzr: "",
-                kssj: "",
-                jssj: "",
-                xmze: "",
-                zyZj: "",
-                shengZj: "",
-                shiZj: "",
-                xianZj: "",
-                xiangZj: "",
-                xzqh: this.$store.state.user.user.uUser.xzqh,
-                bmbm: this.$store.state.user.user.uUser.bmbm,
-                // xzqh1: getDicTab("xzqh",this.$store.state.user.user.uUser.xzqh),
-                // bmbm1: getDicTab("bmbm",this.$store.state.user.user.uUser.xzqh+"-"+this.$store.state.user.user.uUser.bmbm),
-                lrr: this.$store.state.user.user.uUser.nickname,
-                lrsj: "",
-                xmdz: "",
-                xmGps: "",
-                jsnr: "",
-                shengFgks: "",
-                shiFgks: "",
-                xianFgks: "",
-                xiangFgks: "",
-                xmlb: ""
-            },
-            xmGsrules: {
-                xmmc: [{ required: true, message: "不能为空" }],
-                nd: [{ required: true, message: "不能为空" }],
-                xmbh: [{ required: true, message: "不能为空" }],
-                cylb: [{ required: true, message: "不能为空" }],
-                xmlb: [{ required: true, message: "不能为空" }],
-                ssdw: [{ required: true, message: "不能为空" }],
-                xmze: [{ required: true, validator: validOfMoney }],
-                kssj: [{ required: true, message: "不能为空" }],
-                jssj: [{ required: true, message: "不能为空" }],
-                jssj: [{ required: true, message: "不能为空" }],
-                xmdz: [{ required: true, message: "不能为空" }],
-                xmGps: [{ required: true, message: "不能为空" }],
-                zyZj: [{ required: true, validator: validOfMoney }],
-                shengZj: [{ required: true, validator: validOfMoney }],
-                shiZj: [{ required: true, validator: validOfMoney }],
-                xianZj: [{ required: true, validator: validOfMoney }],
-                xiangZj: [{ required: true, validator: validOfMoney }]
-            },
-            limitStartTime: {
-                disabledDate: time => {
-                    var end_time = this.editForm.jssj;
-                    let endDateVal = new Date(end_time).getTime();
-                    if (endDateVal) {
-                        return time.getTime() > endDateVal;
-                    }
-                }
-            },
-            limitEndTime: {
-                disabledDate: time => {
-                    var start_time = this.editForm.kssj;
-                    let startDateVal = new Date(start_time).getTime();
-                    if (startDateVal) {
-                        return time.getTime() < startDateVal;
-                    }
-                }
-            }
-        };
-    },
-    props: {
-        newModal: Boolean,
-        chubeiTrue: Boolean,
-        //从综合查询项目申报点击进入该组件
-        shenbaoTrue: Boolean,
-        textTit: "",
-        editObj: {
-            default: () => {}
+  components: {
+    xianModal,
+    shiModal,
+    shengModal,
+    xiangModal,
+    accessoryModel
+  },
+  data() {
+    const validOfMoney = (rule, value, callback) => {
+      if (!validMoney(value)) {
+        callback(new Error("请输入正确的金额~"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      //各模态框的开关
+      newModalToggle: false,
+      xianModalShow: false,
+      shiModalShow: false,
+      shengModalShow: false,
+      xiangModalShow: false,
+      ssdwVisible: false,
+      accessoryModalInt: false,
+      textTitFile: "",
+      fileSrc: "",
+      upShowhide: true,
+      textTitText: "",
+      ssdwtit: "",
+      ssdwSaveList: [],
+      ssdwArr: [],
+      ndoptions: [""],
+      tableData: [""],
+      multipleSelection: [],
+      cylxoptions: [""],
+      duojiOptions: [],
+      xzqhoptions: [],
+      bmbmoptions: [],
+      options: [],
+      checkBox: 0,
+      pageNo2: 1,
+      pageSize2: 6,
+      totalCount2: 1,
+      xianTit: "",
+      shiTit: "",
+      shengTit: "",
+      xiangTit: "",
+      //省市县乡的选中集合
+      shengChecked: [],
+      shiChecked: [],
+      xianChecked: [],
+      xiangChecked: [],
+      //单个控制的项目类别
+      xmlbArr: [],
+      editForm: {
+        xmmc: "",
+        nd: "",
+        xmbh: "",
+        cylx: "",
+        ssdw: "",
+        fzr: "",
+        kssj: "",
+        jssj: "",
+        xmze: "",
+        zyZj: "",
+        shengZj: "",
+        shiZj: "",
+        xianZj: "",
+        xiangZj: "",
+        xzqh: this.$store.state.user.user.uUser.xzqh,
+        bmbm: this.$store.state.user.user.uUser.bmbm,
+        // xzqh1: getDicTab("xzqh",this.$store.state.user.user.uUser.xzqh),
+        // bmbm1: getDicTab("bmbm",this.$store.state.user.user.uUser.xzqh+"-"+this.$store.state.user.user.uUser.bmbm),
+        lrr: this.$store.state.user.user.uUser.nickname,
+        lrsj: "",
+        xmdz: "",
+        xmGps: "",
+        jsnr: "",
+        shengFgks: "",
+        shiFgks: "",
+        xianFgks: "",
+        xiangFgks: "",
+        xmlb: ""
+      },
+      xmGsrules: {
+        xmmc: [{ required: true, message: "不能为空" }],
+        nd: [{ required: true, message: "不能为空" }],
+        xmbh: [{ required: true, message: "不能为空" }],
+        cylb: [{ required: true, message: "不能为空" }],
+        xmlb: [{ required: true, message: "不能为空" }],
+        ssdw: [{ required: true, message: "不能为空" }],
+        xmze: [{ required: true, validator: validOfMoney }],
+        kssj: [{ required: true, message: "不能为空" }],
+        jssj: [{ required: true, message: "不能为空" }],
+        jssj: [{ required: true, message: "不能为空" }],
+        xmdz: [{ required: true, message: "不能为空" }],
+        xmGps: [{ required: true, message: "不能为空" }],
+        zyZj: [{ required: true, validator: validOfMoney }],
+        shengZj: [{ required: true, validator: validOfMoney }],
+        shiZj: [{ required: true, validator: validOfMoney }],
+        xianZj: [{ required: true, validator: validOfMoney }],
+        xiangZj: [{ required: true, validator: validOfMoney }]
+      },
+      limitStartTime: {
+        disabledDate: time => {
+          var end_time = this.editForm.jssj;
+          let endDateVal = new Date(end_time).getTime();
+          if (endDateVal) {
+            return time.getTime() > endDateVal;
+          }
         }
-    },
-    watch: {
-        editForm: {
-            handler: function(val,oldval) {
-                // console.log(val,oldval)
-                if (val) {
-                    this.editForm.xmze =
-                        Number(this.editForm.zyZj || 0) +
-                        Number(this.editForm.shengZj || 0) +
-                        Number(this.editForm.shiZj || 0) +
-                        Number(this.editForm.xianZj || 0) +
-                        Number(this.editForm.xiangZj || 0);
-                }
-            },
-            deep: true
-        },
-        xmlbArr(val) {
-            this.editForm.xmlb = this.xmlbArr.join(",");
-        },
-        newModal(val) {
-            if (this.$refs.editForm) {
-                this.$refs.editForm.resetFields();
-                this.xmlbArr = [];
-            }
-            if (this.editForm.lrsj) {
-                this.editForm.lrsj = new Date().getTime();
-            }
-            this.newModalToggle = val;
-        },
-        textTit(val) {
-            this.textTitText = val;
-        },
-        editObj(val) {
-            if (val) {
-                this.editForm = Object.assign({}, val);
-                if (val.fj) {
-                    this.fileSrc = {
-                        num: Math.random(),
-                        fileStr: this.editForm.fj
-                    };
-                } else {
-                    this.fileSrc = {
-                        num: Math.random(),
-                        fileStr: ""
-                    };
-                }
-                if (this.editForm.xmlb) {
-                    this.xmlbArr = this.editForm.xmlb.split(",");
-                }
-                val.shengFgksIds
-                    ? (this.shengChecked = val.shengFgksIds)
-                    : (this.shengChecked = []);
-                val.shiFgksIds
-                    ? (this.shiChecked = val.shiFgksIds)
-                    : (this.shiChecked = []);
-                val.xianFgksIds
-                    ? (this.xianChecked = val.xianFgksIds)
-                    : (this.xianChecked = []);
-                val.xiangFgksIds
-                    ? (this.xiangChecked = val.xiangFgksIds)
-                    : (this.xiangChecked = []);
-            }
+      },
+      limitEndTime: {
+        disabledDate: time => {
+          var start_time = this.editForm.kssj;
+          let startDateVal = new Date(start_time).getTime();
+          if (startDateVal) {
+            return time.getTime() < startDateVal;
+          }
         }
-    },
-    methods: {
-        //控制项目类别的多级菜单改变
-        duojiChange(value) {
-            this.xmlbArr = value;
-        },
-        xianToggle(val) {
-            this.xianModalShow = val;
-        },
-        shiToggle(val) {
-            this.shiModalShow = val;
-        },
-        shengToggle(val) {
-            this.shengModalShow = val;
-        },
-        xiangToggle(val) {
-            this.xiangModalShow = val;
-        },
-        shengShow() {
-            this.shengModalShow = true;
-            this.shengTit = "省级分管处室";
-        },
-        shiShow() {
-            this.shiModalShow = true;
-            this.shiTit = "市级分管处室";
-        },
-        xianShow() {
-            this.xianModalShow = true;
-            this.xianTit = "县级分管处室";
-        },
-        xiangShow() {
-            this.xianModalShow = true;
-            this.xianTit = "乡级分管处室";
-        },
-        //接受子组件传递的选中值的行政区划
-        shengFgks(val) {
-            this.editForm.shengFgks = val;
-        },
-        shiFgks(val) {
-            this.editForm.shiFgks = val;
-        },
-        xianFgks(val) {
-            this.editForm.xianFgks = val;
-        },
-        xiangFgks(val) {
-            this.editForm.xiangFgks = val;
-        },
-        //接受子组件传递的选中值保存的id数组
-        shengchId(val) {
-            this.shengChecked = val;
-        },
-        shichId(val) {
-            this.shiChecked = val;
-        },
-        xianchId(val) {
-            this.xianChecked = val;
-        },
-        xiangchId(val) {
-            this.xiangChecked = val;
-        },
-        btn_cancel() {
-            this.newModalToggle = false;
-            this.$emit("newToggle", this.newModalToggle);
-        },
-        userClose2() {
-            this.btn_cancel();
-        },
-        //总的信息保存
-        userbtn_save() {
-            this.$refs.editForm.validate(valid => {
-                if (valid) {
-                    let _this = this;
-                    let obj = Object.assign({}, this.editForm);
-                    obj.xmlb = this.xmlbArr.join(",");
-                    if (this.chubeiTrue == true) {
-                        obj.xmlx = "0";
-                    }else{
-                        obj.xmlx = "1";
-                    }
-
-                    // for(var i in obj){
-                    //     if(i.length && i.length>2 && i.substring(i.length-2,i.length)=="Zj"){
-                    //         obj[i]= operation(obj[i],"*")
-                    //     }
-                    // }
-                    delete obj.zhbmbm;
-                    if (obj.id) {
-                        xmmsChange(obj).then(res => {
-                            let data = res.data;
-                            if (data.success) {
-                                _this.btn_cancel();
-
-                                this.$message({
-                                    message: data.msg,
-                                    type: "success"
-                                });
-                                let obj = {
-                                    pageNo: this.pageNo,
-                                    pageSize: this.pageSize
-                                };
-                                this.$emit("getList", obj);
-                                // this.shengStatus = null;
-                                // this.shiStatus = null;
-                                // this.xianStatus = null;
-                                // this.xiangStatus = null;
-                            }
-                        });
-                    } else {
-                        xmmsAdd(obj).then(res => {
-                            let data = res.data;
-                            if (data.success) {
-                                _this.btn_cancel();
-
-                                this.$message({
-                                    message: data.msg,
-                                    type: "success"
-                                });
-                                let obj = {
-                                    pageNo: this.pageNo,
-                                    pageSize: this.pageSize
-                                };
-                                this.$emit("getList", obj);
-                                // this.shengStatus = null;
-                                // this.shiStatus = null;
-                                // this.xianStatus = null;
-                                // this.xiangStatus = null;
-                            }
-                        });
-                    }
-                }
-            });
-        },
-        indexMethod(index) {
-            let start = (this.pageNo2 - 1) * this.pageSize2;
-            return start + index + 1;
-        },
-        //实施单位的展示
-        ssdwFocus() {
-            this.ssdwVisible = true;
-            this.ssdwtit = "实施单位列表";
-            let obj = {
-                pageNo: this.pageNo2,
-                pageSize: this.pageSize2
-            };
-            searchUnit(obj).then(res => {
-                let data = res.data;
-                if (data.success) {
-                    this.tableData = data.msg.data;
-                    this.totalCount2 = data.msg.totalCount;
-                    this.$nextTick(function() {
-                        //dom改变后触发的事件
-                        if (this.ssdwSaveList.length) {
-                            this.ssdwSave(this.ssdwSaveList);
-                        }
-                    });
-                }
-            });
-        },
-        //选择
-        checkboxChange(val) {
-            this.multipleSelection = val;
-        },
-        userClose() {
-            this.ssdwVisible = false;
-        },
-        //分页
-        handleCurrentChange2(val) {
-            this.pageNo2 = val;
-            this.ssdwSaveList = this.ssdwSaveList.concat(
-                this.multipleSelection
-            );
-            this.ssdwFocus();
-        },
-        //实施单位保存
-        ssdwSelectBc() {
-            if (this.multipleSelection.length) {
-                if (this.multipleSelection.length === 1) {
-                    this.editForm.ssdw = this.multipleSelection[0].dwmc;
-                    this.editForm.fzr = this.multipleSelection[0].fzr;
-                    this.editForm.ssdwId = this.multipleSelection[0].id;
-                    this.ssdwVisible = false;
-                } else {
-                    this.$message({
-                        message: "只能选择一个实施单位~",
-                        type: "warning"
-                    });
-                    return;
-                }
-            } else {
-                this.$message({
-                    message: "请选择实施单位~",
-                    type: "warning"
-                });
-                return;
-            }
-            // this.ssdwSaveList = this.ssdwSaveList.concat(this.multipleSelection);
-            // this.ssdwVisible = false;
-            // let _this = this;
-            // this.editForm.ssdw = "";
-            // this.editForm.fzr = "";
-            // this.dedupe(this.ssdwSaveList).forEach(row => {
-            //   this.editForm.ssdw += row.dwmc + ",";
-            //   this.editForm.fzr += row.fzr + ",";
-            // });
-        },
-        //实施单位对比，设置选中
-        ssdwSave(rows) {
-            if (rows) {
-                this.ssdwArr = [];
-                let _this = this;
-                rows.map(r => {
-                    _this.tableData.map(t => {
-                        if (t.id == r.id) {
-                            _this.ssdwArr.push(t);
-                        }
-                    });
-                });
-                _this.ssdwArr.forEach(row => {
-                    _this.$refs.multipleTable.toggleRowSelection(row, true);
-                });
-            } else {
-                this.$refs.multipleTable.clearSelection();
-            }
-            // this.multipleSelection = [];
-        },
-        //去重
-        dedupe(array) {
-            if (array) {
-                return Array.from(new Set(array));
-            }
-        },
-        //附件
-        colseTog(val) {
-            this.accessoryModalInt = val;
-        },
-        chileFile(val) {
-            this.editForm.fj = val;
-        },
-        fileClick() {
-            this.accessoryModalInt = true;
-            this.textTitFile = "附件";
-        }
-    },
-    mounted() {
-        this.ndoptions = doCreate("nd");
-        this.cylxoptions = doCreate("cylb");
-        this.xzqhoptions = doCreate("xzqh");
-        this.bmbmoptions = doCreate("bmbm");
-        //项目类别多级菜单
-        treeQuery({ dicttype: "xmlb" }).then(res => {
-            let data = res.data;
-            moreMenu(data);
-            this.options = data;
-        });
+      }
+    };
+  },
+  props: {
+    newModal: Boolean,
+    chubeiTrue: Boolean,
+    //从综合查询项目申报点击进入该组件
+    shenbaoTrue: Boolean,
+    textTit: "",
+    editObj: {
+      default: () => {}
     }
+  },
+  watch: {
+    editForm: {
+      handler: function(val, oldval) {
+        // console.log(val,oldval)
+        if (val) {
+          this.editForm.xmze =
+            Number(this.editForm.zyZj || 0) +
+            Number(this.editForm.shengZj || 0) +
+            Number(this.editForm.shiZj || 0) +
+            Number(this.editForm.xianZj || 0) +
+            Number(this.editForm.xiangZj || 0);
+        }
+      },
+      deep: true
+    },
+    xmlbArr(val) {
+      this.editForm.xmlb = this.xmlbArr.join(",");
+    },
+    newModal(val) {
+      if (this.$refs.editForm) {
+        this.$refs.editForm.resetFields();
+        this.xmlbArr = [];
+      }
+      if (this.editForm.lrsj) {
+        this.editForm.lrsj = new Date().getTime();
+      }
+      this.newModalToggle = val;
+    },
+    textTit(val) {
+      this.textTitText = val;
+    },
+    editObj(val) {
+      if (val) {
+        this.editForm = Object.assign({}, val);
+        if (val.fj) {
+          this.fileSrc = {
+            num: Math.random(),
+            fileStr: this.editForm.fj
+          };
+        } else {
+          this.fileSrc = {
+            num: Math.random(),
+            fileStr: ""
+          };
+        }
+        if (this.editForm.xmlb) {
+          this.xmlbArr = this.editForm.xmlb.split(",");
+        }
+        val.shengFgksIds
+          ? (this.shengChecked = val.shengFgksIds)
+          : (this.shengChecked = []);
+        val.shiFgksIds
+          ? (this.shiChecked = val.shiFgksIds)
+          : (this.shiChecked = []);
+        val.xianFgksIds
+          ? (this.xianChecked = val.xianFgksIds)
+          : (this.xianChecked = []);
+        val.xiangFgksIds
+          ? (this.xiangChecked = val.xiangFgksIds)
+          : (this.xiangChecked = []);
+      }
+    }
+  },
+  methods: {
+    //控制项目类别的多级菜单改变
+    duojiChange(value) {
+      this.xmlbArr = value;
+    },
+    xianToggle(val) {
+      this.xianModalShow = val;
+    },
+    shiToggle(val) {
+      this.shiModalShow = val;
+    },
+    shengToggle(val) {
+      this.shengModalShow = val;
+    },
+    xiangToggle(val) {
+      this.xiangModalShow = val;
+    },
+    shengShow() {
+      this.shengModalShow = true;
+      this.shengTit = "省级分管处室";
+    },
+    shiShow() {
+      this.shiModalShow = true;
+      this.shiTit = "市级分管处室";
+    },
+    xianShow() {
+      this.xianModalShow = true;
+      this.xianTit = "县级分管处室";
+    },
+    xiangShow() {
+      this.xianModalShow = true;
+      this.xianTit = "乡级分管处室";
+    },
+    //接受子组件传递的选中值的行政区划
+    shengFgks(val) {
+      this.editForm.shengFgks = val;
+    },
+    shiFgks(val) {
+      this.editForm.shiFgks = val;
+    },
+    xianFgks(val) {
+      this.editForm.xianFgks = val;
+    },
+    xiangFgks(val) {
+      this.editForm.xiangFgks = val;
+    },
+    //接受子组件传递的选中值保存的id数组
+    shengchId(val) {
+      this.shengChecked = val;
+    },
+    shichId(val) {
+      this.shiChecked = val;
+    },
+    xianchId(val) {
+      this.xianChecked = val;
+    },
+    xiangchId(val) {
+      this.xiangChecked = val;
+    },
+    btn_cancel() {
+      this.newModalToggle = false;
+      this.$emit("newToggle", this.newModalToggle);
+    },
+    userClose2() {
+      this.btn_cancel();
+    },
+    //总的信息保存
+    userbtn_save() {
+      this.$refs.editForm.validate(valid => {
+        if (valid) {
+          let _this = this;
+          let obj = Object.assign({}, this.editForm);
+          obj.xmlb = this.xmlbArr.join(",");
+          if (this.chubeiTrue == true) {
+            obj.xmlx = "0";
+          } else {
+            obj.xmlx = "1";
+          }
+
+          // for(var i in obj){
+          //     if(i.length && i.length>2 && i.substring(i.length-2,i.length)=="Zj"){
+          //         obj[i]= operation(obj[i],"*")
+          //     }
+          // }
+          delete obj.zhbmbm;
+          if (obj.id) {
+            xmmsChange(obj).then(res => {
+              let data = res.data;
+              if (data.success) {
+                _this.btn_cancel();
+
+                this.$message({
+                  message: data.msg,
+                  type: "success"
+                });
+                let obj = {
+                  pageNo: this.pageNo,
+                  pageSize: this.pageSize
+                };
+                this.$emit("getList", obj);
+                // this.shengStatus = null;
+                // this.shiStatus = null;
+                // this.xianStatus = null;
+                // this.xiangStatus = null;
+              }
+            });
+          } else {
+            xmmsAdd(obj).then(res => {
+              let data = res.data;
+              if (data.success) {
+                _this.btn_cancel();
+
+                this.$message({
+                  message: data.msg,
+                  type: "success"
+                });
+                let obj = {
+                  pageNo: this.pageNo,
+                  pageSize: this.pageSize
+                };
+                this.$emit("getList", obj);
+                // this.shengStatus = null;
+                // this.shiStatus = null;
+                // this.xianStatus = null;
+                // this.xiangStatus = null;
+              } else {
+                this.$message({
+                  message: data.msg
+                });
+              }
+            });
+          }
+        }
+      });
+    },
+    indexMethod(index) {
+      let start = (this.pageNo2 - 1) * this.pageSize2;
+      return start + index + 1;
+    },
+    //实施单位的展示
+    ssdwFocus() {
+      this.ssdwVisible = true;
+      this.ssdwtit = "实施单位列表";
+      let obj = {
+        pageNo: this.pageNo2,
+        pageSize: this.pageSize2
+      };
+      searchUnit(obj).then(res => {
+        let data = res.data;
+        if (data.success) {
+          this.tableData = data.msg.data;
+          this.totalCount2 = data.msg.totalCount;
+          this.$nextTick(function() {
+            //dom改变后触发的事件
+            if (this.ssdwSaveList.length) {
+              this.ssdwSave(this.ssdwSaveList);
+            }
+          });
+        }
+      });
+    },
+    //选择
+    checkboxChange(val) {
+      this.multipleSelection = val;
+    },
+    userClose() {
+      this.ssdwVisible = false;
+    },
+    //分页
+    handleCurrentChange2(val) {
+      this.pageNo2 = val;
+      this.ssdwSaveList = this.ssdwSaveList.concat(this.multipleSelection);
+      this.ssdwFocus();
+    },
+    //实施单位保存
+    ssdwSelectBc() {
+      if (this.multipleSelection.length) {
+        if (this.multipleSelection.length === 1) {
+          this.editForm.ssdw = this.multipleSelection[0].dwmc;
+          this.editForm.fzr = this.multipleSelection[0].fzr;
+          this.editForm.ssdwId = this.multipleSelection[0].id;
+          this.ssdwVisible = false;
+        } else {
+          this.$message({
+            message: "只能选择一个实施单位~",
+            type: "warning"
+          });
+          return;
+        }
+      } else {
+        this.$message({
+          message: "请选择实施单位~",
+          type: "warning"
+        });
+        return;
+      }
+      // this.ssdwSaveList = this.ssdwSaveList.concat(this.multipleSelection);
+      // this.ssdwVisible = false;
+      // let _this = this;
+      // this.editForm.ssdw = "";
+      // this.editForm.fzr = "";
+      // this.dedupe(this.ssdwSaveList).forEach(row => {
+      //   this.editForm.ssdw += row.dwmc + ",";
+      //   this.editForm.fzr += row.fzr + ",";
+      // });
+    },
+    //实施单位对比，设置选中
+    ssdwSave(rows) {
+      if (rows) {
+        this.ssdwArr = [];
+        let _this = this;
+        rows.map(r => {
+          _this.tableData.map(t => {
+            if (t.id == r.id) {
+              _this.ssdwArr.push(t);
+            }
+          });
+        });
+        _this.ssdwArr.forEach(row => {
+          _this.$refs.multipleTable.toggleRowSelection(row, true);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+      // this.multipleSelection = [];
+    },
+    //去重
+    dedupe(array) {
+      if (array) {
+        return Array.from(new Set(array));
+      }
+    },
+    //附件
+    colseTog(val) {
+      this.accessoryModalInt = val;
+    },
+    chileFile(val) {
+      this.editForm.fj = val;
+    },
+    fileClick() {
+      this.accessoryModalInt = true;
+      this.textTitFile = "附件";
+    }
+  },
+  mounted() {
+    this.ndoptions = doCreate("nd");
+    this.cylxoptions = doCreate("cylb");
+    this.xzqhoptions = doCreate("xzqh");
+    this.bmbmoptions = doCreate("bmbm");
+    //项目类别多级菜单
+    treeQuery({ dicttype: "xmlb" }).then(res => {
+      let data = res.data;
+      moreMenu(data);
+      this.options = data;
+    });
+  }
 };
 </script>
 <style lang="scss">
 .projecOutlinModal {
-    .el-dialog__header {
-        background: #307ecc;
-        .el-dialog__title {
-            color: #fff;
-        }
+  .el-dialog__header {
+    background: #307ecc;
+    .el-dialog__title {
+      color: #fff;
     }
-    // .el-dialog__body {
-    //     padding: 20px 20px 44px 20px;
-    // }
-    .fileButtom {
-        margin-top: 20px;
-    }
+  }
+  // .el-dialog__body {
+  //     padding: 20px 20px 44px 20px;
+  // }
+  .fileButtom {
+    margin-top: 20px;
+  }
 }
 </style>
 

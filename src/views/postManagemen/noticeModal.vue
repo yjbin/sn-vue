@@ -155,6 +155,11 @@ export default {
                                     type: "success"
                                 });
                                 _this.$emit("ListQuery");
+                            } else {
+                                _this.$message({
+                                    message: data.msg,
+                                    type: "warning"
+                                });
                             }
                         });
                     } else {
@@ -169,6 +174,11 @@ export default {
                                 });
 
                                 this.$emit("ListQuery");
+                            } else {
+                                _this.message({
+                                    message: data.msg,
+                                    type: "warning"
+                                });
                             }
                         });
                     }
@@ -213,7 +223,7 @@ export default {
         newModal(val) {
             this.newModalToggle = val;
         },
-     
+
         editObj(val) {
             if (val) {
                 if (this.$refs.fileForm) {

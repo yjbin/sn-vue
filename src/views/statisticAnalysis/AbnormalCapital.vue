@@ -40,7 +40,7 @@
                     </el-table-column>
                     <el-table-column  label="超标拨付" prop="cbbf" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column label="超期拨付" prop="cqbf" show-overflow-tooltip>
+                    <el-table-column label="超期资金" prop="cqzj" show-overflow-tooltip>
                     </el-table-column>
                 </el-table-column>
                 <el-table-column label="合计(万元)" prop="heji" width="150">
@@ -70,18 +70,21 @@ export default {
             return getDicTab("xzqh", row.xzqh);
         },
         searchFun() {
-
+            this.zjycSearch();
         },
         zjycSearch() {
             let obj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
-                nd:2018
+                nd:this.seatch_nd || 2018
             };
             zjycSelect(obj).then(res => {
                 let data = res.data;
-                // data.map(i => {
-                //     return i
-                // });
+                data.map(i => {
+                    i.debf ? i.debf = i.debf : i.debf = 0;
+                    i.cqzj ? i.cqzj = i.cqzj : i.cqzj = 0;
+                    i.cbbf ? i.cbbf = i.cbbf : i.cbbf = 0;
+                    return i
+                });
                 this.dateList = data;
             });
         }

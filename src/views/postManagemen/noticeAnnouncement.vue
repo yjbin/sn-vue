@@ -47,13 +47,13 @@
                 <el-table-column prop="by3" label="状态" :formatter="fwztDic"></el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick">{{scope.row.by2}}</span>
+                        <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="fileEdit(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="listDel(scope.row)"  :disabled="(scope.row.by3=='1'?true:false)">删除</el-button>
+                        <el-button size="mini" type="danger" @click="listDel(scope.row)" :disabled="(scope.row.by3=='1'?true:false)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -136,9 +136,9 @@ export default {
             this.newModal = true;
             this.textTit = "编辑";
             this.editObj = row;
-            if(row.by3=="1"){
+            if (row.by3 == "1") {
                 this.activeShow = false;
-            }else{
+            } else {
                 this.activeShow = true;
             }
         },
@@ -154,11 +154,18 @@ export default {
                     };
                     noticeDel(obj).then(res => {
                         let data = res.data;
-                        this.$message({
-                            message: data.msg,
-                            type: "success"
-                        });
-                        this.ListQuery();
+                        if (data.success) {
+                            this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                            this.ListQuery();
+                        } else {
+                            this.$message({
+                                message: data.msg,
+                                type: "warning"
+                            });
+                        }
                     });
                 })
                 .catch(() => {
@@ -197,7 +204,7 @@ export default {
                 lx: "0",
                 nd: this.seatch_nd,
                 name: this.seatch_name,
-                by3:this.seatch_fwzt
+                by3: this.seatch_fwzt
             };
             noticeQuery(obj).then(res => {
                 let data = res.data;
@@ -224,14 +231,22 @@ export default {
                 idsArr.push(i.id);
             });
             let obj = {
-                ids:idsArr.join(",")
-            }
+                ids: idsArr.join(",")
+            };
             pageQueryRelease(obj).then(res => {
                 let data = res.data;
-                this.$message({
-                    message: data.msg,
-                    type: "success"
-                });
+                if (data.success) {
+                    this.$message({
+                        message: data.msg,
+                        type: "success"
+                    });
+                    this.ListQuery();
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
+                }
                 this.ListQuery();
             });
         },
