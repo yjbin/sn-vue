@@ -225,16 +225,15 @@ export default {
             this.xzqhoptions = doCreate("xzqh");
             this.bmbmoptions = doCreate("bmbm");
             if (val.fj) {
-                
                 this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: this.xmForm.fj
-                        };
+                    num: Math.random(),
+                    fileStr: this.xmForm.fj
+                };
             } else {
                 this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: ""
-                        };
+                    num: Math.random(),
+                    fileStr: ""
+                };
             }
             if (this.xmForm.xmlb) {
                 this.xmlbArr = this.xmForm.xmlb.split(",");

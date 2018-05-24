@@ -96,10 +96,9 @@ export default {
     watch: {
         xmxq(val) {
             this.xmid = val.id;
-            this.activeName = "first"; 
+            this.activeName = "first";
             this.QueryListXmjd();
             this.QueryListXmbk();
-            
         }
     },
 
@@ -130,12 +129,12 @@ export default {
         },
         xmjdChange(val) {
             this.xmjdFrom.pageNo = val;
-            this.QueryListXmjd()
+            this.QueryListXmjd();
         },
         xmbfChange(val) {
             this.xmbfFrom.pageNo = val;
             //查询
-            this.QueryListXmbk() ;
+            this.QueryListXmbk();
         },
         QueryListXmjd() {
             if (this.xmid) {
@@ -146,12 +145,16 @@ export default {
                 };
                 xmjdSelect(obj).then(res => {
                     let data = res.data;
-                    if (data.success &&res.data.msg.data.length) {
+                    if (data.success && res.data.msg.data.length) {
                         this.xmjdList = res.data.msg.data;
                         this.xmjdtotalCount = res.data.msg.totalCount;
                     } else {
                         this.xmjdList = [];
                         this.xmjdtotalCount = 0;
+                        this.$message({
+                            message: data.msg,
+                            type: "warning"
+                        });
                     }
                 });
             } else {
@@ -161,7 +164,7 @@ export default {
         },
         QueryListXmbk() {
             //查询
-            let _this =this;
+            let _this = this;
             if (this.xmid) {
                 let obj2 = {
                     pageNo: this.xmbfFrom.pageNo,
@@ -178,6 +181,11 @@ export default {
                             _this.xmbfList = [];
                             _this.xmbftotalCount = 0;
                         }
+                    } else {
+                        this.$message({
+                            message: data.msg,
+                            type: "warning"
+                        });
                     }
                 });
             } else {
@@ -186,7 +194,6 @@ export default {
             }
         },
         handleClick(tab, event) {
-            
             if (tab.name == "third") {
                 this.QueryListXmjd();
             } else if (tab.name == "fourth") {

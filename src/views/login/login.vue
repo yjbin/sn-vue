@@ -1,65 +1,65 @@
 <template>
-  <div class="login">
-    <div class="header">
-      <span class="header-tit"><img src="../../assets/images/loginLogo.png" alt=""> </span>
-      <span class="header-login">欢迎您登录系统!</span>
-    </div>
-    <div class="content">
-      <el-row :gutter="20">
-        <!-- <el-col :span="6" :offset="5">
+    <div class="login">
+        <div class="header">
+            <span class="header-tit"><img src="../../assets/images/loginLogo.png" alt=""> </span>
+            <span class="header-login">欢迎您登录系统!</span>
+        </div>
+        <div class="content">
+            <el-row :gutter="20">
+                <!-- <el-col :span="6" :offset="5">
           <div class="fl-box">
             <div class="fl-bg">
               <img src="../../assets/images/login.png" alt="">
             </div>
           </div>
         </el-col> -->
-        <el-col :span="6" :offset="14">
-          <div class="fr-box">
-            <div class="fr-box-content">
-              <div class="login-tit">
-                <p>登录</p>
-                <i></i>
-              </div>
-              <div class="login-content">
-                <el-form :model="loginForm" ref="loginForm" :rules="rules">
-                  <el-form-item prop="username">
-                    <el-input placeholder="用户名" v-model="loginForm.username" @focus="inputFocus" name="name">
-                      <i slot="prefix" class="el-input__icon person"></i>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item prop="password" :class="{marginToggle:error}">
-                    <el-input type="password" placeholder="密 码" v-model="loginForm.password" @keyup.enter.native="loginBtn" @focus="inputFocus" name="passwd">
-                      <i slot="prefix" class="el-input__icon password-icon"></i>
-                    </el-input>
-                    <p class="error" v-if="error">用户名和密码不正确</p>
-                  </el-form-item>
-                  <el-row :gutter="20">
-                    <el-col :span="12">
-                      <el-input v-model="loginForm.captcha" placeholder="请输入验证码" @keyup.enter.native="loginBtn"></el-input>
-                    </el-col>
-                    <el-col :span="12">
-                      <div class="verify-img">
-                        <img :src="src" @click="changeImg">
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <div class="rember-pass">
-                    <el-checkbox v-model="checked">记住密码</el-checkbox>
-                  </div>
-                  <el-button type="primary" @click="loginBtn">登录</el-button>
-                </el-form>
-              </div>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
+                <el-col :span="6" :offset="14">
+                    <div class="fr-box">
+                        <div class="fr-box-content">
+                            <div class="login-tit">
+                                <p>登录</p>
+                                <i></i>
+                            </div>
+                            <div class="login-content">
+                                <el-form :model="loginForm" ref="loginForm" :rules="rules">
+                                    <el-form-item prop="username">
+                                        <el-input placeholder="用户名" v-model="loginForm.username" @focus="inputFocus" name="name">
+                                            <i slot="prefix" class="el-input__icon person"></i>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="password" :class="{marginToggle:error}">
+                                        <el-input type="password" placeholder="密 码" v-model="loginForm.password" @keyup.enter.native="loginBtn" @focus="inputFocus" name="passwd">
+                                            <i slot="prefix" class="el-input__icon password-icon"></i>
+                                        </el-input>
+                                        <p class="error" v-if="error">用户名和密码不正确</p>
+                                    </el-form-item>
+                                    <el-row :gutter="20">
+                                        <el-col :span="12">
+                                            <el-input v-model="loginForm.captcha" placeholder="请输入验证码" @keyup.enter.native="loginBtn"></el-input>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <div class="verify-img">
+                                                <img :src="src" @click="changeImg">
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                    <div class="rember-pass">
+                                        <el-checkbox v-model="checked">记住密码</el-checkbox>
+                                    </div>
+                                    <el-button type="primary" @click="loginBtn">登录</el-button>
+                                </el-form>
+                            </div>
+                        </div>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="footer">
+            <p>版权所有：北京中农信达信息技术有限公司
+                <span @click="clearSession" class="clearSession">清除缓存</span>
+            </p>
+        </div>
     </div>
-    <div class="footer">
-      <p>版权所有：北京中农信达信息技术有限公司
-        <span @click="clearSession" class="clearSession">清除缓存</span>
-      </p>
-    </div>
-  </div>
 </template>
 <script>
 export default {
@@ -151,6 +151,14 @@ export default {
         },
         clearSession() {
             sessionStorage.clear();
+            this.$message({
+                message: "清除成功",
+                type: "success"
+            });
+            setTimeout(()=>{
+                location.reload();
+            },1000)
+            
         }
     },
     mounted() {

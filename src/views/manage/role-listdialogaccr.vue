@@ -37,6 +37,11 @@ export default {
                     _this.$refs.tree.setCheckedKeys(data.data);
                 } else {
                     _this.$refs.tree.setCheckedKeys([]);
+                    this.$message({
+                        type: "error",
+                        message: data.msg
+                    });
+                    
                 }
             });
         },

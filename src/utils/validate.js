@@ -39,3 +39,8 @@ export function validMoney(val){
   var reg=/^([1-9]\d{0,8}|0)(\.\d{1,6})?$/;
   return reg.test(val);  
 }  
+//验证合法的姓名 
+export function validName(val){  
+  var reg=/^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/;
+  return reg.test(val);  
+}

@@ -39,10 +39,10 @@
                     <el-table-column prop="xdsysj" label="限定使用时间" :formatter="xdsysjFormat" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="zt" label="状态">
                         <template slot-scope="scope">
-                           <span v-if="scope.row.zt=='1'" style="color:#67C23A;cursor: pointer">已挂接</span>
-                        <span v-else-if="scope.row.zt=='0'" style="color:#409EFF;cursor: pointer">未挂接</span>
-                        <span v-else-if="scope.row.zt=='2'" style="color:#409EFF;cursor: pointer">挂接完成</span>
-                    
+                            <span v-if="scope.row.zt=='1'" style="color:#67C23A;cursor: pointer">已挂接</span>
+                            <span v-else-if="scope.row.zt=='0'" style="color:#409EFF;cursor: pointer">未挂接</span>
+                            <span v-else-if="scope.row.zt=='2'" style="color:#409EFF;cursor: pointer">挂接完成</span>
+
                         </template>
                     </el-table-column>
                     <el-table-column prop="address" label="操作" width="150">
@@ -129,6 +129,11 @@ export default {
                     this.totalCount = data.msg.totalCount;
                     // this.seatch_name = "";
                     // this.seatch_nd = "";
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },
@@ -146,8 +151,8 @@ export default {
         xdsysjFormat(row) {
             return formatDate(row.xdsysj, "yyyy-MM-dd");
         },
-        formatterzjjb(row){
-            return getDicTab('zjjb',row.zjjb);
+        formatterzjjb(row) {
+            return getDicTab("zjjb", row.zjjb);
         }
     },
     mounted() {

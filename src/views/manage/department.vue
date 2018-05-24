@@ -5,9 +5,9 @@
                 <el-tree :data="bm_treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick" :expand-on-click-node="false">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <el-tooltip v-if="node.label.length>8" class="item" effect="dark" :content="node.label" placement="top">
-                            <span class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                            <span class="nodeLabel">{{ node.label }}</span>
                         </el-tooltip>
-                        <span v-else class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        <span v-else class="nodeLabel">{{ node.label }}</span>
                         <span>
                             <el-tooltip class="item" effect="dark" content="添加下级" placement="top">
                                 <i class="el-icon-plus" @click.stop="() => append(data)"></i>
@@ -213,11 +213,19 @@ export default {
           .then(() => {
             deleteTree({ bm: data.bm, xzqh: "" }).then(res => {
               let data = res.data;
-              this.$message({
-                type: "success",
-                message: data.msg
-              });
-              this.treeQueryBm();
+              if(data.success){
+                this.$message({
+                  type: "success",
+                  message: data.msg
+                });
+                this.treeQueryBm();
+              }else{
+                 this.$message({
+                  type: "error",
+                  message: data.msg
+                });
+              }
+              
             });
           })
           .catch(() => {
@@ -242,10 +250,9 @@ export default {
       this.newModal = val;
     },
     groupMember(val) {
-      this.tableData = val.data;
-      this.xzqh = val.xzqh;
-      this.bm = val.bm;
-      this.userList(this.pageSize, this.pageNo);
+      if(val){
+        this.userList(this.pageSize, this.pageNo);
+      }
     },
     nodeClick(data) {
       if (this.pureClick) {
@@ -302,6 +309,13 @@ export default {
         if (data.success) {
           _this.tableData = data.msg.data;
           _this.totalCount = data.msg.totalCount;
+        }else{
+          _this.tableData = [];
+          _this.totalCount = 0;
+          _this.$message({
+            type:"error",
+            message:data.msg
+          })
         }
       });
     },
@@ -318,11 +332,18 @@ export default {
       })
         .then(() => {
           delMember({ id: row.id }).then(res => {
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            this.userList(this.pageSize, this.pageNo);
+            if(res.data.success){
+               this.$message({
+                type: "success",
+                message:res.data.msg
+              });
+              this.userList(this.pageSize, this.pageNo);
+            }else{
+              this.$message({
+                type: "error",
+                message:res.data.msg
+              });
+            }
           });
         })
         .catch(() => {

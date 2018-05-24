@@ -42,7 +42,7 @@
                 <el-table-column prop="lrr" label="发布人" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="lrsj" label="发布时间" :formatter="formatterDatefbsj" show-overflow-tooltip></el-table-column>
                 <!-- <el-table-column prop="zt" label="状态" :formatter="ztDic" ></el-table-column> -->
-                <el-table-column prop="by3" label="状态"  :formatter="fwztDic"></el-table-column>
+                <el-table-column prop="by3" label="状态" :formatter="fwztDic"></el-table-column>
                 <el-table-column prop="by2" label="阅读数" show-overflow-tooltip>
                     <template slot-scope="scope">
                         <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
@@ -98,7 +98,7 @@ export default {
             ndoptions: [],
             editObj: {},
             fileList: [],
-            fwztoptions: [],
+            fwztoptions: []
         };
     },
     methods: {
@@ -137,16 +137,15 @@ export default {
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 name: row.name,
                 ydr: this.$store.state.user.user.uUser.nickname,
-                ydrId:this.$store.state.user.user.uUser.id,
+                ydrId: this.$store.state.user.user.uUser.id,
                 count: "1",
                 fwtzId: row.id
             };
             pageQueryAdd(obj).then(res => {
                 let data = res.data;
-                if(data.success){
+                if (data.success) {
                     this.ListQuery();
                 }
-
             });
         },
         listDel(row) {
@@ -182,7 +181,6 @@ export default {
         ydsClick(row) {
             this.pageModal = true;
             this.pageTit = "阅读人信息";
-
         },
         newToggle(val) {
             this.newModal = val;
@@ -197,18 +195,23 @@ export default {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
                 lx: "0",
-                by3:"1",
+                by3: "1",
                 nd: this.seatch_nd,
                 name: this.seatch_name,
-                jsdw:this.$store.state.user.user.uUser.bmbm,
-                xzqh:this.$store.state.user.user.uUser.xzqh,
-                read:this.seatch_fwzt
+                jsdw: this.$store.state.user.user.uUser.bmbm,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
+                read: this.seatch_fwzt
             };
             noticeQuery(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
                     this.fileList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },

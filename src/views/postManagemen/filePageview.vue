@@ -32,7 +32,7 @@ export default {
             pageSize: 10,
             pageNo: 1,
             totalCount: 0,
-            fwtzId:""
+            fwtzId: ""
         };
     },
     methods: {
@@ -43,7 +43,7 @@ export default {
             return getDicTab("bmbm", row.bmbm);
         },
         ydsjFormat(row) {
-            return formatDate( row.ydsj,"yyyy-MM-dd");
+            return formatDate(row.ydsj, "yyyy-MM-dd");
         },
         btn_cancel() {
             this.newModalToggle = false;
@@ -68,6 +68,11 @@ export default {
                 if (data.success) {
                     this.pageList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         }
@@ -83,7 +88,7 @@ export default {
         pageObj: {
             handler: function(val) {
                 this.fwtzId = val.fwtzId;
-                this.pageQueryList()
+                this.pageQueryList();
             },
             deep: true
         }

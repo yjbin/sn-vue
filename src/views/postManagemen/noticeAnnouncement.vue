@@ -211,6 +211,11 @@ export default {
                 if (data.success) {
                     this.fileList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },

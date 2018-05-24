@@ -2,20 +2,20 @@
     <div class="projectCollect">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="资金年度">
-                <el-select v-model="seatch_nd"  placeholder="请选择..." prefix-icon="el-icon-search">
+                <el-select v-model="seatch_nd" placeholder="请选择..." prefix-icon="el-icon-search">
                     <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="行政区划">
-                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.label" :value="item.value">
+                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search" @change="xzqhChange">
+                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="部门处室">
-                <el-select v-model="seatch_bmbm"  filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.label" :value="item.value">
+                <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -38,10 +38,10 @@
 
                 </el-table-column>
                 <el-table-column label="项目类别(万元)" show-overflow-tooltip>
-                    <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label" :key="item.id"></el-table-column>
+                    <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label" :key="item.id" :formatter="toFiexds"></el-table-column>
 
                 </el-table-column>
-                <el-table-column prop="heji" label="合计(万元)" show-overflow-tooltip width="150"></el-table-column>
+                <el-table-column prop="heji" label="合计(万元)" show-overflow-tooltip width="150" :formatter="toFiexds"></el-table-column>
             </el-table>
         </div>
     </div>
@@ -49,6 +49,7 @@
 <script>
 import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
+import { bmbmDict, xzqhDict } from "@/api/config";
 import { xmzeCount } from "@/api/statisticAnalysis/projectCollect";
 export default {
     data() {
@@ -67,30 +68,64 @@ export default {
         getXzqh(row) {
             return getDicTab("xzqh", row.xzqh);
         },
-        searchFun() {},
+        toFiexds(row, column, cellValue, index) {
+            let toFiexdNum = cellValue?Number(cellValue).toFixed(2):0
+
+            return toFiexdNum;
+        },
+        searchFun() {
+            this.xmzeCountList();
+        },
         xmzeCountList() {
             let obj = {
-                xzqh: this.$store.state.user.user.uUser.xzqh,
+                xzqh:
+                    this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
+                bmbm:
+                    this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                nd: this.seatch_nd,
                 lbcj: "1"
             };
             xmzeCount(obj).then(res => {
                 let data = res.data;
                 this.CollectList = data;
             });
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
+            });
         }
     },
     mounted() {
-
         this.ndOptions = doCreate("ndTit");
-        this.xzqhOptions = doCreate("xzqh");
-        this.bmbmOptions = doCreate("bmbm");
-        this.xzqhOptions.unshift({label:"全部",value:""});
-        this.bmbmOptions.unshift({label:"全部",value:""});
+
         treeQuery({ dicttype: "xmlb" }).then(res => {
             let data = res.data;
             this.columnList = data;
         });
         this.xmzeCountList();
+        this.intLoad();
     }
 };
 </script>

@@ -16,7 +16,7 @@
                         <span>项目统计</span>
                     </div>
                 </div>
-                <div v-show="zjOrxm" class="homeBigboxTopLeftright">
+                <div v-if="zjOrxm" class="homeBigboxTopLeftright">
                     <div class="homeBigboxTopLeftrightHeader">
                         资金统计
                     </div>
@@ -90,7 +90,7 @@
                     </div>
 
                 </div>
-                <div v-show="!zjOrxm" class="homeBigboxTopLeftright">
+                <div v-else class="homeBigboxTopLeftright">
                     <div class="homeBigboxTopLeftrightHeader">
                         项目统计
                     </div>

@@ -214,6 +214,11 @@ export default {
                 if (data.success) {
                     this.fileList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },
@@ -221,7 +226,6 @@ export default {
             this.multipleSelection = val;
         },
         fileRelease() {
-            console.log(this.multipleSelection);
             if (!this.multipleSelection.length) {
                 this.$message({
                     message: "请选择发布数据",
@@ -244,7 +248,7 @@ export default {
                         type: "success"
                     });
                     this.ListQuery();
-                }else{
+                } else {
                     this.$message({
                         message: data.msg,
                         type: "warning"

@@ -17,17 +17,31 @@
         </el-col>
       </el-row>
     </div>
-    <user-list @checkboxChange="checkboxChange" :listObj="listObj" :userDelP="userDelP"></user-list>
-    <user-listdialognew :newModal="newModal" :activeTab="activeTab" @newToggle="newToggle" :textTit="textTit" @upuserTable="upuserTable" :userData="userData"></user-listdialognew>
+    <div class="user-list">
+        <el-table :data="userTable" stripe border style="width: 100%" @selection-change="checkboxChange">
+        <el-table-column type="selection"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+        <el-table-column prop="nickname" label="用户名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="username" label="登录名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="rId" :formatter="usertypeDic" label="用户角色" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="zhdlsj" :formatter="formatterData" label="最后登录时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="cjr" label="创建人" show-overflow-tooltip></el-table-column>
+        </el-table>
+        <div class="user-page fr">
+            <el-pagination @current-change="handleCurrentChange" :current-page.sync="pageNo" :page-size="pageSize" layout="total, prev, pager, next" :total="totalCount">
+            </el-pagination>
+        </div>
+    </div>
+    <user-listdialognew :newModal="newModal" :activeTab="activeTab" @newToggle="newToggle" :textTit="textTit" :userData="userData" @addevent="addevent"></user-listdialognew>
   </div>
 </template>
 <script>
-import userList from "./user-list";
 import userListdialognew from "./user-listdialognew";
 import { userSearch, userByid, userDel } from "@/api/user";
+import { formatDate } from "@/utils/data";
+import { getDicTab } from "@/utils/config";
 export default {
     components: {
-        userList,
         userListdialognew
     },
     data() {
@@ -38,18 +52,17 @@ export default {
             textTit: "",
             userId: "",
             name: "",
-            pageSize: 10,
             pageNo: 1,
-            userDelP: 0,
+            pageSize: 10,
+            totalCount:0,
             userData: {},
-            listObj: {
-                userTab: [],
-                total: 0,
-                pageNo: 1
-            }
+            userTable: [],
         };
     },
     methods: {
+        addevent(val){
+            this.user_search();
+        },
         user_new() {
             this.newModal = true;
             this.textTit = "新建";
@@ -66,7 +79,7 @@ export default {
             if (this.checkBox.length) {
                 this.userId = this.checkBox[0].id;
                 this.dataFilling(_this.userId).then(res => {
-                    _this.userData = res;
+                    _this.userData = Object.assign({},res);
                 });
             }
         },
@@ -85,6 +98,7 @@ export default {
                     });
             });
         },
+        //删除用户
         user_del() {
             let userArr = [];
             let qData = {};
@@ -111,13 +125,18 @@ export default {
                         userDel(qData).then(res => {
                             let data = res.data;
                             if (data.success) {
-                                // this.user_search();
-                                this.userDelP = Math.random();
+                                this.user_search();
+                                 this.$message({
+                                    type: "success",
+                                    message: data.msg
+                                });
+                            }else{
+                                 this.$message({
+                                    type: "error",
+                                    message: data.msg
+                                });
                             }
-                            this.$message({
-                                type: "success",
-                                message: data.msg
-                            });
+                           
                         });
                     })
                     .catch(() => {
@@ -137,7 +156,7 @@ export default {
                         dangerouslyUseHTMLString: true
                     }
                 );
-                return;
+                return false
             } else if (this.checkBox.length > 1) {
                 this.$alert(
                     "<i class='el-icon-info'></i> 只能选择一个用户!",
@@ -146,36 +165,55 @@ export default {
                         dangerouslyUseHTMLString: true
                     }
                 );
+                return false
             } else {
                 this[modal] = true;
             }
         },
+        //查询
         user_search() {
             let _this = this;
             let obj = {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
                 xzqh: this.$store.state.user.user.uUser.xzqh,
-                name:this.name
             };
-            
+            this.name ? obj.name = this.name :""
             userSearch(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
-                    _this.listObj.userTab = data.data;
-                    _this.listObj.total = data.totalCount;
-                    _this.name = "";
+                    _this.userTable = data.data;
+                    _this.totalCount = data.totalCount;
+                }else{
+                     _this.userTable = [];
+                     _this.totalCount = 0;
+                     this.$message({
+                        type: "error",
+                        message: data.msg
+                    });
                 }
             });
         },
+        handleCurrentChange(val) {
+            this.pageNo = val;
+            this.user_search();
+        },
+        indexMethod(index) {
+            let start = (this.pageNo - 1) * this.pageSize;
+            return start + index + 1;
+        },
+        formatterData(row) {
+            return formatDate(row.zhdlsj, "yyyy-MM-dd");
+        },
+        usertypeDic(row) {
+          return getDicTab("role", row.rId);
+        },
         checkboxChange(checkBoxVal) {
             this.checkBox = checkBoxVal;
-        },
-        upuserTable() {
-            // this.listObj.userTab = Tab;
-            // this.listObj.total = tot;
-            this.userDelP = Math.random();
         }
+    },
+    mounted() {
+        this.user_search();
     }
 };
 </script>

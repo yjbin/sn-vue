@@ -7,16 +7,18 @@ export function dictionaries(key) {
     method: 'get'
   })
 }
-export function xzqhDict() {
+export function xzqhDict(obj) {
   return request({
     url: "/xzqh/selectAll",
-    method: 'post'
+    method: 'post',
+    data:obj?obj:{}
   })
 }
-export function bmbmDict() {
+export function bmbmDict(obj) {
   return request({
     url: "/dept/selectAllTo",
-    method: 'post'
+    method: 'post',
+    data:obj?obj:{}
   })
 }
 //多级下拉接口

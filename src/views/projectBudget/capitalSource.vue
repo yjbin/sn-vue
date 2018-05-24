@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="role-listdialog">
-            <el-dialog :title="zjlytit" :visible.sync="dialogVisible" :before-close="userClose">
+            <el-dialog :title="zjlytit" :visible.sync="dialogVisible" :before-close="userClose" :close-on-click-modal="false">
                 <div class="dict-content">
                     <el-form :inline="true" :model="zjlyForm" ref="zjlyForm" class="demo-form-inline" label-width="120px" :rules="rulesZjly">
                         <el-row>
@@ -202,7 +202,7 @@
         </div>
         <!-- 未挂接项目列表 -->
         <div class="role-listdialog">
-            <el-dialog :title="xmgjtit" :visible.sync="wgjVisible" :before-close="userClose" width="80%">
+            <el-dialog :title="xmgjtit" :visible.sync="wgjVisible" :before-close="userClose" width="80%" :close-on-click-modal="false">
                 <div class="user-list">
                     <el-table :data="xmList" stripe border style="width: 100%">
                         <el-table-column type="index" :index="indexMethod2" label="序号" width="80"></el-table-column>
@@ -237,7 +237,7 @@
             </el-dialog>
         </div>
         <div class="role-listdialog">
-            <el-dialog :title="gjxqtit" :visible.sync="ygjVisible" :before-close="userClose" width="70%">
+            <el-dialog :title="gjxqtit" :visible.sync="ygjVisible" :before-close="userClose" width="70%" >
 
                 <el-form :inline="true" class="demo-form-inline" :model="xmForm" label-width="110px">
                     <el-row>
@@ -611,6 +611,11 @@ export default {
                             message: data.msg
                         });
                         _this.zjlyQuery();
+                    } else {
+                        this.$message({
+                            message: data.msg,
+                            type: "warning"
+                        });
                     }
                 });
             });
@@ -628,12 +633,16 @@ export default {
             capotalQuery(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
-                    if(data.msg.data.length){
+                    if (data.msg.data.length) {
                         this.zjlyList = data.msg.data;
                         this.totalCount = data.msg.totalCount;
-                    }else{
+                    } else {
                         this.zjlyList = [];
                         this.totalCount = 0;
+                        this.$message({
+                            message: data.msg,
+                            type: "warning"
+                        });
                     }
                 }
             });
@@ -656,7 +665,7 @@ export default {
                             } else {
                                 this.$message({
                                     message: data.msg,
-                                    type: "success"
+                                    type: "warning"
                                 });
                             }
                         });
@@ -673,7 +682,7 @@ export default {
                             } else {
                                 this.$message({
                                     message: data.msg,
-                                    type: "success"
+                                    type: "warning"
                                 });
                             }
                         });
@@ -707,9 +716,14 @@ export default {
                                 fileStr: ""
                             };
                         }
-                    }else{
+                    } else {
                         this.xmForm = {};
                     }
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },
@@ -733,13 +747,21 @@ export default {
                 flag: "1"
             };
             xmlbList(obj).then(res => {
-                let resArr = [];
-                res.data.data.elements.map(i => {
-                    i.gjzjjeNew = 0;
-                    resArr.push(i);
-                });
-                this.xmList = resArr;
-                this.totalCount2 = res.data.data.totalCount;
+                let data = res.data;
+                if (data.success) {
+                    let resArr = [];
+                    data.data.elements.map(i => {
+                        i.gjzjjeNew = 0;
+                        resArr.push(i);
+                    });
+                    this.xmList = resArr;
+                    this.totalCount2 = res.data.data.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
+                }
             });
         },
         xmgjClick(row) {

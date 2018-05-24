@@ -150,24 +150,13 @@ export default {
       bm_model:false,
       tabToggle: "",
       text_Tit: "",
-      pageSize: 10,
-      pageNo: 1,
       xzqh_data:[],
       bm_data:[],
       userXzqh:"",
       bmbm:"",
       xzqh:"",
       model_Tit:"",
-      authoptions: [],
       typeoptions: [],
-      szbmoptions: [],
-      xzqhoptions: [],
-      zjoptions: [],
-      zcoptions: [],
-      lxoptions: [],
-      sstdoptions: [],
-      sexoptions: [],
-      ztoptions: [],
       userForm: {
         uUser: {
           nickname: "",
@@ -181,7 +170,7 @@ export default {
           xzqh: "",
           bmbm: ""
         },
-        uUserInfo: {
+         uUserInfo: {
           zc: "",
           lx: "",
           sstd: "",
@@ -213,10 +202,11 @@ export default {
       default: ""
     },
     userData: {
-      default: {}
+      default: ()=>{}
     }
   },
   methods: {
+    //查询部门树
     bmData(){
        treeQueryBm({xzqh:this.xzqh}).then(res => {
         let data = res.data;
@@ -236,20 +226,19 @@ export default {
               if (data) {
                   _this.xzqh_data = data;
                   // _this.$refs.multipleTable.toggleRowSelection(_this.xzqh,true);
-
               }
           })
         }else if(data=="bm"){
-          if(this.userForm.uUser.xzqh!==""){
+          if(this.userForm.uUser.xzqh != ""){
             this.bm_model = true;
             this.model_Tit = "部门编码";
             this.bmData();
           }else{
-             this.$message({
-                type: "danger",
-                message: "请返回先选择行政区划!"
+            this.$message({
+              type:"warning",
+              message:"请返回选择行政区划",
             });
-            return 
+            return false
           }
         }
       }
@@ -283,32 +272,30 @@ export default {
         if (valid) {
           this.userForm.uUser.xzqh = this.xzqh;
           this.userForm.uUser.bmbm = this.bmbm;
+          this.userForm.uUser.cjr = this.$store.getters.user.uUser.nickname;
           userAdd(this.userForm).then(res => {
             let data = res.data;
             if (data.success) {
               delete _this.userForm.uUser.id;
-              _this.btn_cancel();
-              // _this.userList(_this.pageSize, _this.pageNo);
-              this.$emit("upuserTable");
-               _this.bmbm = "";
-               _this.xzqh = "";
+                _this.btn_cancel();
+                _this.bmbm = "";
+                _this.xzqh = "";
+                _this.$message({
+                  message: data.msg,
+                  type: "success"
+                });
+                _this.$emit('addevent',Math.random());
+            }else{
+                _this.$message({
+                  message: data.msg,
+                  type: "error"
+                });
             }
-            this.$message({
-              message: data.msg,
-              type: "success"
-            });
           });
         }
       });
     },
-    userList(pageSize, pageNo) {
-      userSearch(pageSize, pageNo).then(res => {
-        let data = res.data;
-        if (data.success) {
-          this.$emit("upuserTable");
-        }
-      });
-    },
+    //解析用户角色
     userRole() {
       let dicMap = window.sessionStorage;
       roleSearch().then(res => {
@@ -323,22 +310,6 @@ export default {
         }
       });
     },
-    
-    
-  },
-  mounted() {
-    this.szbmoptions = doCreate("bmbm");
-    this.xzqhoptions = doCreate("xzqh");
-    this.zjoptions = doCreate("yhzt");
-    this.lxoptions = doCreate("lx");
-    this.sstdoptions = doCreate("sstd");
-    this.sexoptions = doCreate("sex");
-    this.ztoptions = doCreate("yhzt");
-    this.zcoptions = doCreate("zc");
-    this.userRole();
-    this.userXzqh = this.$store.state.user.user.uUser.xzqh;
-    this.userForm.uUser.cjr = this.$store.getters.user.uUser.nickname;
-    
   },
   watch: {
     newModal(val) {
@@ -350,14 +321,26 @@ export default {
       }
     },
     userData(val) {
-      this.xzqh =val.uUser.xzqh;
-      this.bmbm =val.uUser.bmbm;
-      let obj = Object.assign({},val.uUser);
-      obj.xzqh = getDicTab("xzqh", val.uUser.xzqh);
-      obj.bmbm = getDicTab("bmbm", val.uUser.xzqh+"-"+val.uUser.bmbm);
-      this.userForm.uUser=obj;
+      if(!(JSON.stringify(val) == '{}')){
+        this.xzqh =val.uUser.xzqh;
+        this.bmbm =val.uUser.bmbm;
+        let obj = Object.assign({},val.uUser);
+        obj.xzqh = getDicTab("xzqh", val.uUser.xzqh);
+        obj.bmbm = getDicTab("bmbm", val.uUser.xzqh+"-"+val.uUser.bmbm);
+        this.userForm.uUser= Object.assign({},obj);
+      }else{
+        if (this.$refs.userForm) {
+          this.$refs.userForm.resetFields();
+        }
+         this.userForm.uUser = {}
+      }
     }
-  }
+  },
+  mounted() {
+    this.userRole();
+    this.userXzqh = this.$store.state.user.user.uUser.xzqh;
+
+  },
 };
 </script>
 <style lang="scss" scoped>

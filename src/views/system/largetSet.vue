@@ -313,8 +313,18 @@ export default {
             searchData(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
-                    _this.tableData = data.msg.data;
-                    _this.totalCount = data.msg.totalCount;
+                    if(data.msg.data.length){
+                        _this.tableData = data.msg.data;
+                        _this.totalCount = data.msg.totalCount;
+                    }else{
+                        _this.tableData = [];
+                        _this.totalCount = 0;
+                    }                  
+                }else{
+                     _this.$message({
+                          message: data.msg,
+                          type: "error"
+                     })
                 }
             });
         },
@@ -340,6 +350,11 @@ export default {
                                         this.$message({
                                             message: data.msg,
                                             type: "success"
+                                        });
+                                    }else{
+                                        this.$message({
+                                            message: data.msg,
+                                            type: "error"
                                         });
                                     }
                                 });

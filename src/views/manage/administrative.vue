@@ -5,9 +5,9 @@
                 <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick" :expand-on-click-node="false">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <el-tooltip v-if="node.label.length>8" class="item" effect="dark" :content="node.label" placement="top">
-                            <span class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                            <span class="nodeLabel">{{ node.label }}</span>
                         </el-tooltip>
-                        <span v-else class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        <span v-else class="nodeLabel" >{{ node.label }}</span>
                         <span>
                             <i class="el-icon-plus" @click="() => append(data)"></i>
 
@@ -77,7 +77,6 @@ export default {
       const newChild = { label: "新增节点", bm: Number(data.bm) };
       data.children.push(newChild);
     },
-
     remove(node, data) {
       this.pureClick = false;
       // const parent = node.parent;
@@ -98,12 +97,21 @@ export default {
           type: "warning"
         })
           .then(() => {
-            this.$message({
-              type: "success",
-              message: "删除成功!"
+            deleteTree({ bm: data.bm }).then(res =>{
+              if(res.data.success){
+                this.$message({
+                  type: "success",
+                  message: res.data.msg
+                });
+                this.treeQuery();
+              }else{
+                this.$message({
+                  type: "error",
+                  message: res.data.msg
+                });
+              }
+              
             });
-            deleteTree({ bm: data.bm });
-            this.treeQuery();
           })
           .catch(() => {
             this.$message({

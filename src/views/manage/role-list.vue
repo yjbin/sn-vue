@@ -41,6 +41,13 @@ export default {
                 if (data.success) {
                     this.roleTable = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                }else{
+                    this.roleTable = [];
+                    this.totalCount = 0;
+                    this.$message({
+                        type: "error",
+                        message: data.msg
+                    });
                 }
             });
         }

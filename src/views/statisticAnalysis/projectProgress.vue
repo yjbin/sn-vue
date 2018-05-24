@@ -8,14 +8,14 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="行政区划">
-                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.label" :value="item.value">
+                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search"  @change="xzqhChange">
+                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="部门处室">
                 <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.label" :value="item.value">
+                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -69,6 +69,7 @@
 <script>
 import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
+import { bmbmDict,xzqhDict } from "@/api/config";
 import { xmjdSelect } from "@/api/statisticAnalysis/projectProgress";
 export default {
     data() {
@@ -86,41 +87,69 @@ export default {
         getXzqh(row) {
             return getDicTab("xzqh", row.xzqh);
         },
-        searchFun() {},
+        searchFun() {
+            this.xmjdSearch();
+        },
         xmjdSearch() {
             let obj = {
-                xzqh: this.$store.state.user.user.uUser.xzqh,
-                nd:2018
+                xzqh:this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                nd: this.seatch_nd
             };
             xmjdSelect(obj).then(res => {
                 let data = res.data;
                 data.map(i => {
-                    i.xmze1 = i["0-30"] ? i["0-30"].xmze : 0;
-                    i.count1 = i["0-30"] ? i["0-30"].count : 0;
+                    i.xmze1 = i["0-30"] ? Number(i["0-30"].xmze).toFixed(2) : 0;
+                    i.count1 = i["0-30"] ? Number(i["0-30"].count).toFixed(2) : 0;
                     i.bilv1 = i["0-30"] ? Number(i["0-30"].bilv).toFixed(2) : 0;
-                    i.xmze2 = i["30-50"] ? i["30-50"].xmze : 0;
-                    i.count2 = i["30-50"] ? i["30-50"].count : 0;
+                    i.xmze2 = i["30-50"] ? Number(i["30-50"].xmze).toFixed(2) : 0;
+                    i.count2 = i["30-50"] ? Number(i["30-50"].count).toFixed(2) : 0;
                     i.bilv2 = i["30-50"] ? Number(i["30-50"].bilv).toFixed(2) : 0;
-                    i.xmze3 = i["50-80"] ? i["50-80"].xmze : 0;
-                    i.count3 = i["50-80"] ? i["50-80"].count : 0;
+                    i.xmze3 = i["50-80"] ? Number(i["50-80"].xmze).toFixed(2) : 0;
+                    i.count3 = i["50-80"] ? Number(i["50-80"].count).toFixed(2) : 0;
                     i.bilv3 = i["50-80"] ? Number(i["50-80"].bilv).toFixed(2) : 0;
-                    i.xmze4 = i["80-100"] ? i["80-100"].xmze : 0;
-                    i.count4 = i["80-100"] ? i["80-100"].count : 0;
+                    i.xmze4 = i["80-100"] ? Number(i["80-100"].xmze).toFixed(2) : 0;
+                    i.count4 = i["80-100"] ? Number(i["80-100"].count).toFixed(2) : 0;
                     i.bilv4 = i["80-100"] ? Number(i["80-100"].bilv).toFixed(2) : 0;
-                    i.xmzehj = i.heji?i.heji.xmze:0;
-                    i.counthj =i.heji?i.heji.count:0;
-                    i.ybfhj = i.heji?i.heji.ybf:0;
+                    i.xmzehj = i.heji?Number(i.heji.xmze).toFixed(2):0;
+                    i.counthj =i.heji?Number(i.heji.count).toFixed(2):0;
+                    i.ybfhj = i.heji?Number(i.heji.ybf).toFixed(2):0;
                     return i;
                 });
                 this.dateList = data;
+            });
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
             });
         }
     },
     mounted() {
         this.columnList = doCreate("sycj");
         this.ndOptions = doCreate("ndTit");
-        this.xzqhOptions = doCreate("xzqh");
-        this.bmbmOptions = doCreate("bmbm");
+        this.intLoad();
         this.xmjdSearch();
     }
 };

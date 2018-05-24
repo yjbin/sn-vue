@@ -32,7 +32,7 @@ export default {
             pageSize: 10,
             pageNo: 1,
             totalCount: 0,
-            fwtzId:""
+            fwtzId: ""
         };
     },
     methods: {
@@ -52,7 +52,7 @@ export default {
         },
         handleCurrentChange(val) {
             this.pageNo = val;
-            this.pageQueryList()
+            this.pageQueryList();
         },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;
@@ -69,6 +69,11 @@ export default {
                 if (data.success) {
                     this.pageList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         }
@@ -87,7 +92,7 @@ export default {
         pageObj: {
             handler: function(val) {
                 this.fwtzId = val.fwtzId;
-                this.pageQueryList()
+                this.pageQueryList();
             },
             deep: true
         }

@@ -10,12 +10,6 @@
             <span @click="role_accredit">授权</span>
           </div>
         </el-col>
-        <!-- <el-col :span="6" :offset="6">
-          <div class="role-right">
-            <el-input placeholder="请输入内容" v-model="name"></el-input>
-            <el-button slot="append" icon="el-icon-search" @click="role_search"></el-button>
-          </div>
-        </el-col> -->
       </el-row>
     </div>
     <role-list @checkboxChange="checkboxChange" :roleTab="roleTab"></role-list>
@@ -90,11 +84,17 @@ export default {
                         let data = res.data;
                         if (data.success) {
                             this.role_search();
+                            this.$message({
+                                type: "success",
+                                message: data.msg
+                            });
+                        }else{
+                             this.$message({
+                                type: "error",
+                                message: data.msg
+                            });
                         }
-                        this.$message({
-                            type: "success",
-                            message: data.msg
-                        });
+                        
                     });
                 });
             }
@@ -105,6 +105,8 @@ export default {
                 if (data.success) {
                     this.roleTab = data.data;
                     this.name = "";
+                }else{
+                    this.roleTab = [];
                 }
             });
         },

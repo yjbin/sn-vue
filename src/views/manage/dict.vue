@@ -154,6 +154,10 @@ export default {
           this.dictData = data.data;
         }else{
           this.dictData = [];
+           this.$message({
+              message: data.msg,
+              type: "error"
+          })
         }
       });
     },
@@ -177,11 +181,17 @@ export default {
               this.bmValue = DicType;
               this.dictList();
               this.dialogVisible = false;
+               this.$message({
+                message: data.msg,
+                type: "success"
+              });
+            }else{
+              this.$message({
+                message: data.msg,
+                type: "error"
+              });
             }
-            this.$message({
-              message: data.msg,
-              type: "success"
-            });
+           
           });
         }
       });
@@ -235,11 +245,17 @@ export default {
               doCreate(dic);
               _this.bmValue = dic;
               _this.dictList();
+              this.$message({
+                type: "success",
+                message: data.msg
+              });
+            }else{
+                this.$message({
+                type: "error",
+                message: data.msg
+              });
             }
-            this.$message({
-              type: "success",
-              message: data.msg
-            });
+            
           });
         });
       }

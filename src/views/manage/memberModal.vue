@@ -15,7 +15,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="xzqh">
-                        <el-select v-model="userForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                        <el-select v-model="userForm.xzqh" placeholder="请选择相应单位" style="width:100%" :disabled="true">
                           <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
                         </el-select>
@@ -31,7 +31,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="bm">
-                        <el-select v-model="userForm.bm" placeholder="请选择" style="width:100%" :disabled="true">
+                        <el-select v-model="userForm.bm" placeholder="请选择相应单位" style="width:100%" :disabled="true">
                           <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
                         </el-select>
@@ -49,7 +49,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="name">
-                        <el-input v-model="userForm.name"></el-input>
+                        <el-input v-model.trim="userForm.name"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -93,11 +93,11 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="zzmm">
-                        <el-input v-model="userForm.zzmm"></el-input>
-                        <!-- <el-select v-model="userForm.zzmm" placeholder="请选择">
-                          <el-option v-for="(item,index) in zjoptions" :key="index" :label="item.label" :value="item.value">
+                        <!-- <el-input v-model="userForm.zzmm"></el-input> -->
+                        <el-select v-model="userForm.zzmm" placeholder="请选择">
+                          <el-option v-for="(item,index) in zzmmptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
-                        </el-select> -->
+                        </el-select>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -180,16 +180,23 @@
 // import { doCreate } from "@/utils/config";
 // import { userAdd, userSearch } from "@/api/user";
 // import { roleSearch } from "@/api/role";
-// import { validPassword } from "@/utils/validate";
+import { validContact,validName } from "@/utils/validate";
 import { doCreate } from "@/utils/config";
 import { findRoles, addMember, delMember } from "@/api/department";
 export default {
     data() {
-        const PassWord = (rule, value, callback) => {
-            if (!validPassword(value)) {
-                callback(new Error("密码由6-20字母和数字组成"));
-            } else {
+         const checkTel = (rule, value, callback) => {
+            if (validContact(value)) {
                 callback();
+            } else {
+                callback(new Error("请输入正确的联系方式"));
+            }
+        };
+         const checkName = (rule, value, callback) => {
+            if (validName(value)) {
+                callback();
+            } else {
+                callback(new Error("请输入合法的姓名"));
             }
         };
         return {
@@ -217,10 +224,10 @@ export default {
             rulesUser: {
                 xzqh: [{ required: true, message: "不能为空" }],
                 bm: [{ required: true, message: "不能为空" }],
-                rId: [{ required: true, message: "不能为空" }],
-                name: [{ required: true, message: "不能为空" }],
+                rId: [{  required: true,message: "不能为空" }],
+                name: [{required: true,validator:checkName ,trigger: 'blur'}],
                 zzmm: [{ required: true, message: "不能为空" }],
-                tel: [{ required: true, message: "不能为空" }],
+                tel: [{ required: true,validator: checkTel}],
                 zw: [{ required: true, message: "不能为空" }]
             }
         };
@@ -245,6 +252,7 @@ export default {
             this.btn_cancel();
         },
         userbtn_save() {
+            let _this = this;
             this.$refs.userForm2.validate(valid => {
                 if (valid) {
                     let url = "update";
@@ -254,15 +262,20 @@ export default {
                     addMember(this.userForm, url).then(res => {
                         let data = res.data;
                         if (data.success) {
-                            this.$message({
+                            _this.$message({
                                 message: data.msg,
                                 type: "success"
                             });
-                            this.btn_cancel();
-                            let obj = {};
-                            obj.xzqh = this.userForm.xzqh;
-                            obj.bm = this.userForm.bm;
-                            this.$emit("groupMember", obj);
+                            _this.btn_cancel();
+                            _this.$emit("groupMember", 1);
+                            if (this.$refs.userForm2) {
+                                this.$refs.userForm2.resetFields();
+                            }
+                        }else{
+                           _this.$message({
+                                message: data.msg,
+                                type: "error"
+                            });
                         }
                     });
                 }
@@ -275,6 +288,7 @@ export default {
         this.bmbmoptions = doCreate("bmbm");
         this.xboptions = doCreate("xb");
         this.zwlxoptions = doCreate("zwlx");
+        this.zzmmptions = doCreate("zzmm");
         // this.userRole();
         // this.userForm.uUser.cjr = this.$store.getters.user.uUser.nickname;
     },
@@ -288,9 +302,6 @@ export default {
             this.userForm.xzqh = this.xzqh ? this.xzqh : "";
             this.userForm.bm = this.bm ? (this.xzqh+"-"+this.bm) : "";
         },
-        //  groupObj(val){
-        //     this.userForm = val
-        // },
         groupObj: {
             handler: function(val) {
                 this.userForm = Object.assign({}, val);

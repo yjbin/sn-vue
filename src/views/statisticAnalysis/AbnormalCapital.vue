@@ -8,14 +8,14 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="行政区划">
-                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.label" :value="item.value">
+                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search"  @change="xzqhChange">
+                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="部门处室">
                 <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.label" :value="item.value">
+                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -36,14 +36,14 @@
             <el-table :data="dateList" stripe border show-summary style="width: 100%">
                 <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip width="150"></el-table-column>
                 <el-table-column label="异常类型">
-                    <el-table-column label="大额拨付" prop="debf" show-overflow-tooltip>
+                    <el-table-column label="大额拨付" prop="debf"  :formatter="toFiexds" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column  label="超标拨付" prop="cbbf" show-overflow-tooltip>
+                    <el-table-column  label="超标拨付" prop="cbbf" :formatter="toFiexds" show-overflow-tooltip>
                     </el-table-column>
-                    <el-table-column label="超期资金" prop="cqzj" show-overflow-tooltip>
+                    <el-table-column label="超期资金" prop="cqzj" :formatter="toFiexds" show-overflow-tooltip>
                     </el-table-column>
                 </el-table-column>
-                <el-table-column label="合计(万元)" prop="heji" width="150">
+                <el-table-column label="合计(万元)" prop="heji" :formatter="toFiexds" width="150">
                 </el-table-column>
             </el-table>
         </div>
@@ -52,6 +52,7 @@
 <script>
 import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
+import { bmbmDict,xzqhDict } from "@/api/config";
 import { zjycSelect } from "@/api/statisticAnalysis/abnormalCapital";
 export default {
     data() {
@@ -69,32 +70,63 @@ export default {
         getXzqh(row) {
             return getDicTab("xzqh", row.xzqh);
         },
+        toFiexds(row, column, cellValue, index) {
+            let toFiexdNum = cellValue?Number(cellValue).toFixed(2):0
+
+            return toFiexdNum;
+        },
         searchFun() {
             this.zjycSearch();
         },
         zjycSearch() {
             let obj = {
-                xzqh: this.$store.state.user.user.uUser.xzqh,
-                nd:this.seatch_nd || 2018
+                xzqh:this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                nd: this.seatch_nd
             };
             zjycSelect(obj).then(res => {
                 let data = res.data;
                 data.map(i => {
-                    i.debf ? i.debf = i.debf : i.debf = 0;
-                    i.cqzj ? i.cqzj = i.cqzj : i.cqzj = 0;
-                    i.cbbf ? i.cbbf = i.cbbf : i.cbbf = 0;
+                    i.debf ? i.debf = Number(i.debf).toFixed(2) : i.debf = 0;
+                    i.cqzj ? i.cqzj = Number(i.cqzj).toFixed(2) : i.cqzj = 0;
+                    i.cbbf ? i.cbbf = Number(i.cbbf).toFixed(2) : i.cbbf = 0;
                     return i
                 });
                 this.dateList = data;
+            });
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
             });
         }
     },
     mounted() {
         this.columnList = doCreate("sycj");
         this.ndOptions = doCreate("ndTit");
-        this.xzqhOptions = doCreate("xzqh");
-        this.bmbmOptions = doCreate("bmbm");
         this.zjycSearch();
+        this.intLoad();
     }
 };
 </script>

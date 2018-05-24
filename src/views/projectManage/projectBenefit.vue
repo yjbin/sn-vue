@@ -63,7 +63,7 @@
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="xyEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="xyDel(scope.row)">删除</el-button>
+              <el-button size="mini" type="danger" @click="xyDel(scope.row)" :disabled="(scope.row.bmbm == this.userBmbm?true:false)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -448,14 +448,23 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                    xmxyDel({ id: row.id }).then(() => {
-                        this.$message({
+                    xmxyDel({ id: row.id }).then(res => {
+                      let data = res.data;
+                      if(data.success){
+                         this.$message({
                             type: "success",
-                            message: "删除成功!"
+                            message: data.msg
                         });
                         this.$refs.xmxyFrom.resetFields();
                         this.detailModel();
                         this.xmjdFromInt();
+                      }else{
+                        this.$message({
+                            type: "warning",
+                            message: data.msg
+                        });
+                      }
+                       
                     });
                 })
                 .catch(() => {
@@ -485,6 +494,11 @@ export default {
                     _this.$message({
                         message: data.msg,
                         type: "success"
+                    });
+                } else {
+                    _this.$message({
+                        message: data.msg,
+                        type: "warning"
                     });
                 }
             });

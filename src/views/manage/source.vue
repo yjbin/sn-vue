@@ -5,9 +5,9 @@
                 <el-tree :data="treeData" node-key="id" ref="tree" default-expand-all @node-click="nodeClick">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <el-tooltip v-if="node.label.length>8" class="item" effect="dark" :content="node.label" placement="top">
-                            <span class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                            <span class="nodeLabel">{{ node.label }}</span>
                         </el-tooltip>
-                        <span v-else class="nodeLabel" @mouseenter.stop="dataDetails">{{ node.label }}</span>
+                        <span v-else class="nodeLabel">{{ node.label }}</span>
                         <span>
                             <i class="el-icon-plus" @click.stop="() => append(data)"></i>
                             <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
@@ -105,12 +105,20 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                    treeDel({ id: data.id }).then(() => {
-                        this.$message({
-                            type: "success",
-                            message: "删除成功!"
-                        });
-                        this.treeQuery();
+                    treeDel({ id: data.id }).then(res => {
+                        if(res.success){
+                            this.$message({
+                                type: "success",
+                                message: res.data.msg
+                            });
+                            this.treeQuery();
+                        }else{
+                            this.$message({
+                                type: "success",
+                                message: res.data.msg
+                            });
+                        }
+                        
                     });
                 })
                 .catch(() => {
@@ -133,9 +141,10 @@ export default {
         treeQuery() {
             treeQuery().then(res => {
                 let data = res.data;
-
-                this.treeData = data;
-                this.formData = data[0];
+                if(data){
+                    this.treeData = data;
+                    this.formData = data[0];
+                } 
             });
         },
         formSave() {
@@ -143,7 +152,6 @@ export default {
                 if (valid) {
                     let _this = this;
                     let url = "edit"; //ResponseTree
-
                     let obj = Object.assign({}, this.formData);
                     obj.label = obj.pName;
                     delete obj.pName;
@@ -165,6 +173,11 @@ export default {
                             _this.$message({
                                 message: data.msg,
                                 type: "success"
+                            });
+                        }else{
+                            _this.$message({
+                                message: data.msg,
+                                type: "error"
                             });
                         }
                     });

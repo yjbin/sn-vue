@@ -123,12 +123,19 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                    treeDel({ id: data.id }).then(() => {
-                        this.$message({
-                            type: "success",
-                            message: "删除成功!"
-                        });
-                        this.treeQuery(this.typeVal);
+                    treeDel({ id: data.id }).then(res => {
+                        if(res.success){
+                            this.$message({
+                                type: "success",
+                                message: res.data.msg
+                            });
+                            this.treeQuery(this.typeVal);
+                        }else{
+                            this.$message({
+                                type: "error",
+                                message: res.data.msg
+                            });
+                        }
                     });
                 })
                 .catch(() => {
@@ -177,6 +184,11 @@ export default {
                             _this.$message({
                                 message: data.msg,
                                 type: "success"
+                            });
+                        }else{
+                             _this.$message({
+                                message: data.msg,
+                                type: "error"
                             });
                         }
                     });

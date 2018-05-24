@@ -8,14 +8,14 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="行政区划">
-                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.label" :value="item.value">
+                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search"  @change="xzqhChange">
+                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="部门处室">
                 <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.label" :value="item.value">
+                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -38,16 +38,16 @@
 
                 </el-table-column>
                 <el-table-column label="资金级别" show-overflow-tooltip>
-                    <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label+'(万元)'" :key="item.value"></el-table-column>
+                    <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label+'(万元)'" :key="item.value" :formatter="toFiexds"></el-table-column>
                 </el-table-column>
                 <el-table-column label="合计" show-summary show-overflow-tooltip>
-                    <el-table-column label="总额" prop="ze" show-overflow-tooltip>
+                    <el-table-column label="总额" prop="ze" :formatter="toFiexds" show-overflow-tooltip>
 
                     </el-table-column>
-                    <el-table-column label="已拨付" prop="ybf" show-overflow-tooltip>
+                    <el-table-column label="已拨付" prop="ybf" :formatter="toFiexds" show-overflow-tooltip>
 
                     </el-table-column>
-                    <el-table-column label="拨付比率%" prop="bilv" show-overflow-tooltip>
+                    <el-table-column label="拨付比率%" prop="bilv" :formatter="toFiexds" show-overflow-tooltip>
 
                     </el-table-column>
                 </el-table-column>
@@ -58,6 +58,7 @@
 <script>
 import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
+import { bmbmDict,xzqhDict } from "@/api/config";
 import { selectZjFb } from "@/api/statisticAnalysis/projectFund";
 export default {
     data() {
@@ -76,10 +77,19 @@ export default {
         getXzqh(row) {
             return getDicTab("xzqh", row.xzqh);
         },
-        searchFun() {},
+        searchFun() {
+            this.ZjFbCountList();
+        },
+        toFiexds(row, column, cellValue, index) {
+            let toFiexdNum = cellValue?Number(cellValue).toFixed(2):0
+        
+            return toFiexdNum;
+        },
         ZjFbCountList() {
             let obj = {
-                xzqh: this.$store.state.user.user.uUser.xzqh
+                xzqh:this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                nd: this.seatch_nd
             };
             selectZjFb(obj).then(res => {
                 let data = res.data;
@@ -92,14 +102,37 @@ export default {
 
                 this.CollectList = data;
             });
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
+            });
         }
     },
     mounted() {
         this.ndOptions = doCreate("ndTit");
-        this.xzqhOptions = doCreate("xzqh");
-        this.bmbmOptions = doCreate("bmbm");
-        this.xzqhOptions.unshift({ label: "全部", value: "" });
-        this.bmbmOptions.unshift({ label: "全部", value: "" });
+        this.intLoad();
         this.columnList = doCreate("zjjb");
         this.ZjFbCountList();
     }

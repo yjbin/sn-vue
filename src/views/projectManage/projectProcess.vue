@@ -279,7 +279,7 @@ export default {
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
-                xzqh:this.$store.state.user.user.uUser.xzqh
+                xzqh: this.$store.state.user.user.uUser.xzqh
                 // xzqh: this.$store.state.user.user.uUser.xzqh,
                 // bm: this.$store.state.user.user.uUser.bmbm,
                 // fgks: "0"
@@ -287,10 +287,10 @@ export default {
             this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
             xmlbList(obj).then(res => {
-                if(res.data.data.elements.length){
-                     this.xmgsList = res.data.data.elements;
-                     this.totalCount = res.data.data.totalCount;
-                }else{
+                if (res.data.data.elements.length) {
+                    this.xmgsList = res.data.data.elements;
+                    this.totalCount = res.data.data.totalCount;
+                } else {
                     this.xmgsList = [];
                     this.totalCount = 0;
                 }
@@ -329,7 +329,7 @@ export default {
                             } else {
                                 this.$message({
                                     message: data.msg,
-                                    type: "success"
+                                    type: "warning"
                                 });
                             }
                         });
@@ -356,7 +356,7 @@ export default {
                             } else {
                                 this.$message({
                                     message: data.msg,
-                                    type: "success"
+                                    type: "warning"
                                 });
                             }
                         });
@@ -367,7 +367,6 @@ export default {
         xmjdEdit(row) {
             this.$refs.xmjdFrom.resetFields();
             let obj = Object.assign({}, row);
-            
 
             this.xmjdFrom = obj;
 
@@ -386,16 +385,23 @@ export default {
                 .then(() => {
                     xmjdDell({ id: row.id }).then(res => {
                         let data = res.data;
-                        this.$message({
-                            message: data.msg,
-                            type: "success"
-                        });
-                        this.xmjdFrom = {};
-                        this.changeModal();
-                        this.$refs.xmjdFrom.resetFields();
-                        this.xmjdFromInt();
+                        if (data.success) {
+                            this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                            this.xmjdFrom = {};
+                            this.changeModal();
+                            this.$refs.xmjdFrom.resetFields();
+                            this.xmjdFromInt();
 
-                        this.addUpdatePd = true;
+                            this.addUpdatePd = true;
+                        } else {
+                            this.$message({
+                                message: data.msg,
+                                type: "warning"
+                            });
+                        }
                     });
                 })
                 .catch(() => {
@@ -424,7 +430,7 @@ export default {
                 this.$refs.xmjdFrom.resetFields();
                 this.xmjdFromInt();
             }
-            
+
             let obj = {
                 pageNo: this.pageNo2,
                 pageSize: this.pageSize2,

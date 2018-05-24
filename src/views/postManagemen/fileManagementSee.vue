@@ -147,6 +147,11 @@ export default {
                 let data = res.data;
                 if (data.success) {
                     this.ListQuery();
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },
@@ -201,7 +206,7 @@ export default {
                 nd: this.seatch_nd,
                 name: this.seatch_name,
                 jsdw: this.$store.state.user.user.uUser.bmbm,
-                xzqh:this.$store.state.user.user.uUser.xzqh,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
                 read: this.seatch_fwzt
             };
             fileQuery(obj).then(res => {
@@ -209,6 +214,11 @@ export default {
                 if (data.success) {
                     this.fileList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
+                } else {
+                    this.$message({
+                        message: data.msg,
+                        type: "warning"
+                    });
                 }
             });
         },

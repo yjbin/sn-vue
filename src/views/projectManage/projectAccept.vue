@@ -1,18 +1,18 @@
 <template>
     <div class="AcceptinstiuTion">
         <div v-bind:class="{boxFist:fistActive}">
-             <el-form :inline="true" class="demo-form-inline">
+            <el-form :inline="true" class="demo-form-inline">
                 <el-form-item label="年度">
-                <el-select v-model="seatch_nd" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
-                    <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select>
+                    <el-select v-model="seatch_nd" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in ndOptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="项目名称">
-                <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
+                    <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
                 </el-form-item>
                 <el-form-item>
-                <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
+                    <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
                 </el-form-item>
             </el-form>
             <div class="user-list">
@@ -26,7 +26,7 @@
                     <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="ljsdzj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
-                    <el-table-column  label="操作" width="150">
+                    <el-table-column label="操作" width="150">
                         <template slot-scope="scope">
                             <el-button size="mini" type="primary" @click="changeModal(scope.row)">验收</el-button>
                         </template>
@@ -64,7 +64,7 @@
                     <el-table-column label="操作" width="150">
                         <template slot-scope="scope">
                             <el-button size="mini" type="primary" @click="xmjdEdit(scope.row)">编辑</el-button>
-                            <el-button size="mini" type="danger" @click="xmjdDel(scope.row)">删除</el-button>
+                            <el-button size="mini" type="danger" @click="xmjdDel(scope.row)" :disabled="(scope.row.bmbm == this.userBmbm?true:false)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -80,7 +80,7 @@
                             <span>验收详情</span>
                         </div>
                     </el-col>
-                    <el-button class="backBtn" size="mini" type="success"   @click="xmjdAddInt()" >新增</el-button>
+                    <el-button class="backBtn" size="mini" type="success" @click="xmjdAddInt()">新增</el-button>
                 </el-row>
             </div>
             <el-form :inline="true" :model="xmysFrom" ref="xmysFrom" class="demo-form-inline" label-width="100px" :rules="rulesXmys">
@@ -201,7 +201,7 @@ export default {
             seatch_nd: "",
             seatch_name: "",
             fistActive: false,
-            yesNoUpdara: false,
+            yesNoUpdara: true,
             secondActive: true,
             newModal: false,
             editModal: false,
@@ -219,17 +219,17 @@ export default {
             xmid: "",
             xmmc: "",
             xmbh: "",
-            userBmbm:this.$store.state.user.user.uUser.bmbm,
+            userBmbm: this.$store.state.user.user.uUser.bmbm,
             rulesXmys: {
                 ysr: [{ required: true, message: "不能为空" }],
                 yssj: [{ required: true, message: "不能为空" }],
                 ysjg: [{ required: true, message: "不能为空" }]
             },
             //附件
-            accessoryModalInt:false,
+            accessoryModalInt: false,
             upShowhide: true,
             textTitFile: "",
-            fileSrc:"",
+            fileSrc: ""
         };
     },
     methods: {
@@ -284,10 +284,10 @@ export default {
             let obj = {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
-                bmbm:this.$store.state.user.user.uUser.bmbm,
-                xmlx:"0",
-                flag:"1",
-                xzqh: this.$store.state.user.user.uUser.xzqh,
+                bmbm: this.$store.state.user.user.uUser.bmbm,
+                xmlx: "0",
+                flag: "1",
+                xzqh: this.$store.state.user.user.uUser.xzqh
                 // bm: this.$store.state.user.user.uUser.bmbm,
                 // fgks: "0"
             };
@@ -296,8 +296,10 @@ export default {
             xmlbList(obj).then(res => {
                 let data = res.data.data.elements;
                 data.forEach(function(item) {
-                    item.ljsdzj ? item.ljsdzj = item.ljsdzj : item.ljsdzj ="0";
-                })
+                    item.ljsdzj
+                        ? (item.ljsdzj = item.ljsdzj)
+                        : (item.ljsdzj = "0");
+                });
                 this.xmgsList = data;
                 this.totalCount = res.data.data.totalCount;
             });
@@ -327,7 +329,7 @@ export default {
                             } else {
                                 _this.$message({
                                     message: data.msg,
-                                    type: "success"
+                                    type: "warning"
                                 });
                             }
                         });
@@ -349,7 +351,7 @@ export default {
                             } else {
                                 _this.$message({
                                     message: data.msg,
-                                    type: "success"
+                                    type: "warning"
                                 });
                             }
                         });
@@ -358,26 +360,26 @@ export default {
             });
         },
         xmjdEdit(row) {
-            if(this.$refs.xmysFrom){     
+            if (this.$refs.xmysFrom) {
                 this.$refs.xmysFrom.resetFields();
             }
-            this.xmysFrom =  Object.assign({}, row);
+            this.xmysFrom = Object.assign({}, row);
             this.addUpdatePd = false;
-            if(row.bmbm==this.userBmbm){
-                this.yesNoUpdara = true
-            }else{
-                this.yesNoUpdara = false
+            if (row.bmbm == this.userBmbm) {
+                this.yesNoUpdara = true;
+            } else {
+                this.yesNoUpdara = false;
             }
-            if(row.fj){
-              this.fileSrc = {
-                            num: Math.random(),
-                            fileStr:this.xmysFrom.fj
-                        };
-            }else{
-               this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: ""
-                        };
+            if (row.fj) {
+                this.fileSrc = {
+                    num: Math.random(),
+                    fileStr: this.xmysFrom.fj
+                };
+            } else {
+                this.fileSrc = {
+                    num: Math.random(),
+                    fileStr: ""
+                };
             }
         },
         xmjdDel(row) {
@@ -387,19 +389,25 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                   xmysDell({ id: row.id }).then(res => {
+                    xmysDell({ id: row.id }).then(res => {
                         let data = res.data;
-                        this.$message({
-                            message: data.msg,
-                            type: "success"
-                        });
-                        this.xmysFrom = {};
-                        this.$refs.xmysFrom.resetFields();
-                        this.changeModal();
-                        this.xmysFromInt();
-                        this.addUpdatePd = true;
+                        if (data.success) {
+                            this.$message({
+                                message: data.msg,
+                                type: "success"
+                            });
+                            this.xmysFrom = {};
+                            this.$refs.xmysFrom.resetFields();
+                            this.changeModal();
+                            this.xmysFromInt();
+                            this.addUpdatePd = true;
+                        } else {
+                            this.$message({
+                                message: data.msg,
+                                type: "warning"
+                            });
+                        }
                     });
-                  
                 })
                 .catch(() => {
                     this.$message({
@@ -407,13 +415,12 @@ export default {
                         message: "已取消删除"
                     });
                 });
-            
         },
         xmjdAddInt() {
             this.xmysFrom = {};
             this.$refs.xmysFrom.resetFields();
             this.addUpdatePd = true;
-            this.yesNoUpdara = true
+            this.yesNoUpdara = true;
             this.xmysFromInt();
         },
         changeModal(row) {
@@ -422,7 +429,7 @@ export default {
                 this.xmmc = row.xmmc;
                 this.xmbh = row.xmbh;
                 this.xmysFrom = {};
-                if(this.$refs.xmysFrom){     
+                if (this.$refs.xmysFrom) {
                     this.$refs.xmysFrom.resetFields();
                 }
                 this.xmysFromInt();
@@ -450,10 +457,10 @@ export default {
         },
         xmysFromInt() {
             this.getNowDate();
-             this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: ""
-                        };
+            this.fileSrc = {
+                num: Math.random(),
+                fileStr: ""
+            };
             this.xmysFrom.xmmc = this.xmmc;
             this.xmysFrom.xmbh = this.xmbh;
             this.xmysFrom.xzqh = this.$store.state.user.user.uUser.xzqh;
@@ -478,10 +485,10 @@ export default {
         this.bmbmoptions = doCreate("bmbm");
         this.getList();
         this.addUpdatePd = true;
-         this.fileSrc = {
-                            num: Math.random(),
-                            fileStr: ""
-                        };
+        this.fileSrc = {
+            num: Math.random(),
+            fileStr: ""
+        };
     }
 };
 </script>
