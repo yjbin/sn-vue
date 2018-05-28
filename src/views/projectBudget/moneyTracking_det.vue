@@ -307,6 +307,7 @@ export default {
       };
       if (option) {
         obj.xmid = option;
+        this.xmbfList = [];
         appropRecord(obj).then(res => {
           if (res.data.msg.data.length) {
             this.xmbfList = res.data.msg.data;
@@ -332,6 +333,7 @@ export default {
       };
       if (option) {
         obj.xmid = option;
+        this.xmjdList = [];
         xmjdSelect(obj).then(res => {
           if (res.data.msg.data.length) {
             this.xmjdList = res.data.msg.data;
@@ -357,6 +359,7 @@ export default {
       };
       if (option) {
         obj.xmId = option;
+        this.xmysListDate = [];
         xmysSelect(obj).then(res => {
           if (res.data.msg.data.length) {
             this.xmysListDate = res.data.msg.data;
@@ -389,6 +392,7 @@ export default {
       };
       if (option) {
         obj.xmId = option;
+        this.xmxyList = [];
         xmxySelect(obj).then(res => {
           if (res.data.msg.data.length) {
             this.xmxyList = res.data.msg.data;
@@ -421,6 +425,7 @@ export default {
       };
       if (option) {
         obj.xmId = option;
+        this.xmkhList = [];
         assessSelect(obj).then(res => {
           if (res.data.msg.data.length) {
             this.xmkhList = res.data.msg.data;

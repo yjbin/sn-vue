@@ -122,6 +122,11 @@ export default {
                         this.tableData = [];
                         this.totalCount = 0;
                     }
+                }else{
+                    this.$message({
+                        message: data.msg,
+                        type: 'error'
+                    });
                 }
             });
         },

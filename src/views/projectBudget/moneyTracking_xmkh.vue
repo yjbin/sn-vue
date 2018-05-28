@@ -41,7 +41,7 @@
           </el-col>
           <el-col :span="9" :offset="2">
             <el-form-item label="录入时间">
-              <el-date-picker type="datetime" v-model="xmkhFrom.lrsj" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
+              <el-date-picker type="datetime" v-model="xmkhFrom.lrsj" placeholder="录入时间" value-format="timestamp" :disabled="true" style="width:100%"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -54,7 +54,7 @@
           </el-col>
           <el-col :span="9" :offset="2">
             <el-form-item label="考核时间">
-              <el-date-picker type="datetime" v-model="xmkhFrom.khsj" placeholder="考核时间" disabled></el-date-picker>
+              <el-date-picker type="datetime" v-model="xmkhFrom.khsj" placeholder="考核时间" value-format="timestamp" disabled></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>

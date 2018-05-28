@@ -157,7 +157,7 @@
             <el-row>
                 <el-col :span="20" :offset="2">
                     <el-form-item label="限定使用时间" prop="xdsysj">
-                        <el-date-picker v-model="moneyFrom.xdsysj" type="datetime" placeholder="限定使用时间"></el-date-picker>
+                        <el-date-picker v-model="moneyFrom.xdsysj" type="date" placeholder="限定使用时间"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -203,7 +203,7 @@ export default {
             secondPage: true,
             pageNo: 1,
             pageSize: 10,
-            totalCount: 1,
+            totalCount: 0,
             rulesMoney: {
                 wh: [{ required: true, trigger: "blur"}],
             }
@@ -283,6 +283,7 @@ export default {
     },
     mounted() {
         this.fromInt();
+        this.getList();
     }
 };
 </script>

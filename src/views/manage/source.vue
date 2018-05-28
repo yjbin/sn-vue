@@ -9,8 +9,12 @@
                         </el-tooltip>
                         <span v-else class="nodeLabel">{{ node.label }}</span>
                         <span>
-                            <i class="el-icon-plus" @click.stop="() => append(data)"></i>
-                            <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                            <el-tooltip class="item" effect="dark" content="添加下级" placement="top">
+                                <i class="el-icon-plus" @click.stop="() => append(data)"></i>
+                            </el-tooltip>
+                              <el-tooltip class="item" effect="dark" content="添加本级" placement="top">
+                                <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
+                            </el-tooltip>        
                             <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
                         </span>
                     </span>

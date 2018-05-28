@@ -22,7 +22,7 @@
             <el-table-column prop="kssj" label="开始时间" :formatter="formatterDatekssj" show-overflow-tooltip></el-table-column>
             <el-table-column prop="jssj" label="结束时间" :formatter="formatterDatejssj" show-overflow-tooltip></el-table-column>
             <el-table-column prop="lrr" label="录入人" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="lrsj" label="录入时间" :formatter="formatterDatelrsj" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lrsj" label="录入时间"  show-overflow-tooltip></el-table-column>
             <el-table-column prop="wgnr" label="完工内容" show-overflow-tooltip></el-table-column>
           </el-table>
           <div class="mar10 fr">
@@ -214,8 +214,6 @@ export default {
                     this.searchList.zjId = val.zjId;
                     this.searchList.bmbm = val.bmbm;
                     this.getXmgkDate(
-                        this.xmbfFrom.pageNo,
-                        this.xmbfFrom.pageSize,
                         this.searchList
                     );
                     this.activeName = "first_one";
@@ -239,11 +237,11 @@ export default {
             return getDicTab("bmbm", row.bmbm);
         },
         //项目概述查询xmid
-        getXmgkDate(pageNo, pageSize, option) {
+        getXmgkDate(option) {
             let _this = this;
             let obj = {
-                pageNo: pageNo,
-                pageSize: pageSize
+                pageNo: this.xmbfFrom.pageNo,
+                pageSize: this.xmbfFrom.pageSize,
             };
             option.zjId ? (obj.zjId = option.zjId) : "";
             option.bmbm ? (obj.bmbm = option.bmbm) : "";
@@ -310,6 +308,7 @@ export default {
             };
             if (option) {
                 obj.xmid = option;
+                this.xmbfList = [];
                 appropRecord(obj).then(res => {
                     if (res.data.msg.data.length) {
                         this.xmbfList = res.data.msg.data;
@@ -335,6 +334,7 @@ export default {
             };
             if (option) {
                 obj.xmid = option;
+                this.xmjdList = [];
                 xmjdSelect(obj).then(res => {
                     if (res.data.msg.data.length) {
                         this.xmjdList = res.data.msg.data;
@@ -360,6 +360,7 @@ export default {
             };
             if (option) {
                 obj.xmId = option;
+                this.xmysListDate = [];
                 xmysSelect(obj).then(res => {
                     if (res.data.msg.data.length) {
                         this.xmysListDate = res.data.msg.data;
@@ -392,6 +393,7 @@ export default {
             };
             if (option) {
                 obj.xmId = option;
+                this.xmxyList = [];
                 xmxySelect(obj).then(res => {
                     if (res.data.msg.data.length) {
                         this.xmxyList = res.data.msg.data;
@@ -424,6 +426,7 @@ export default {
             };
             if (option) {
                 obj.xmId = option;
+                 this.xmkhList = [];
                 assessSelect(obj).then(res => {
                     if (res.data.msg.data.length) {
                         this.xmkhList = res.data.msg.data;

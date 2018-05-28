@@ -105,12 +105,12 @@
                 <el-row>
                     <el-col :span="9" :offset="2">
                         <el-form-item label="开始时间" prop="kssj">
-                            <el-date-picker v-model="xmjdFrom.kssj" type="datetime" :editable="false" placeholder="开始时间" :picker-options="limitStartTime"></el-date-picker>
+                            <el-date-picker v-model="xmjdFrom.kssj" type="datetime" value-format="timestamp" :editable="false" placeholder="开始时间" :picker-options="limitStartTime"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="9" :offset="2">
                         <el-form-item label="结束时间" prop="jssj">
-                            <el-date-picker v-model="xmjdFrom.jssj" type="datetime" :editable="false" placeholder="结束时间" :picker-options="limitEndTime"></el-date-picker>
+                            <el-date-picker v-model="xmjdFrom.jssj" type="datetime" value-format="timestamp" :editable="false" placeholder="结束时间" :picker-options="limitEndTime"></el-date-picker>
                         </el-form-item>
 
                     </el-col>

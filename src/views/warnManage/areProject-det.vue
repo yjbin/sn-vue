@@ -238,6 +238,7 @@ export default {
             }
         },
         handleClick(tab, event) {
+            this.tablesSet();
             if (tab.name == "second") {
                 this.QueryListXmjd();
             } else if (tab.name == "third") {
@@ -246,8 +247,19 @@ export default {
         },
         numbersjbfje(row){
             return row.sjbfje || 0;
+        },
+        tablesSet(){
+            var tables=document.querySelectorAll('table');
+            for(var i=0;i<tables.length;i++){
+            tables[i].style.width='100%'
+            };
+            var elHeaders=document.querySelectorAll('.el-table__header');
+            for(var j=0;j<elHeaders.length;j++){
+            elHeaders[j].style.tableLayout='inherit'
+            }
         }
     }
+     
 };
 </script>
 

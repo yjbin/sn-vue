@@ -123,7 +123,7 @@
                     </el-col>
                     <el-col :span="9" :offset="2">
                         <el-form-item label="录入时间" prop="lrsj">
-                            <el-date-picker id="xdsysj" v-model="xmysFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
+                            <el-date-picker  value-format="timestamp" v-model="xmysFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -135,7 +135,7 @@
                     </el-col>
                     <el-col :span="9" :offset="2">
                         <el-form-item label="验收时间" prop="yssj">
-                            <el-date-picker id="xdsysj" v-model="xmysFrom.yssj" type="datetime" placeholder="验收时间" style="width:100%"></el-date-picker>
+                            <el-date-picker value-format="timestamp" v-model="xmysFrom.yssj" type="datetime" placeholder="验收时间" style="width:100%"></el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>

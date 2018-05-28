@@ -1,6 +1,6 @@
 <template>
   <div class="xmxyDetail">
-    <el-dialog :title="titText" :visible.sync="xmxyVisible" :before-close="btnClose" width="50%">
+    <el-dialog :title="titText" :visible.sync="xmxyVisible" :before-close="btnClose" width="50%" top="5vh">
 
       <el-form :inline="true" :model="xmxyFrom" ref="xmxyFrom" class="demo-form-inline" label-width="100px">
         <el-row class="topform">
@@ -46,7 +46,7 @@
               </el-col>
               <el-col :span="11">
                 <el-form-item label="录入时间">
-                  <el-date-picker v-model="xmxyFrom.lrsj" type="datetime" placeholder="录入时间" style="width:100%" :disabled="true"></el-date-picker>
+                  <el-date-picker v-model="xmxyFrom.lrsj" type="datetime" placeholder="录入时间" value-format="timestamp" style="width:100%" :disabled="true"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>

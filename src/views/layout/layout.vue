@@ -4,7 +4,7 @@
         <div class="layout_body">
             <sideBar class="layout_sideBar"></sideBar>
             <div class="layout_main">
-                <el-scrollbar class="page-component__scroll">
+                <el-scrollbar class="page-component__scroll">   
                     <breadCrumb></breadCrumb>
                     <div class="main_body">
                         <router-view></router-view>
@@ -94,6 +94,9 @@ export default {
             height: 100%;
             .page-component__scroll .el-scrollbar__wrap{
                 overflow: auto;
+            }
+            .el-scrollbar__wrap{
+                overflow-x: hidden;
             }
         }
     }

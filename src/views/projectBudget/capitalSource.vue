@@ -174,12 +174,12 @@
                         <el-row>
                             <el-col :span="11">
                                 <el-form-item label="到位时间" prop="dwsj">
-                                    <el-date-picker v-model="zjlyForm.dwsj" type="datetime" :editable="false" placeholder="到位时间" :picker-options="limitStartTime"></el-date-picker>
+                                    <el-date-picker v-model="zjlyForm.dwsj" type="datetime" :editable="false" value-format="timestamp" placeholder="到位时间" :picker-options="limitStartTime"></el-date-picker>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="11">
                                 <el-form-item label="限定使用时间" prop="xdsysj">
-                                    <el-date-picker id="xdsysj" v-model="zjlyForm.xdsysj" type="datetime" :editable="false" placeholder="限定使用时间" :picker-options="limitEndTime"></el-date-picker>
+                                    <el-date-picker id="xdsysj" v-model="zjlyForm.xdsysj" type="datetime" value-format="timestamp" :editable="false" placeholder="限定使用时间" :picker-options="limitEndTime"></el-date-picker>
                                 </el-form-item>
 
                             </el-col>

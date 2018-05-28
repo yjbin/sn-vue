@@ -62,12 +62,12 @@
                     <el-row>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="开始时间" prop="kssj">
-                                <el-date-picker type="datetime" placeholder="开始时间" v-model="editForm.kssj" style="width: 100%;" :picker-options="limitStartTime"></el-date-picker>
+                                <el-date-picker type="datetime" placeholder="开始时间" v-model="editForm.kssj"  value-format="timestamp" style="width: 100%;" :picker-options="limitStartTime"></el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11" :offset="1">
                             <el-form-item label="结束时间" prop="jssj">
-                                <el-date-picker type="datetime" placeholder="结束时间" v-model="editForm.jssj" style="width: 100%;" :picker-options="limitEndTime"></el-date-picker>
+                                <el-date-picker type="datetime" placeholder="结束时间" v-model="editForm.jssj"  value-format="timestamp" style="width: 100%;" :picker-options="limitEndTime"></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -407,6 +407,9 @@ export default {
         editObj(val) {
             if (val) {
                 this.editForm = Object.assign({}, val);
+                if (this.$refs.editForm) {
+                    this.$refs.editForm.resetFields();
+                }
                 window.sessionStorage.setItem("gpsId",this.editForm.xmGps);
                 if (val.fj) {
                     this.fileSrc = {
@@ -537,10 +540,7 @@ export default {
                                     pageSize: this.pageSize
                                 };
                                 this.$emit("getList", obj);
-                                // this.shengStatus = null;
-                                // this.shiStatus = null;
-                                // this.xianStatus = null;
-                                // this.xiangStatus = null;
+                         
                             } else {
                                 this.$message({
                                     message: data.msg,
@@ -563,10 +563,7 @@ export default {
                                     pageSize: this.pageSize
                                 };
                                 this.$emit("getList", obj);
-                                // this.shengStatus = null;
-                                // this.shiStatus = null;
-                                // this.xianStatus = null;
-                                // this.xiangStatus = null;
+                      
                             } else {
                                 this.$message({
                                     message: data.msg
