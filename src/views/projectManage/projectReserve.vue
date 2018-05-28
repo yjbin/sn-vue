@@ -96,6 +96,7 @@ export default {
         newMember() {
             this.newModal = true;
             this.textTit = "新建";
+            window.sessionStorage.removeItem('gpsId');
             this.editObj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,

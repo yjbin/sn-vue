@@ -310,6 +310,9 @@ export default {
                 if (data.success) {
                     this.recordList = data.msg.data;
                     this.totalCount_record = data.msg.totalCount;
+                }else{
+                    this.recordList = [];
+                    this.totalCount_record = 0;
                 }
             });
         },

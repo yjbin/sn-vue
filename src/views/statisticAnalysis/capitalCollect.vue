@@ -30,10 +30,12 @@
                         <span>资金来源统计表</span>
                     </div>
                 </el-col>
+                 <el-button class="export" size="mini" type="success" @click.prevent="exportExcel()">导出</el-button>
+                 <el-button class="export" size="mini" type="warning" @click.prevent="printExcel()">打印</el-button>
             </el-row>
         </div>
-        <div class="collect-list">
-            <el-table :data="dateList" stripe border show-summary style="width: 100%">
+        <div class="collect-list" id="printBox">
+            <el-table :data="dateList" id="zjly" stripe border show-summary style="width: 100%">
                 <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip width="150">
 
                 </el-table-column>
@@ -70,6 +72,9 @@ import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import { bmbmDict,xzqhDict } from "@/api/config";
 import { zmlySelect } from "@/api/statisticAnalysis/capitalCollect";
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
+import Print from 'print-js'
 export default {
     data() {
         return {
@@ -99,7 +104,8 @@ export default {
         zjlySearch() {
             let obj = {
                 xzqh:this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
-                bmbm: this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                bmbm: this.seatch_bmbm,
+                // || this.$store.state.user.user.uUser.bmbm,
                 nd: this.seatch_nd
             };
             zmlySelect(obj).then(res => {
@@ -154,13 +160,45 @@ export default {
                     this.xzqhOptions.unshift({ name: "全部", bm: "" });
                 }
             });
-        }
+        },
+         //导出
+        exportExcel () {
+            /* generate workbook object from table */
+            var wb = XLSX.utils.table_to_book(document.querySelector('#zjly'))
+            /* get binary string as output */
+            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+            try {
+                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'zjly.xlsx')
+            } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+            return wbout
+        },
+        //打印
+         printExcel(){
+            let Print = document.getElementById('printBox');
+            let newContent = Print.innerHTML;
+            let oldContent = document.body.innerHTML;
+            debugger
+            document.body.innerHTML = newContent;
+            window.print();
+            document.body.innerHTML = oldContent;
+            window.location.reload();
+            return false
+                // let newWindow = window.open("_blank"); 
+                // let codestr = document.getElementById("printBox").innerHTML;   
+                // newWindow.document.write(codestr);   
+                // newWindow.document.close(); 
+                // newWindow.print();  
+                // return true;
+              
+            }
+            
     },
     mounted() {
         this.columnList = doCreate("sycj");
         this.ndOptions = doCreate("ndTit");
         this.intLoad();
         this.zjlySearch();
+        
     }
 };
 </script>
@@ -180,3 +218,18 @@ export default {
     }
 }
 </style>
+<style lang="scss">
+@media print {
+    #zjly{
+        zoom:62%;
+    }
+   
+}
+   
+    
+    
+   
+    
+
+</style>
+

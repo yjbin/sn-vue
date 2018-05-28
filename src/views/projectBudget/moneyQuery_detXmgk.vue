@@ -141,7 +141,7 @@
             <el-row>
                 <el-col :span="22" :offset="1">
                     <el-form-item label="项目GPS" prop="xmGps">
-                        <el-input v-model="xmForm.xmGps" placeholder="项目GPS"></el-input>
+                        <el-input v-model="xmForm.xmGps" placeholder="点击选择GPS地址" @focus="gpsChange"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -186,19 +186,24 @@
             </el-row>
         </el-form>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
-
+        <gps-Model :gpsModal="gpsModal" :gpsTit="gpsTit" @colseGps="colseGps" :showGps="showGps"></gps-Model>
     </div>
 </template>
 <script>
 import { doCreate, moreMenu } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import accessoryModel from "@/components/accessoryModel";
+import gpsModel from "@/components/gpsModel";
 export default {
     components: {
-        accessoryModel
+        accessoryModel,
+        gpsModel
     },
     data() {
         return {
+            gpsModal: false,
+            showGps: false,
+            gpsTit: "",
             showDialog: false,
             accessoryModalInt: false,
             upShowhide: false,
@@ -224,6 +229,7 @@ export default {
             this.cylxoptions = doCreate("cylb");
             this.xzqhoptions = doCreate("xzqh");
             this.bmbmoptions = doCreate("bmbm");
+            window.sessionStorage.setItem("gpsId", val.xmGps);
             if (val.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -257,6 +263,14 @@ export default {
         fileClick() {
             this.accessoryModalInt = true;
             this.textTitFile = "附件";
+        },
+        gpsChange() {
+            this.gpsModal = true;
+            this.gpsTit = "地图选择";
+        },
+        colseGps(val) {
+            this.gpsModal = val;
+            this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
         }
     },
     mounted() {

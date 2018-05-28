@@ -212,10 +212,8 @@ export default {
                     this.fileList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
                 } else {
-                    this.$message({
-                        message: data.msg,
-                        type: "warning"
-                    });
+                    this.fileList = [];
+                    this.totalCount = 0;
                 }
             });
         },

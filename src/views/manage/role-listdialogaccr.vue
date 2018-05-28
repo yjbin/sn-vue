@@ -1,15 +1,15 @@
 <template>
-  <div class="listdialogaccr">
-    <el-dialog title="授权" :visible.sync="accrModalToggle" width="40%" :before-close="accrClose">
-      <div class="listdialogaccr-content">
-        <el-tree :data="treeData" node-key="id" ref="tree" show-checkbox default-expand-all></el-tree>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="accr_save">保 存</el-button>
-        <el-button @click="accr_cancel">取 消</el-button>
-      </span>
-    </el-dialog>
-  </div>
+    <div class="listdialogaccr">
+        <el-dialog title="授权" :visible.sync="accrModalToggle" width="40%" :before-close="accrClose">
+            <div class="listdialogaccr-content">
+                <el-tree :data="treeData" node-key="id" ref="tree" show-checkbox default-expand-all></el-tree>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="accr_save">保 存</el-button>
+                <el-button @click="accr_cancel">取 消</el-button>
+            </span>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
@@ -37,11 +37,10 @@ export default {
                     _this.$refs.tree.setCheckedKeys(data.data);
                 } else {
                     _this.$refs.tree.setCheckedKeys([]);
-                    this.$message({
-                        type: "error",
-                        message: data.msg
-                    });
-                    
+                    // this.$message({
+                    //     type: "error",
+                    //     message: data.msg
+                    // });
                 }
             });
         },

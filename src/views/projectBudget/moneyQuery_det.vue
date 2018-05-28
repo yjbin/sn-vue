@@ -151,10 +151,6 @@ export default {
                     } else {
                         this.xmjdList = [];
                         this.xmjdtotalCount = 0;
-                        this.$message({
-                            message: data.msg,
-                            type: "warning"
-                        });
                     }
                 });
             } else {
@@ -182,10 +178,8 @@ export default {
                             _this.xmbftotalCount = 0;
                         }
                     } else {
-                        this.$message({
-                            message: data.msg,
-                            type: "warning"
-                        });
+                        _this.xmbfList = [];
+                        _this.xmbftotalCount = 0;
                     }
                 });
             } else {

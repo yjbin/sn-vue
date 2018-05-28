@@ -30,10 +30,11 @@
                         <span>项目进度汇总表</span>
                     </div>
                 </el-col>
+                 <el-button class="export" size="mini" type="success" @click="exportExcel()">导出</el-button>
             </el-row>
         </div>
         <div class="collect-list">
-            <el-table :data="dateList" stripe border show-summary style="width: 100%">
+            <el-table :data="dateList" id="xmjd" stripe border show-summary style="width: 100%">
                 <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip width="150"></el-table-column>
                 <el-table-column label="项目进度">
                     <el-table-column label="0% -- 30%">
@@ -71,6 +72,8 @@ import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import { bmbmDict,xzqhDict } from "@/api/config";
 import { xmjdSelect } from "@/api/statisticAnalysis/projectProgress";
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
     data() {
         return {
@@ -93,7 +96,7 @@ export default {
         xmjdSearch() {
             let obj = {
                 xzqh:this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
-                bmbm: this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                bmbm: this.seatch_bmbm,
                 nd: this.seatch_nd
             };
             xmjdSelect(obj).then(res => {
@@ -144,7 +147,18 @@ export default {
                     this.xzqhOptions.unshift({ name: "全部", bm: "" });
                 }
             });
-        }
+        },
+        //导出
+        exportExcel () {
+            /* generate workbook object from table */
+            var wb = XLSX.utils.table_to_book(document.querySelector('#xmjd'))
+            /* get binary string as output */
+            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+            try {
+                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'xmjd.xlsx')
+            } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+            return wbout
+        },
     },
     mounted() {
         this.columnList = doCreate("sycj");

@@ -130,10 +130,8 @@ export default {
                     // this.seatch_name = "";
                     // this.seatch_nd = "";
                 } else {
-                    this.$message({
-                        message: data.msg,
-                        type: "warning"
-                    });
+                    this.tableData = [];
+                    this.totalCount = 0;
                 }
             });
         },

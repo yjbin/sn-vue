@@ -237,7 +237,7 @@
             </el-dialog>
         </div>
         <div class="role-listdialog">
-            <el-dialog :title="gjxqtit" :visible.sync="ygjVisible" :before-close="userClose" width="70%" >
+            <el-dialog :title="gjxqtit" :visible.sync="ygjVisible" :before-close="userClose" width="70%">
 
                 <el-form :inline="true" class="demo-form-inline" :model="xmForm" label-width="110px">
                     <el-row>
@@ -380,7 +380,7 @@
                     <el-row>
                         <el-col :span="22" :offset="1">
                             <el-form-item label="项目GPS" prop="xmGps">
-                                <el-input v-model="xmForm.xmGps" placeholder="项目GPS"></el-input>
+                                <el-input v-model="xmForm.xmGps" placeholder="点击选择GPS地址" @focus="gpsChange"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -428,7 +428,7 @@
             </el-dialog>
         </div>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
-
+        <gps-Model :gpsModal="gpsModal" :gpsTit="gpsTit" @colseGps="colseGps" :showGps="showGps"></gps-Model>
     </div>
 </template>
 <script>
@@ -437,6 +437,7 @@ import { formatDate, operation } from "@/utils/data";
 import { xmlbList } from "@/api/projectOutline";
 import { validMoney } from "@/utils/validate";
 import accessoryModel from "@/components/accessoryModel";
+import gpsModel from "@/components/gpsModel";
 import {
     capotalQuery,
     capotalAdd,
@@ -447,7 +448,8 @@ import {
 
 export default {
     components: {
-        accessoryModel
+        accessoryModel,
+        gpsModel
     },
     data() {
         const validOfMoney = (rule, value, callback) => {
@@ -458,6 +460,9 @@ export default {
             }
         };
         return {
+            gpsModal: false,
+            showGps: false,
+            gpsTit: "",
             zjlyList: [],
             xmList: [],
             ndoptions: [],
@@ -639,10 +644,6 @@ export default {
                     } else {
                         this.zjlyList = [];
                         this.totalCount = 0;
-                        this.$message({
-                            message: data.msg,
-                            type: "warning"
-                        });
                     }
                 }
             });
@@ -705,6 +706,10 @@ export default {
                     this.gjxqtit = "已挂接项目详情";
                     if (data.data.elements.length) {
                         this.xmForm = data.data.elements[0];
+                        window.sessionStorage.setItem(
+                            "gpsId",
+                            this.xmForm.xmGps
+                        );
                         if (data.data.elements[0].fj) {
                             this.fileSrc = {
                                 num: Math.random(),
@@ -720,10 +725,11 @@ export default {
                         this.xmForm = {};
                     }
                 } else {
-                    this.$message({
-                        message: data.msg,
-                        type: "warning"
-                    });
+                    this.xmForm = {};
+                    // this.$message({
+                    //     message: data.msg,
+                    //     type: "warning"
+                    // });
                 }
             });
         },
@@ -869,6 +875,14 @@ export default {
                     type: "warning"
                 });
             }
+        },
+        gpsChange() {
+            this.gpsModal = true;
+            this.gpsTit = "地图选择";
+        },
+        colseGps(val) {
+            this.gpsModal = val;
+            this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
         }
     },
     mounted() {

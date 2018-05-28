@@ -229,7 +229,7 @@ export default {
               }
           })
         }else if(data=="bm"){
-          if(this.userForm.uUser.xzqh != ""){
+          if(this.userForm.uUser.xzqh){
             this.bm_model = true;
             this.model_Tit = "部门编码";
             this.bmData();
@@ -257,6 +257,7 @@ export default {
     nodeClick(data){
       this.xzqh = data.bm;
       this.userForm.uUser.xzqh = data.name;
+      this.userForm.uUser.bmbm = "";
     },
     bmnodeClick(data){
       this.bmbm = data.bm;

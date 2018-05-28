@@ -140,7 +140,7 @@
             <el-row>
                 <el-col :span="20" :offset="2">
                     <el-form-item label="项目GPS">
-                        <el-input v-model="xmForm.xmGps" placeholder="项目GPS"></el-input>
+                        <el-input v-model="xmForm.xmGps" placeholder="点击选择GPS地址" @focus="gpsChange"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -194,20 +194,26 @@
         </el-form>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
         <levels-model :depModal="depModal" :depTit="depTit" :depcked="depcked" @depToggle="depToggle" ></levels-model>
+        <gps-Model :gpsModal="gpsModal" :gpsTit="gpsTit" @colseGps="colseGps" :showGps="showGps"></gps-Model>
     </div>
 </template>
 <script>
 import { doCreate, getDicTab, moreMenu } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import accessoryModel from "@/components/accessoryModel";
-import levelsModel from "@/components/levelsModel"
+import levelsModel from "@/components/levelsModel";
+import gpsModel from "@/components/gpsModel";
 export default {
     components: {
         accessoryModel,
-        levelsModel
+        levelsModel,
+        gpsModel
     },
     data() {
         return {
+            gpsModal: false,
+            showGps: false,
+            gpsTit: "",
             showDialog: false,
             ndoptions: [],
             cylxoptions: [],
@@ -264,6 +270,7 @@ export default {
             handler: function(val) {
                 if (val) {
                     this.xmForm = Object.assign({}, val);
+                    window.sessionStorage.setItem("gpsId", this.xmForm.xmGps);
                     if (val.fj) {
                         this.fileSrc = {
                             num: Math.random(),
@@ -343,6 +350,15 @@ export default {
         fileClick() {
             this.accessoryModalInt = true;
             this.textTitFile = "附件";
+        },
+        //地图
+        gpsChange() {
+            this.gpsModal = true;
+            this.gpsTit = "地图选择";
+        },
+        colseGps(val) {
+            this.gpsModal = val;
+            // this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
         }
     }
 };

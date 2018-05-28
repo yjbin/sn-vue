@@ -56,6 +56,10 @@ a {
 .mar10 {
   margin: 10px; }
 
+.export {
+  float: right;
+  margin: 5px 8px 0 0; }
+
 .el-table th,
 .el-table tr {
   text-align: center; }

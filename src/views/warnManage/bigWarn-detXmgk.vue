@@ -139,7 +139,7 @@
             <el-row>
                 <el-col :span="20" :offset="2">
                     <el-form-item label="项目GPS" prop="xmGps">
-                        <el-input v-model="xmForm.xmGps" placeholder="项目GPS"></el-input>
+                        <el-input v-model="xmForm.xmGps" placeholder="点击选择GPS地址" @focus="gpsChange"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -186,13 +186,14 @@
             <el-row>
                 <el-col :span="2" :offset="4">
                     <el-form-item prop="xzqh">
-                        <el-button type="success"  size="mini" @click="fileClick">附件</el-button>
+                        <el-button type="success" size="mini" @click="fileClick">附件</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
-        <levels-model :depModal="depModal" :depTit="depTit" :depcked="depcked" @depToggle="depToggle" ></levels-model>
+        <levels-model :depModal="depModal" :depTit="depTit" :depcked="depcked" @depToggle="depToggle"></levels-model>
+        <gps-Model :gpsModal="gpsModal" :gpsTit="gpsTit" @colseGps="colseGps" :showGps="showGps"></gps-Model>
     </div>
 </template>
 <script>
@@ -200,146 +201,161 @@ import { doCreate, moreMenu } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import accessoryModel from "@/components/accessoryModel";
 import levelsModel from "@/components/levelsModel";
+import gpsModel from "@/components/gpsModel";
 export default {
-  components: {
-    accessoryModel,
-    levelsModel
-  },
-  data() {
-    return {
-      ndoptions: [],
-      cylxoptions: [],
-      bmbmoptions: [],
-      xzqhoptions: [],
-      options: [],
-      xmlbArr: [],
-      xmForm: {
-          xzqh:this.$store.state.user.user.uUser.xzqh,
-          
-      },
-      //附件参数
-      accessoryModalInt: false,
-      upShowhide: false,
-      textTitFile: "",
-      fileSrc: "",
-      //省市县乡的选中集合
-      shengChecked: [],
-      shiChecked: [],
-      xianChecked: [],
-      xiangChecked: [],
-      //公共组件的传递参数
-      depModal: false,
-      depTit: "",
-      depcked: []
-    };
-  },
-  props: {
-    xmgkList: {
-      default: () => {}
-    }
-  },
-  watch: {
-    xmgkList: {
-      handler: function(val) {
-        if (val) {
-          this.xmForm = Object.assign({}, val);
-          if (val.fj) {
-            this.fileSrc = {
-              num: Math.random(),
-              fileStr: this.xmForm.fj
-            };
-          } else {
-            this.fileSrc = {
-              num: Math.random(),
-              fileStr: ""
-            };
-          }
-          if (this.xmForm.xmlb) {
-            this.xmlbArr = this.xmForm.xmlb.split(",");
-          }else{
-              this.xmlbArr = [];
-          }
-          val.shengFgksIds
-            ? (this.shengChecked = val.shengFgksIds)
-            : (this.shengChecked = []);
-          val.shiFgksIds
-            ? (this.shiChecked = val.shiFgksIds)
-            : (this.shiChecked = []);
-          val.xianFgksIds
-            ? (this.xianChecked = val.xianFgksIds)
-            : (this.xianChecked = []);
-          val.xiangFgksIds
-            ? (this.xiangChecked = val.xiangFgksIds)
-            : (this.xiangChecked = []);
-        } else {
-          this.xmlbArr = [];
+    components: {
+        accessoryModel,
+        levelsModel,
+        gpsModel
+    },
+    data() {
+        return {
+            gpsModal: false,
+            showGps: false,
+            gpsTit: "",
+            ndoptions: [],
+            cylxoptions: [],
+            bmbmoptions: [],
+            xzqhoptions: [],
+            options: [],
+            xmlbArr: [],
+            xmForm: {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            },
+            //附件参数
+            accessoryModalInt: false,
+            upShowhide: false,
+            textTitFile: "",
+            fileSrc: "",
+            //省市县乡的选中集合
+            shengChecked: [],
+            shiChecked: [],
+            xianChecked: [],
+            xiangChecked: [],
+            //公共组件的传递参数
+            depModal: false,
+            depTit: "",
+            depcked: []
+        };
+    },
+    props: {
+        xmgkList: {
+            default: () => {}
         }
-      },
-      deep: true
+    },
+    watch: {
+        xmgkList: {
+            handler: function(val) {
+                if (val) {
+                    this.xmForm = Object.assign({}, val);
+                    window.sessionStorage.setItem("gpsId", this.xmForm.xmGps);
+                    if (val.fj) {
+                        this.fileSrc = {
+                            num: Math.random(),
+                            fileStr: this.xmForm.fj
+                        };
+                    } else {
+                        this.fileSrc = {
+                            num: Math.random(),
+                            fileStr: ""
+                        };
+                    }
+                    if (this.xmForm.xmlb) {
+                        this.xmlbArr = this.xmForm.xmlb.split(",");
+                    } else {
+                        this.xmlbArr = [];
+                    }
+                    val.shengFgksIds
+                        ? (this.shengChecked = val.shengFgksIds)
+                        : (this.shengChecked = []);
+                    val.shiFgksIds
+                        ? (this.shiChecked = val.shiFgksIds)
+                        : (this.shiChecked = []);
+                    val.xianFgksIds
+                        ? (this.xianChecked = val.xianFgksIds)
+                        : (this.xianChecked = []);
+                    val.xiangFgksIds
+                        ? (this.xiangChecked = val.xiangFgksIds)
+                        : (this.xiangChecked = []);
+                } else {
+                    this.xmlbArr = [];
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        modelShow(val) {
+            this.depModal = true;
+            switch (val) {
+                case "sheng":
+                    this.depTit = "省级分管处室";
+                    this.depcked = this.shengChecked;
+                    break;
+                case "shi":
+                    this.depTit = "市级分管处室";
+                    this.depcked = this.shiChecked;
+                    break;
+                case "xian":
+                    this.depTit = "县级分管处室";
+                    this.depcked = this.xianChecked;
+                    break;
+                case "xiang":
+                    this.depTit = "乡级分管处室";
+                    this.depcked = this.xiangChecked;
+                    break;
+                default:
+                    return false;
+            }
+        },
+        depToggle(val) {
+            this.depModal = val;
+        },
+        //附件
+        colseTog(val) {
+            this.accessoryModalInt = val;
+        },
+        chileFile(val) {
+            this.xmxyFrom.fj = val;
+        },
+        fileClick() {
+            this.accessoryModalInt = true;
+            this.textTitFile = "附件";
+        },
+        //地图
+        gpsChange() {
+            this.gpsModal = true;
+            this.gpsTit = "地图选择";
+        },
+        colseGps(val) {
+            this.gpsModal = val;
+            // this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
+        }
+    },
+    mounted() {
+        this.ndoptions = doCreate("nd");
+        this.cylxoptions = doCreate("cylb");
+        this.xzqhoptions = doCreate("xzqh");
+        this.bmbmoptions = doCreate("bmbm");
+        treeQuery({ dicttype: "xmlb" }).then(res => {
+            let data = res.data;
+            moreMenu(data);
+            this.options = data;
+        });
     }
-  },
-  methods: {
-    modelShow(val) {
-      this.depModal = true;
-      switch (val) {
-        case "sheng":
-          this.depTit = "省级分管处室";
-          this.depcked = this.shengChecked;
-          break;
-        case "shi":
-          this.depTit = "市级分管处室";
-          this.depcked = this.shiChecked;
-          break;
-        case "xian":
-          this.depTit = "县级分管处室";
-          this.depcked = this.xianChecked;
-          break;
-        case "xiang":
-          this.depTit = "乡级分管处室";
-          this.depcked = this.xiangChecked;
-          break;
-        default:
-          return false;
-      }
-    },
-    depToggle(val) {
-      this.depModal = val;
-    },
-    colseTog(val) {
-      this.accessoryModalInt = val;
-    },
-    chileFile(val) {
-      this.xmxyFrom.fj = val;
-    },
-    fileClick() {
-      this.accessoryModalInt = true;
-      this.textTitFile = "附件";
-    }
-  },
-  mounted(){
-    this.ndoptions = doCreate("nd");
-    this.cylxoptions = doCreate("cylb");
-    this.xzqhoptions = doCreate("xzqh");
-    this.bmbmoptions = doCreate("bmbm");
-    treeQuery({ dicttype: "xmlb" }).then(res => {
-    let data = res.data;
-    moreMenu(data);
-    this.options = data;
-    });
-  }
 };
 </script>
 <style lang="scss">
 .detailsXmgk {
-  .el-dialog__header {
-    background: #307ecc;
-    .el-dialog__title {
-      color: #fff;
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
     }
-  }
-  .el-dialog__body {
-    padding: 20px 20px 44px 20px;
-  }
+    .el-dialog__body {
+        padding: 20px 20px 44px 20px;
+    }
 }
 </style>
 

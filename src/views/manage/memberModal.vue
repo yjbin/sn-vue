@@ -205,6 +205,7 @@ export default {
             pageSize: 3,
             text_Tit: "",
             activeName2: "first",
+            zzmmptions:[],
             userForm: {
                 xzqh: "",
                 bm: "",

@@ -30,10 +30,11 @@
                         <span>项目资金分布表</span>
                     </div>
                 </el-col>
+                 <el-button class="export" size="mini" type="success" @click="exportExcel()">导出</el-button>
             </el-row>
         </div>
         <div class="collect-list">
-            <el-table :data="CollectList" stripe border show-summary style="width: 100%">
+            <el-table :data="CollectList" id="xmzj" stripe border show-summary style="width: 100%">
                 <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip width="150">
 
                 </el-table-column>
@@ -60,6 +61,8 @@ import { getDicTab, doCreate } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import { bmbmDict,xzqhDict } from "@/api/config";
 import { selectZjFb } from "@/api/statisticAnalysis/projectFund";
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
     data() {
         return {
@@ -88,7 +91,7 @@ export default {
         ZjFbCountList() {
             let obj = {
                 xzqh:this.seatch_xzqh || this.$store.state.user.user.uUser.xzqh,
-                bmbm: this.seatch_bmbm || this.$store.state.user.user.uUser.bmbm,
+                bmbm: this.seatch_bmbm,
                 nd: this.seatch_nd
             };
             selectZjFb(obj).then(res => {
@@ -128,7 +131,18 @@ export default {
                     this.xzqhOptions.unshift({ name: "全部", bm: "" });
                 }
             });
-        }
+        },
+        //导出
+        exportExcel () {
+            /* generate workbook object from table */
+            var wb = XLSX.utils.table_to_book(document.querySelector('#xmzj'))
+            /* get binary string as output */
+            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+            try {
+                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'xmzj.xlsx')
+            } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+            return wbout
+        },
     },
     mounted() {
         this.ndOptions = doCreate("ndTit");

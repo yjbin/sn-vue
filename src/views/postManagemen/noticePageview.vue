@@ -70,10 +70,8 @@ export default {
                     this.pageList = data.msg.data;
                     this.totalCount = data.msg.totalCount;
                 } else {
-                    this.$message({
-                        message: data.msg,
-                        type: "warning"
-                    });
+                    this.pageList = [];
+                    this.totalCount = 0;
                 }
             });
         }
