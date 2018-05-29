@@ -190,6 +190,18 @@
         <div class="role-listdialog">
             <el-dialog :title="ssdwtit" :visible.sync="ssdwVisible" :before-close="userClose" width="80%">
                 <div class="user-list">
+                    <el-form :inline="true" class="demo-form-inline">
+                       <el-form-item label="行政区划">
+                            <el-select v-model="search_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                                <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="success" size="medium" @click="ssdwFocus('本级')">本级</el-button>
+                            <el-button type="primary" size="medium" @click="ssdwFocus()">查询</el-button>
+                        </el-form-item>
+                    </el-form>
                     <el-table ref="multipleTable" :data="tableData" border stripe style="width: 100%" @selection-change="checkboxChange">
                         <el-table-column type="selection"></el-table-column>
                         <el-table-column width="50" label="序号" type="index" :index="indexMethod">
@@ -282,7 +294,8 @@ export default {
             checkBox: 0,
             pageNo2: 1,
             pageSize2: 6,
-            totalCount2: 1,
+            totalCount2: 0,
+            search_xzqh:"",
             xianTit: "",
             shiTit: "",
             shengTit: "",
@@ -406,6 +419,7 @@ export default {
         },
         editObj(val) {
             if (val) {
+                debugger
                 this.editForm = Object.assign({}, val);
                 if (this.$refs.editForm) {
                     this.$refs.editForm.resetFields();
@@ -501,6 +515,7 @@ export default {
         },
         btn_cancel() {
             this.newModalToggle = false;
+            this.search_xzqh = '';
             this.$emit("newToggle", this.newModalToggle);
         },
         userClose2() {
@@ -579,13 +594,15 @@ export default {
             return start + index + 1;
         },
         //实施单位的展示
-        ssdwFocus() {
+        ssdwFocus(level) {
             this.ssdwVisible = true;
             this.ssdwtit = "实施单位列表";
             let obj = {
                 pageNo: this.pageNo2,
-                pageSize: this.pageSize2
+                pageSize: this.pageSize2,
             };
+            level ? (obj.dwbm = this.$store.state.user.user.uUser.bmbm,this.search_xzqh = ""):"";
+            this.search_xzqh ? obj.by1 = this.search_xzqh:"";
             searchUnit(obj).then(res => {
                 let data = res.data;
                 if (data.success) {

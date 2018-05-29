@@ -24,8 +24,17 @@
                     <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
                 </el-form-item>
             </el-form>
+            <div class="capit-tit">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="user-left">
+                            <span>项目概述列表</span>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
             <div class="user-list">
-            <el-table :data="zjlyList" stripe border style="width: 100%">
+                <el-table :data="zjlyList" stripe border style="width: 100%">
                     <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
                     <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="bmcs" label="部门处室" :formatter="getBmbm" show-overflow-tooltip></el-table-column>
@@ -62,30 +71,30 @@ import { xmlbList } from "@/api/projectOutline";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
 import { xmbfindById } from "@/api/projectOutline";
-import  proSecond  from "./projectOutline-sec"
+import proSecond from "./projectOutline-sec";
 
 export default {
-    components:{
+    components: {
         proSecond
     },
     data() {
         return {
             zjlyList: [],
             ndOptions: [],
-            searchList:{
+            searchList: {
                 nd: "",
                 xmmc: "",
-                xmbh:"",
-                ssdw:"",
-                fzr:""
+                xmbh: "",
+                ssdw: "",
+                fzr: ""
             },
             active: true,
             textTit: "",
             pageNo: 1,
             pageSize: 10,
             totalCount: 1,
-            xmgkList:{},
-            propFrom:{}
+            xmgkList: {},
+            propFrom: {}
         };
     },
     methods: {
@@ -105,9 +114,9 @@ export default {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                xzqh:this.$store.state.user.user.uUser.xzqh,
+                xzqh: this.$store.state.user.user.uUser.xzqh,
                 xmlx: "0",
-                flag:"1"
+                flag: "1"
             };
             this.searchList.nd ? (obj.nd = this.searchList.nd) : "";
             this.searchList.zjjb ? (obj.zjjb = this.searchList.zjjb) : "";
@@ -115,35 +124,35 @@ export default {
             this.searchList.zjmc ? (obj.zjmc = this.searchList.zjmc) : "";
             this.searchList.sqwh ? (obj.sqwh = this.searchList.sqwh) : "";
             xmlbList(obj).then(res => {
-                if(res.data.data.elements.length){
-                     this.zjlyList = res.data.data.elements;
-                     this.totalCount = res.data.data.totalCount;
-                }else{
+                if (res.data.data.elements.length) {
+                    this.zjlyList = res.data.data.elements;
+                    this.totalCount = res.data.data.totalCount;
+                } else {
                     this.zjlyList = [];
                     this.totalCount = 0;
                 }
             });
         },
         //编辑
-        zjlyDetail(row){
+        zjlyDetail(row) {
             this.active = false;
-            if(row){
+            if (row) {
                 this.propFrom = {
-                    xmid:row.id
-                }
+                    xmid: row.id
+                };
             }
             let xmgkobj = {
-                id:this.propFrom.xmid,
-            }
+                id: this.propFrom.xmid
+            };
             xmbfindById(xmgkobj).then(res => {
                 let data = res.data.data;
                 if (data) {
                     this.xmgkList = Object.assign({}, data);
-                }else{
+                } else {
                     this.$message({
                         message: "未查询到此项目",
                         type: "success"
-                    })
+                    });
                 }
             });
         },
@@ -167,10 +176,25 @@ export default {
     mounted() {
         this.getList();
         this.ndOptions = doCreate("ndTit");
-  
     }
 };
 </script>
+<style lang="scss" scoped>
+.instiuTion{
+    .capit-tit {
+        background: #317ecc;
 
+        .user-left {
+            span {
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                margin: 10px 20px;
+            }
+        }
+    }
+    }
+</style>
 
 

@@ -98,9 +98,9 @@ export default {
             selectZjFb(obj).then(res => {
                 let data = res.data;
                 data.map(i => {
-                    i.ze = i.heji.ze;
-                    i.ybf = i.heji.ybf;
-                    i.bilv = i.heji.bilv;
+                    i.ze = i.heji?i.heji.ze:0;
+                    i.ybf = i.heji?i.heji.ybf:0;
+                    i.bilv = i.heji?i.heji.bilv:0;
                     return i;
                 });
 

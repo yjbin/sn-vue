@@ -15,6 +15,15 @@
                 <!-- <el-button type="success" size="medium" @click="newMember">新增</el-button> -->
             </el-form-item>
         </el-form>
+        <div class="capit-tit">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="user-left">
+                            <span>项目申报列表</span>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
         <div class="user-list">
             <el-table :data="xmgsList" stripe border style="width: 100%">
                 <el-table-column type="index" label="序号" width="80" :index="indexMethod"></el-table-column>
@@ -175,5 +184,21 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+.instiuTion{
+    .capit-tit {
+        background: #317ecc;
 
+        .user-left {
+            span {
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                margin: 10px 20px;
+            }
+        }
+    }
+    }
+</style>
 
