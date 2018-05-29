@@ -122,7 +122,7 @@ export default {
       dialogVisible: false,
       activeName: "1",
       dictData: [],
-      bmValue: "",
+      bmValue: "zjjb",
       bmoptions: [],
       zdoptions: [],
       dictTid: "",
@@ -153,9 +153,9 @@ export default {
         if (data.success) {
           this.dictData = data.data;
         }else{
-          this.dictData = [];
+           this.dictData = [];
            this.$message({
-              message: data.msg,
+              message: "暂无此字典项",
               type: "error"
           })
         }

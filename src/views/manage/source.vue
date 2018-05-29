@@ -12,9 +12,9 @@
                             <el-tooltip class="item" effect="dark" content="添加下级" placement="top">
                                 <i class="el-icon-plus" @click.stop="() => append(data)"></i>
                             </el-tooltip>
-                              <el-tooltip class="item" effect="dark" content="添加本级" placement="top">
+                            <el-tooltip class="item" effect="dark" content="添加本级" placement="top">
                                 <i class="el-icon-circle-plus-outline" @click.stop="() => appendTj(data)"></i>
-                            </el-tooltip>        
+                            </el-tooltip>
                             <i class="el-icon-delete" @click.stop="() => remove(node, data)"></i>
                         </span>
                     </span>
@@ -109,21 +109,28 @@ export default {
                 type: "warning"
             })
                 .then(() => {
-                    treeDel({ id: data.id }).then(res => {
-                        if(res.success){
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg
-                            });
-                            this.treeQuery();
-                        }else{
-                            this.$message({
-                                type: "success",
-                                message: res.data.msg
-                            });
-                        }
-                        
-                    });
+                    if (data.id) {
+                        treeDel({ id: data.id }).then(res => {
+                            if (res.success) {
+                                this.$message({
+                                    type: "success",
+                                    message: res.data.msg
+                                });
+                                this.treeQuery();
+                            } else {
+                                this.$message({
+                                    type: "warning",
+                                    message: res.data.msg
+                                });
+                            }
+                        });
+                    } else {
+                        this.$message({
+                            type: "success",
+                            message: "删除成功"
+                        });
+                        this.treeQuery();
+                    }
                 })
                 .catch(() => {
                     this.$message({
@@ -145,10 +152,10 @@ export default {
         treeQuery() {
             treeQuery().then(res => {
                 let data = res.data;
-                if(data){
+                if (data) {
                     this.treeData = data;
                     this.formData = data[0];
-                } 
+                }
             });
         },
         formSave() {
@@ -178,7 +185,7 @@ export default {
                                 message: data.msg,
                                 type: "success"
                             });
-                        }else{
+                        } else {
                             _this.$message({
                                 message: data.msg,
                                 type: "error"
@@ -203,6 +210,7 @@ export default {
         width: 300px;
         height: 81vh;
         overflow: auto;
+        border-right: 1px dotted #999;
     }
     .nodeLabel {
         width: 126px;
@@ -216,7 +224,6 @@ export default {
         width: calc(100% - 300px);
         height: 100%;
         padding: 20px;
-        border-left: 1px dotted #999;
     }
 }
 </style>

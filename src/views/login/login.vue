@@ -56,7 +56,7 @@
         </div>
         <div class="footer">
             <p>版权所有：北京中农信达信息技术有限公司
-                <span @click="clearSession" class="clearSession">清除缓存</span>
+                <span @click="clearSession" class="clearSession">清除缓存并刷新</span>
             </p>
         </div>
     </div>
@@ -157,7 +157,7 @@ export default {
             });
             setTimeout(()=>{
                 location.reload();
-            },1000)
+            },500)
             
         }
     },

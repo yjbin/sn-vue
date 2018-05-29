@@ -30,12 +30,13 @@
                         <span>项目进度汇总表</span>
                     </div>
                 </el-col>
-                 <el-button class="export" size="mini" type="success" @click="exportExcel()">导出</el-button>
+                 <el-button class="export" size="mini" type="success" @click="exportModel('xmjd')">导出</el-button>
+                 <el-button class="export" size="mini" type="warning" @click.prevent="printModel('printBox')">打印</el-button>
             </el-row>
         </div>
-        <div class="collect-list">
+        <div class="collect-list" id="printBox">
             <el-table :data="dateList" id="xmjd" stripe border show-summary style="width: 100%">
-                <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip width="150"></el-table-column>
+                <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
                 <el-table-column label="项目进度">
                     <el-table-column label="0% -- 30%">
                         <el-table-column prop="count1" label="数量(个)" show-overflow-tooltip></el-table-column>
@@ -58,7 +59,7 @@
                         <el-table-column prop="bilv4" label="拨付进度%" show-overflow-tooltip></el-table-column>
                     </el-table-column>
                 </el-table-column>
-                <el-table-column label="合计" width="150">
+                <el-table-column label="合计">
                     <el-table-column prop="counthj" label="数量(个)" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="xmzehj" label="金额(万元)" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="ybfhj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
@@ -68,12 +69,10 @@
     </div>
 </template>
 <script>
-import { getDicTab, doCreate } from "@/utils/config";
+import { getDicTab, doCreate,exportExcel,printExcel } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import { bmbmDict,xzqhDict } from "@/api/config";
 import { xmjdSelect } from "@/api/statisticAnalysis/projectProgress";
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
 export default {
     data() {
         return {
@@ -149,16 +148,13 @@ export default {
             });
         },
         //导出
-        exportExcel () {
-            /* generate workbook object from table */
-            var wb = XLSX.utils.table_to_book(document.querySelector('#xmjd'))
-            /* get binary string as output */
-            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-            try {
-                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'xmjd.xlsx')
-            } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-            return wbout
+        exportModel (opt) {
+           exportExcel(opt)
         },
+        //打印
+        printModel(id){
+            printExcel(id);
+        }
     },
     mounted() {
         this.columnList = doCreate("sycj");
@@ -182,5 +178,13 @@ export default {
             }
         }
     }
+}
+</style>
+<style lang="scss">
+@media print {
+    #xmjd{
+        zoom:62%;
+    }
+   
 }
 </style>

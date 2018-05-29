@@ -46,7 +46,7 @@ export default {
                     yAxis: [
                         {
                             type: "value",
-                            name: "单位：万元"
+                            name: "单位：个"
                         }
                     ],
                     color: ["#3bc38d"],

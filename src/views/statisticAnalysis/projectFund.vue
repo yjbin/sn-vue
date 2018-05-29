@@ -30,12 +30,13 @@
                         <span>项目资金分布表</span>
                     </div>
                 </el-col>
-                 <el-button class="export" size="mini" type="success" @click="exportExcel()">导出</el-button>
+                 <el-button class="export" size="mini" type="success" @click="exportModel('xmzj')">导出</el-button>
+                 <el-button class="export" size="mini" type="warning" @click.prevent="printModel('printBox')">打印</el-button>
             </el-row>
         </div>
-        <div class="collect-list">
+        <div class="collect-list" id="printBox">
             <el-table :data="CollectList" id="xmzj" stripe border show-summary style="width: 100%">
-                <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip width="150">
+                <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip >
 
                 </el-table-column>
                 <el-table-column label="资金级别" show-overflow-tooltip>
@@ -57,12 +58,10 @@
     </div>
 </template>
 <script>
-import { getDicTab, doCreate } from "@/utils/config";
+import { getDicTab, doCreate,exportExcel,printExcel } from "@/utils/config";
 import { treeQuery } from "@/api/multistageDown";
 import { bmbmDict,xzqhDict } from "@/api/config";
 import { selectZjFb } from "@/api/statisticAnalysis/projectFund";
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
 export default {
     data() {
         return {
@@ -133,16 +132,13 @@ export default {
             });
         },
         //导出
-        exportExcel () {
-            /* generate workbook object from table */
-            var wb = XLSX.utils.table_to_book(document.querySelector('#xmzj'))
-            /* get binary string as output */
-            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-            try {
-                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'xmzj.xlsx')
-            } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-            return wbout
+        exportModel (opt) {
+          exportExcel (opt)
         },
+        //打印
+        printModel(id){
+            printExcel(id);
+        }
     },
     mounted() {
         this.ndOptions = doCreate("ndTit");
@@ -167,5 +163,13 @@ export default {
             }
         }
     }
+}
+</style>
+<style lang="scss">
+@media print {
+    #xmzj{
+        zoom:62%;
+    }
+   
 }
 </style>

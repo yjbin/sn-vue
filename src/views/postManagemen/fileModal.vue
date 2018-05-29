@@ -63,7 +63,7 @@
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="发布时间" prop="lrsj">
-                                <el-date-picker v-model="fileForm.lrsj" type="datetime" placeholder="发布时间" :disabled="true"></el-date-picker>
+                                <el-date-picker v-model="fileForm.lrsj" type="datetime" value-format="timestamp" placeholder="发布时间" :disabled="true"></el-date-picker>
                             </el-form-item>
 
                         </el-col>

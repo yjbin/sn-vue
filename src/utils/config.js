@@ -168,4 +168,43 @@ export function getDicTab(key, val) {
         return d;
       });
     }
+  //导出
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx';
+export function  exportExcel (id) {
+    var arr = Array.prototype.slice.call(document.getElementsByClassName('has-gutter')[1].getElementsByClassName('is-leaf'));
+    arr.map(i=>{
+        i.setAttribute("rowspan","1");
+    })
+    /* generate workbook object from table */
+    var wb = XLSX.utils.table_to_book(document.querySelector('#'+id))
+    /* get binary string as output */
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+    try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), id+'.xlsx')
+    } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+    return wbout
+}
+//打印
+import Print from 'print-js';
+export function printExcel(id){
+  let Print = document.getElementById(id);
+  // let arr = Array.prototype.slice.call(Print.getElementsByClassName('el-table__body')[0].getElementsByClassName('cell'));
+  // arr.forEach(i=>{
+  //     i.setAttribute("display","inherit");
+  // })
+  let newContent = Print.innerHTML;
+  let oldContent = document.body.innerHTML;
+  document.body.innerHTML = newContent;
+  window.print();
+  window.location.reload();
+  document.body.innerHTML = oldContent;
+  return false
+      // let newWindow = window.open("_blank"); 
+      // let codestr = document.getElementById("id").innerHTML;   
+      // newWindow.document.write(codestr);   
+      // newWindow.document.close(); 
+      // newWindow.print();  
+      // return true;
     
+  }
