@@ -36,6 +36,7 @@
         </div>
         <div class="collect-list" id="printBox">
             <el-table :data="dateList" id="xmjd" stripe border show-summary style="width: 100%">
+                <el-table-column label="项目进度汇总表">
                 <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip></el-table-column>
                 <el-table-column label="项目进度">
                     <el-table-column label="0% -- 30%">
@@ -63,6 +64,7 @@
                     <el-table-column prop="counthj" label="数量(个)" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="xmzehj" label="金额(万元)" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="ybfhj" label="已拨付(万元)" show-overflow-tooltip></el-table-column>
+                </el-table-column>
                 </el-table-column>
             </el-table>
         </div>
@@ -178,13 +180,5 @@ export default {
             }
         }
     }
-}
-</style>
-<style lang="scss">
-@media print {
-    #xmjd{
-        zoom:62%;
-    }
-   
 }
 </style>

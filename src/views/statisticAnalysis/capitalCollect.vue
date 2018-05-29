@@ -192,12 +192,5 @@ export default {
     }
 }
 </style>
-<style lang="scss">
-@media print {
-    #zjly{
-        zoom:62%;
-    }
-    
-}
-</style>
+
 

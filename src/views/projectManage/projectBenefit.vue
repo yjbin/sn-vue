@@ -15,6 +15,16 @@
           <el-button type="primary" size="medium" @click="search">查询</el-button>
         </el-form-item>
       </el-form>
+      <div class="capit-tit">
+        <el-row>
+          <el-col :span="12">
+            <div class="user-left">
+              <span>项目效益列表</span>
+            </div>
+          </el-col>
+       
+        </el-row>
+      </div>
       <div class="tabList">
         <el-table :data="tableData" stripe border style="width: 100%">
           <el-table-column type="index" label="序号" width="80"></el-table-column>

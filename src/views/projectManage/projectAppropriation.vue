@@ -15,6 +15,15 @@
                     <el-button type="primary" size="medium" @click="search">查询</el-button>
                 </el-form-item>
             </el-form>
+            <div class="capit-tit">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="user-left">
+                            <span>项目拨款列表</span>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
             <div class="tabList">
                 <el-table :data="tableData" stripe border style="width: 100%">
                     <el-table-column type="index" label="序号" width="80" :index="indexMethod"></el-table-column>
@@ -150,6 +159,20 @@ export default {
 #appropriation {
     .isShow {
         display: none;
+    }
+    .capit-tit {
+        background: #317ecc;
+        margin: 20px 0 0 0;
+        .user-left {
+            span {
+                color: #fff;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                margin: 10px 20px;
+            }
+        }
+       
     }
 }
 </style>

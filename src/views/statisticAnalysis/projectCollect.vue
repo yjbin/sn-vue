@@ -37,6 +37,7 @@
         </div>
         <div class="collect-list" id="printBox">
             <el-table :data="CollectList" id="sbhzb" stripe border show-summary style="width: 100%">
+                <el-table-column label="项目申报汇总表">
                 <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip >
 
                 </el-table-column>
@@ -44,7 +45,10 @@
                     <el-table-column v-for="item in columnList" :prop="item.value" :label="item.label" :key="item.id" :formatter="toFiexds"></el-table-column>
 
                 </el-table-column>
-                <el-table-column prop="heji" label="合计(万元)" show-overflow-tooltip  :formatter="toFiexds"></el-table-column>
+                <el-table-column prop="heji" label="合计(万元)" show-overflow-tooltip  :formatter="toFiexds">
+
+                </el-table-column>
+                </el-table-column>
             </el-table>
         </div>
     </div>
@@ -155,13 +159,5 @@ export default {
             }
         }
     }
-}
-</style>
-<style lang="scss">
-@media print {
-    #sbhzb{
-        zoom:62%;
-    }
-   
 }
 </style>

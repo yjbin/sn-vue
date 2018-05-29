@@ -23,6 +23,7 @@
                 <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
             </el-form-item>
         </el-form>
+        <div>
         <div class="capit-tit">
             <el-row>
                 <el-col :span="12">
@@ -36,6 +37,7 @@
         </div>
         <div class="collect-list" id="printBox">
             <el-table :data="dateList" id="zjyc" stripe border show-summary style="width: 100%">
+                <el-table-column label="资金异常分析表">
                 <el-table-column label="行政区划" prop="xzqh" :formatter="getXzqh" show-overflow-tooltip ></el-table-column>
                 <el-table-column label="异常类型">
                     <el-table-column label="大额拨付" prop="debf"  :formatter="toFiexds" show-overflow-tooltip>
@@ -47,7 +49,9 @@
                 </el-table-column>
                 <el-table-column label="合计(万元)" prop="heji" :formatter="toFiexds" >
                 </el-table-column>
+                </el-table-column>
             </el-table>
+        </div>
         </div>
     </div>
 </template>
@@ -154,13 +158,5 @@ export default {
             }
         }
     }
-}
-</style>
-<style lang="scss">
-@media print {
-    #zjyc{
-        zoom:62%;
-    }
-   
 }
 </style>

@@ -36,6 +36,7 @@
         </div>
         <div class="collect-list" id="printBox">
             <el-table :data="CollectList" id="xmzj" stripe border show-summary style="width: 100%">
+                <el-table-column label="项目资金分布表">
                 <el-table-column prop="xzqh" label="行政区划" :formatter="getXzqh" show-overflow-tooltip >
 
                 </el-table-column>
@@ -52,6 +53,7 @@
                     <el-table-column label="拨付比率%" prop="bilv" :formatter="toFiexds" show-overflow-tooltip>
 
                     </el-table-column>
+                </el-table-column>
                 </el-table-column>
             </el-table>
         </div>
@@ -163,13 +165,5 @@ export default {
             }
         }
     }
-}
-</style>
-<style lang="scss">
-@media print {
-    #xmzj{
-        zoom:62%;
-    }
-   
 }
 </style>
