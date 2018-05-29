@@ -196,8 +196,8 @@ export function exportExcel(id) {
   }
   return wbout
 }
-//打印
 
+//打印
 export function printExcel(id) {
   //let Print = document.getElementById(id);
   // let arr = Array.prototype.slice.call(Print.getElementsByClassName('el-table__body')[0].getElementsByClassName('cell'));
@@ -217,14 +217,12 @@ export function printExcel(id) {
   // window.location.reload();
   // return false
 
-
   let printStr = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'></head>";
   const tabStyle = `<style>
   table,table tr th, table tr td { border:1px solid #f5f7fa;color:#606266;line-height: 30px;height:30px }
   .el-table__header,.el-table__body,.el-table__footer{width:100%!important;border-collapse: collapse;text-align:center;}
   .el-table__body, tr td .cell{width:100%!important}
   </style><body>`;
-
   let content = "";
   let str = document.getElementById(id).innerHTML;
   content = content + str;
@@ -241,3 +239,4 @@ export function printExcel(id) {
 
 
 }
+
