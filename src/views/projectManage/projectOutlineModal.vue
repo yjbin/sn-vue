@@ -267,7 +267,7 @@ export default {
         return {
             //各模态框的开关
             gpsModal: false,
-            showGps: true,
+            showGps: {},
             newModalToggle: false,
             xianModalShow: false,
             shiModalShow: false,
@@ -420,10 +420,11 @@ export default {
         editObj(val) {
             if (val) {
                 this.editForm = Object.assign({}, val);
+                
                 if (this.$refs.editForm) {
                     this.$refs.editForm.resetFields();
                 }
-                window.sessionStorage.setItem("gpsId",this.editForm.xmGps);
+                
                 if (val.fj) {
                     this.fileSrc = {
                         num: Math.random(),
@@ -692,10 +693,29 @@ export default {
         gpsChange() {
             this.gpsModal = true;
             this.gpsTit = "地图选择";
+            let gpsId = this.editForm.xmGps;
+            if(gpsId){
+                    window.sessionStorage.setItem("gpsId",gpsId);
+                    this.showGps={
+                        gpsId:gpsId,
+                        sfShow:true,
+                        num:Math.random()
+                    }
+                }else{
+                    window.sessionStorage.setItem("gpsId","");
+                    this.showGps={
+                        gpsId:"",
+                        sfShow:true,
+                        num:Math.random()
+                    }
+                }
         },
         colseGps(val) {
-            this.gpsModal = val;
-            this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
+            this.gpsModal = val.gpsToggle;
+            if(val.gpsId){
+                this.editForm.xmGps = val.gpsId;
+            }
+            
         },
         //附件
         colseTog(val) {

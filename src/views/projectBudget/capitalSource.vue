@@ -461,7 +461,7 @@ export default {
         };
         return {
             gpsModal: false,
-            showGps: false,
+            showGps: {},
             gpsTit: "",
             zjlyList: [],
             xmList: [],
@@ -879,11 +879,30 @@ export default {
         gpsChange() {
             this.gpsModal = true;
             this.gpsTit = "地图选择";
+            let gpsId = this.xmForm.xmGps;
+            if(gpsId){
+                    
+                    this.showGps={
+                        gpsId:gpsId,
+                        sfShow:false,
+                        num:Math.random()
+                    }
+                }else{
+                    
+                    this.showGps={
+                        gpsId:"",
+                        sfShow:true,
+                        num:Math.random()
+                    }
+                }
         },
         colseGps(val) {
-            this.gpsModal = val;
-            this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
-        }
+            this.gpsModal = val.gpsToggle;
+            if(val.gpsId){
+                this.xmForm.xmGps = val.gpsId;
+            }
+            
+        },
     },
     mounted() {
         this.zjlyQuery();

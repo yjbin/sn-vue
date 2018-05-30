@@ -202,7 +202,7 @@ export default {
     data() {
         return {
             gpsModal: false,
-            showGps: false,
+            showGps: {},
             gpsTit: "",
             showDialog: false,
             accessoryModalInt: false,
@@ -229,7 +229,7 @@ export default {
             this.cylxoptions = doCreate("cylb");
             this.xzqhoptions = doCreate("xzqh");
             this.bmbmoptions = doCreate("bmbm");
-            window.sessionStorage.setItem("gpsId", val.xmGps);
+            
             if (val.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -267,11 +267,30 @@ export default {
         gpsChange() {
             this.gpsModal = true;
             this.gpsTit = "地图选择";
+            let gpsId = this.xmForm.xmGps;
+            if(gpsId){
+                    
+                    this.showGps={
+                        gpsId:gpsId,
+                        sfShow:false,
+                        num:Math.random()
+                    }
+                }else{
+                    
+                    this.showGps={
+                        gpsId:"",
+                        sfShow:true,
+                        num:Math.random()
+                    }
+                }
         },
         colseGps(val) {
-            this.gpsModal = val;
-            this.editForm.xmGps = window.sessionStorage.getItem("gpsId");
-        }
+            this.gpsModal = val.gpsToggle;
+            if(val.gpsId){
+                this.xmForm.xmGps = val.gpsId;
+            }
+            
+        },
     },
     mounted() {
         // treeQuery({ dicttype: "xmlb" }).then(res => {

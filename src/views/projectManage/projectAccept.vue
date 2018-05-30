@@ -511,7 +511,7 @@ export default {
     }
     .capit-tit {
         background: #317ecc;
-        margin: 20px 0 0 0;
+      
         .user-left {
             span {
                 color: #fff;
