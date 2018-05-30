@@ -419,7 +419,6 @@ export default {
         },
         editObj(val) {
             if (val) {
-                debugger
                 this.editForm = Object.assign({}, val);
                 if (this.$refs.editForm) {
                     this.$refs.editForm.resetFields();
