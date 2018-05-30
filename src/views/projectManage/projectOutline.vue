@@ -51,11 +51,11 @@
     </div>
 </template>
 <script>
-import projectOutlineModal from "./projectOutlineModal";
+// import projectOutlineModal from "./projectOutlineModal";
 import { xmlbList, xmmsDelete } from "@/api/projectOutline";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-
+const projectOutlineModal = ()=> import("./projectOutlineModal")
 export default {
     components: {
         projectOutlineModal
