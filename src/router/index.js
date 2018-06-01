@@ -465,6 +465,15 @@ export let asyncRouterMap = [
         icon: '',
         rid: "-1"
       }
+    },{
+      path: 'logManagement',
+      component: logManagement,
+      name: 'logManagement',
+      meta: {
+        title: '日志管理',
+        icon: '',
+        rid: "-1"
+      }
     }]
   }, {
     path: '/ideologicalBuilding',
@@ -661,25 +670,6 @@ export let asyncRouterMap = [
       name: 'CommandModule',
       meta: {
         title: '领导指挥舱',
-        icon: '',
-        rid: "-1"
-      }
-    }]
-  },{
-    path:"/logManagement",
-    component: Layout,
-    redirect: '/logManagement/logManagement',
-    meta: {
-      title: '日志管理',
-      icon: ''  ,
-      rid: ""
-    },
-    children: [{
-      path: 'logManagement',
-      component: logManagement,
-      name: 'logManagement',
-      meta: {
-        title: '日志管理',
         icon: '',
         rid: "-1"
       }

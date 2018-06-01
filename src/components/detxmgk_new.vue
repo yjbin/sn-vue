@@ -34,7 +34,7 @@
             <el-row>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="项目类别" prop="xmlb">
-                        <el-cascader expand-trigger="hover" :options="options" v-model="xmlbArr">
+                        <el-cascader expand-trigger="hover" :options="options" v-model="xmlbArr" style="width: 100%;">
                         </el-cascader>
                     </el-form-item>
                 </el-col>
@@ -151,16 +151,16 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :offset="4" :span="2">
+                <el-col :offset="4" :span="3">
                     <el-button type="primary" size="mini" v-show="editForm.xzqh.length>2" @click="modelShow('sheng')">省级分管科室</el-button>
                 </el-col>
-                <el-col :offset="1" :span="2">
+                <el-col :offset="1" :span="3">
                     <el-button type="primary" size="mini" v-show="editForm.xzqh.length>4" @click="modelShow('shi')">市级分管科室</el-button>
                 </el-col>
-                <el-col :offset="1" :span="2">
+                <el-col :offset="1" :span="3">
                     <el-button type="primary" size="mini" v-show="editForm.xzqh.length>6" @click="modelShow('xian')">县级分管科室</el-button>
                 </el-col>
-                <el-col :offset="1" :span="2">
+                <el-col :offset="1" :span="3">
                     <el-button type="primary" size="mini" v-show="editForm.xzqh.length>9" @click="modelShow('xiang')">乡级分管科室</el-button>
                 </el-col>
             </el-row>

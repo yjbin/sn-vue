@@ -75,7 +75,6 @@ export default {
                     logfindById(val.data).then(res =>{
                         let data = res.data;
                         if (data) {
-                                                debugger
                             _this.detailList = {};
                             _this.detailList = Object.assign({},data);
                             if(val.lx == 0){
