@@ -51,6 +51,18 @@ obj = [{
   label: '其他'
 }];
 dicMap.setItem("xb", JSON.stringify(obj));
+//操作类型
+obj = [{
+  value: '0',
+  label: '增加'
+}, {
+  value: '1',
+  label: '修改'
+}, {
+  value: '2',
+  label: '删除'
+}];
+dicMap.setItem("czlx", JSON.stringify(obj));
 import {
   dictionaries,
   xzqhDict,

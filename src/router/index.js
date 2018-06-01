@@ -59,6 +59,8 @@ import projectFund from '@/views/statisticAnalysis/projectFund'
 import projectProgress from '@/views/statisticAnalysis/projectProgress'
 //领导指挥舱
 import CommandModule from '@/views/CommandModule/CommandModule'
+//日志管理
+import logManagement from '@/views/logManagement/logManagement'
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -649,7 +651,7 @@ export let asyncRouterMap = [
     component: Layout,
     redirect: '/CommandModule/CommandModule',
     meta: {
-      title: '统计分析',
+      title: '领导指挥舱',
       icon: ["lead.png", "lead-c.png"],
       rid: ""
     },
@@ -659,6 +661,25 @@ export let asyncRouterMap = [
       name: 'CommandModule',
       meta: {
         title: '领导指挥舱',
+        icon: '',
+        rid: "-1"
+      }
+    }]
+  },{
+    path:"/logManagement",
+    component: Layout,
+    redirect: '/logManagement/logManagement',
+    meta: {
+      title: '日志管理',
+      icon: ''  ,
+      rid: ""
+    },
+    children: [{
+      path: 'logManagement',
+      component: logManagement,
+      name: 'logManagement',
+      meta: {
+        title: '日志管理',
         icon: '',
         rid: "-1"
       }

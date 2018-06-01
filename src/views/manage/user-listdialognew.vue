@@ -1,6 +1,6 @@
 <template>
   <div class="user-listdialog">
-    <el-dialog :title="text_Tit " :visible.sync="newModalToggle" width="50%" :before-close="userClose">
+    <el-dialog :title="text_Tit " :visible.sync="newModalToggle" width="50%" top="5vh" :before-close="userClose">
       <div class="user-content">
         <el-tabs v-model="tabToggle" type="card">
           <el-tab-pane label="登录信息" name="first">

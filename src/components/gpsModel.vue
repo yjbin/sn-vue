@@ -35,8 +35,8 @@ export default {
         showGps: {
             handler: function(val) {
                 if (val) {
-                    window.open(this.iframeSrc, "ifrmname", "");
                     this.$nextTick(() => {
+                        window.open(this.iframeSrc, "ifrmname", "");
                         let iframe1 = document.getElementById("iframe1");
                         iframe1.onload = function() {
                             if (val.gpsId) {

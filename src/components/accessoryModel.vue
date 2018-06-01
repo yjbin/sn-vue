@@ -17,9 +17,9 @@
                     </el-table>
                 </div>
                 <div class="fileBoxRight">
-                     <el-upload class="upload-demo" :disabled="!upShowhide" :action="uploadUrl" multiple :on-success="handleSuccess" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile" >
-                          <i class="el-icon-upload"></i>
-                         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                    <el-upload class="upload-demo" :disabled="!upShowhide" :action="uploadUrl" multiple :on-success="handleSuccess" :file-list="fileList" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="delFile">
+                        <i class="el-icon-upload"></i>
+                        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
                     </el-upload>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                 <el-button type="primary" size="small" @click="btn_save">确定</el-button>
             </span>
         </el-dialog>
-         <el-dialog :visible.sync="dialogVisible">
+        <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt="" class="fileBoxRight_img">
         </el-dialog>
     </div>
@@ -41,10 +41,9 @@ export default {
             text_Text: "",
             newSrcstr: "",
             dialogImageUrl: "",
-            dialogVisible:false,
+            dialogVisible: false,
             baseUrl: process.env.BASE_URL,
             uploadUrl: process.env.BASE_URL + "/file/ajax/upload_file"
-
         };
     },
     props: {
@@ -73,10 +72,14 @@ export default {
                         this.fileList.push({
                             name: fileName[1],
                             href:
-                                this.baseUrl+"/file/downloadFile?filePath=" +
+                                this.baseUrl +
+                                "/file/downloadFile?filePath=" +
                                 i,
-                            src:i,
-                            url:this.baseUrl+ "/file/downloadFile?filePath="+i
+                            src: i,
+                            url:
+                                this.baseUrl +
+                                "/file/downloadFile?filePath=" +
+                                i
                         });
                     });
                 }
@@ -110,7 +113,7 @@ export default {
             this.$emit("colseTog", this.fileToggle);
         },
         //查看
-        handlePictureCardPreview(file){
+        handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
@@ -127,10 +130,14 @@ export default {
                 this.fileList.push({
                     name: fileName[1],
                     href:
-                        this.baseUrl+"/file/downloadFile?filePath=" +
-                        res.msg,
+                        this.baseUrl + "/file/downloadFile?filePath=" + res.msg,
                     src: res.msg,
-                    url: this.baseUrl+"/file/downloadFile?filePath="+res.msg
+                    url: this.baseUrl + "/file/downloadFile?filePath=" + res.msg
+                });
+            } else {
+                this.$message({
+                    type: "warning",
+                    message: res.msg
                 });
             }
         }
@@ -176,14 +183,13 @@ export default {
             }
             .fileBoxRight {
                 flex: 1;
-                height: 58vh; 
-                padding:10px;
-                box-sizing:border-box;
+                height: 58vh;
+                padding: 10px;
+                box-sizing: border-box;
                 overflow: auto;
                 .fileBoxRight_img {
                     width: 80%;
                     margin: 1% 0px 0 10%;
-                 
                 }
             }
         }
@@ -191,9 +197,9 @@ export default {
     .el-dialog {
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
-    .el-upload-dragger{
-        width:150px;
-        height:150px;
+    .el-upload-dragger {
+        width: 150px;
+        height: 150px;
     }
     .el-dialog__footer {
         border-top: 1px solid #ccc;

@@ -1,8 +1,10 @@
 <template>
     <div class="listdialogaccr">
-        <el-dialog title="授权" :visible.sync="accrModalToggle" width="40%" :before-close="accrClose">
+        <el-dialog title="授权" :visible.sync="accrModalToggle" width="40%" top="5vh" :before-close="accrClose">
             <div class="listdialogaccr-content">
+                <el-scrollbar class="page-component__scroll">   
                 <el-tree :data="treeData" node-key="id" ref="tree" show-checkbox default-expand-all></el-tree>
+                </el-scrollbar>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="accr_save">保 存</el-button>
@@ -99,8 +101,8 @@ export default {
 <style lang="scss" scoped>
 .listdialogaccr {
     .listdialogaccr-content {
-        width: 500px;
-        margin: 0 auto;
+        width: 100%;
+        height: 70vh;
     }
 }
 </style>
