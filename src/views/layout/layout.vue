@@ -86,9 +86,13 @@ export default {
                         .el-menu-item {
                             padding-left: 70px!important;
                         }
-                    }
+                        .el-submenu__title{
+                            padding-left: 60px!important;
+                        }     
+                    }                
+                                 
                 }
-            }
+            }        
         }
         .page-component__scroll{
             height: 100%;

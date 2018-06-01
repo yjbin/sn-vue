@@ -166,7 +166,7 @@
                 </el-col>
             </el-row>
             <br>
-            <el-row>
+            <!-- <el-row>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="行政区划">
                         <el-select v-model="xmForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
@@ -183,7 +183,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row> -->
             <el-row>
                 <el-col :span="4" :offset="4">
                     <el-form-item prop="xzqh">

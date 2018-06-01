@@ -111,12 +111,14 @@ export default {
                 .then(() => {
                     if (data.id) {
                         treeDel({ id: data.id }).then(res => {
-                            if (res.success) {
+                            let data = res.data;
+                            if (data.success) {                             
                                 this.$message({
                                     type: "success",
                                     message: res.data.msg
                                 });
                                 this.treeQuery();
+                                
                             } else {
                                 this.$message({
                                     type: "warning",
@@ -185,6 +187,7 @@ export default {
                                 message: data.msg,
                                 type: "success"
                             });
+                            // window.location.reload();
                         } else {
                             _this.$message({
                                 message: data.msg,

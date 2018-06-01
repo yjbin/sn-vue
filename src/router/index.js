@@ -60,7 +60,10 @@ import projectProgress from '@/views/statisticAnalysis/projectProgress'
 //领导指挥舱
 import CommandModule from '@/views/CommandModule/CommandModule'
 //日志管理
-import logManagement from '@/views/logManagement/logManagement'
+import itemLog from '@/views/logManagement/itemLog'
+import cashLog from "@/views/logManagement/cashLog"
+import approveLog from "@/views/logManagement/approveLog"
+import processLog from "@/views/logManagement/processLog"
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -251,7 +254,7 @@ export let asyncRouterMap = [
       meta: {
         title: '大额预警',
         icon: '',
-        rid: ""
+        rid: "-1"
       }
     }, {
       path: 'excessWarn',
@@ -260,7 +263,7 @@ export let asyncRouterMap = [
       meta: {
         title: '超额预警',
         icon: '',
-        rid: ""
+        rid: "-1"
       }
     }, {
       path: 'areProject',
@@ -466,14 +469,54 @@ export let asyncRouterMap = [
         rid: "-1"
       }
     },{
-      path: 'logManagement',
-      component: logManagement,
-      name: 'logManagement',
+      path: '/logManagement',
+      redirect: '/logManagement/itemLog',
+      component: Inner_Layout,
       meta: {
         title: '日志管理',
         icon: '',
         rid: "-1"
-      }
+      },
+      children: [{
+        path: 'itemLog',
+        component: itemLog,
+        name: 'itemLog',
+        meta: {
+          title: '项目日志',
+          icon: '',
+          rid: "-1"
+        }
+      },
+      {
+        path: 'cashLog',
+        component: cashLog,
+        name: 'cashLog',
+        meta: {
+          title: '资金日志',
+          icon: '',
+          rid: "-1"
+        }
+      },
+      {
+        path: 'processLog',
+        component: processLog,
+        name: 'processLog',
+        meta: {
+          title: '进度日志',
+          icon: '',
+          rid: "-1"
+        }
+      },
+      {
+        path: 'approveLog',
+        component: approveLog,
+        name: 'approveLog',
+        meta: {
+          title: '拨付日志',
+          icon: '',
+          rid: "-1"
+        }
+      }]
     }]
   }, {
     path: '/ideologicalBuilding',

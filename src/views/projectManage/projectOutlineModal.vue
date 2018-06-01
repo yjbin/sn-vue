@@ -1,180 +1,182 @@
 <template>
     <div class="projecOutlinModal">
-        <el-dialog :title="textTit " :visible.sync="newModal" width="50%" top="9vh" :before-close="userClose2" :close-on-click-modal="false">
+        <el-dialog :title="textTit " :visible.sync="newModal" width="60%" top="5vh" :before-close="userClose2" :close-on-click-modal="false">
             <div class="user-content">
-                <el-form :inline="true" class="demo-form-inline" :model="editForm" ref="editForm" label-width="80px" :rules="xmGsrules">
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="项目名称" prop="xmmc">
-                                <el-input v-model="editForm.xmmc" placeholder="项目名称"></el-input>
-                                <el-input v-model="editForm.ssdwId" placeholder="试试单位ID" style="display: none"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="年度" prop="nd">
-                                <el-select v-model="editForm.nd" placeholder="请选择" style="width:100%">
-                                    <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="项目编号" prop="xmbh">
-                                <el-input v-model="editForm.xmbh" placeholder="项目编号"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="产业类别" prop="cylx">
-                                <el-select v-model="editForm.cylx" placeholder="请选择" style="width:100%">
-                                    <el-option v-for="(item,index) in cylxoptions" :key="index" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="项目类别" prop="xmlb">
-                                <el-cascader expand-trigger="hover" :options="options" v-model="xmlbArr" @change="duojiChange" style="width:100%">
-                                </el-cascader>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="录入时间" prop="lrsj">
-                                <el-date-picker type="datetime" v-model="editForm.lrsj" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="实施单位" prop="ssdw">
-                                <el-input v-model="editForm.ssdw" placeholder="实施单位" @focus="ssdwFocus()"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="负责人" prop="fzr">
-                                <el-input v-model="editForm.fzr" placeholder="负责人" :disabled="true"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="开始时间" prop="kssj">
-                                <el-date-picker type="datetime" placeholder="开始时间" v-model="editForm.kssj"  value-format="timestamp" style="width: 100%;" :picker-options="limitStartTime"></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="结束时间" prop="jssj">
-                                <el-date-picker type="datetime" placeholder="结束时间" v-model="editForm.jssj"  value-format="timestamp" style="width: 100%;" :picker-options="limitEndTime"></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="项目总额" prop="xmze">
-                                <el-input v-model.number="editForm.xmze" placeholder="项目总额" :disabled="true"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="中央资金" prop="zyZj">
-                                <el-input v-model.number="editForm.zyZj" placeholder="中央资金"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="省级资金" prop="shengZj">
-                                <el-input v-model.number="editForm.shengZj" placeholder="省级资金"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="市级资金" prop="shiZj">
-                                <el-input v-model.number="editForm.shiZj" placeholder="市级资金"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="县级资金" prop="xianZj">
-                                <el-input v-model.number="editForm.xianZj" placeholder="县级资金"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="乡级资金" prop="xiangZj">
-                                <el-input v-model.number="editForm.xiangZj" placeholder="乡级资金"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="行政区划" prop="xzqh">
-                                <el-select v-model="editForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
-                                    <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="科室部门" prop="bmbm">
-                                <el-select v-model="editForm.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
-                                    <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="11" :offset="1">
-                            <el-form-item label="录入人" prop="lrr">
-                                <el-input v-model="editForm.lrr" placeholder="录入人" :disabled="true"></el-input>
-                            </el-form-item>
-                        </el-col>
+                <el-scrollbar class="page-component__scroll">
+                    <el-form :inline="true" class="demo-form-inline" :model="editForm" ref="editForm" label-width="80px" :rules="xmGsrules">
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="项目名称" prop="xmmc">
+                                    <el-input v-model="editForm.xmmc" placeholder="项目名称"></el-input>
+                                    <el-input v-model="editForm.ssdwId" placeholder="试试单位ID" style="display: none"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="年度" prop="nd">
+                                    <el-select v-model="editForm.nd" placeholder="请选择" style="width:100%">
+                                        <el-option v-for="(item,index) in ndoptions" :key="index" :label="item.label" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="项目编号" prop="xmbh">
+                                    <el-input v-model="editForm.xmbh" placeholder="项目编号"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="产业类别" prop="cylx">
+                                    <el-select v-model="editForm.cylx" placeholder="请选择" style="width:100%">
+                                        <el-option v-for="(item,index) in cylxoptions" :key="index" :label="item.label" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="项目类别" prop="xmlb">
+                                    <el-cascader expand-trigger="hover" :options="options" v-model="xmlbArr" @change="duojiChange" style="width:100%">
+                                    </el-cascader>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="录入时间" prop="lrsj">
+                                    <el-date-picker type="datetime" v-model="editForm.lrsj" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="实施单位" prop="ssdw">
+                                    <el-input v-model="editForm.ssdw" placeholder="实施单位" @focus="ssdwFocus()"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="负责人" prop="fzr">
+                                    <el-input v-model="editForm.fzr" placeholder="负责人" :disabled="true"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="开始时间" prop="kssj">
+                                    <el-date-picker type="datetime" placeholder="开始时间" v-model="editForm.kssj" value-format="timestamp" style="width: 100%;" :picker-options="limitStartTime"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="结束时间" prop="jssj">
+                                    <el-date-picker type="datetime" placeholder="结束时间" v-model="editForm.jssj" value-format="timestamp" style="width: 100%;" :picker-options="limitEndTime"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="项目总额" prop="xmze">
+                                    <el-input v-model.number="editForm.xmze" placeholder="项目总额" :disabled="true"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="中央资金" prop="zyZj">
+                                    <el-input v-model.number="editForm.zyZj" placeholder="中央资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="省级资金" prop="shengZj">
+                                    <el-input v-model.number="editForm.shengZj" placeholder="省级资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="市级资金" prop="shiZj">
+                                    <el-input v-model.number="editForm.shiZj" placeholder="市级资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="县级资金" prop="xianZj">
+                                    <el-input v-model.number="editForm.xianZj" placeholder="县级资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="乡级资金" prop="xiangZj">
+                                    <el-input v-model.number="editForm.xiangZj" placeholder="乡级资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="行政区划" prop="xzqh">
+                                    <el-select v-model="editForm.xzqh" placeholder="请选择" style="width:100%" :disabled="true">
+                                        <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="科室部门" prop="bmbm">
+                                    <el-select v-model="editForm.bmbm" placeholder="请选择" style="width:100%" :disabled="true">
+                                        <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="录入人" prop="lrr">
+                                    <el-input v-model="editForm.lrr" placeholder="录入人" :disabled="true"></el-input>
+                                </el-form-item>
+                            </el-col>
 
-                    </el-row>
-                    <el-row>
-                        <el-col :span="23" :offset="1">
-                            <el-form-item label="项目地址" prop="xmdz">
-                                <el-input v-model="editForm.xmdz" placeholder="项目地址"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="23" :offset="1">
-                            <el-form-item label="项目GPS" prop="xmGps">
-                                <el-input v-model="editForm.xmGps" placeholder="点击选择GPS地址" @focus="gpsChange"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="23" :offset="1">
-                            <el-form-item label="建设内容" prop="jsnr">
-                                <el-input type="textarea" :autosize="{ minRows: 5}" v-model="editForm.jsnr"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="23" :offset="1">
+                                <el-form-item label="项目地址" prop="xmdz">
+                                    <el-input v-model="editForm.xmdz" placeholder="项目地址"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="23" :offset="1">
+                                <el-form-item label="项目GPS" prop="xmGps">
+                                    <el-input v-model="editForm.xmGps" placeholder="点击选择GPS地址" @focus="gpsChange"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="23" :offset="1">
+                                <el-form-item label="建设内容" prop="jsnr">
+                                    <el-input type="textarea" :autosize="{ minRows: 5}" v-model="editForm.jsnr"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
 
-                </el-form>
-                <el-row>
-                    <el-col :offset="3" :span="2">
-                        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>2" @click="shengShow">省级分管科室</el-button>
-                    </el-col>
-                    <el-col :offset="2" :span="2">
-                        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>4" @click="shiShow">市级分管科室</el-button>
-                    </el-col>
-                    <el-col :offset="2" :span="2">
-                        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>6" @click="xianShow">县级分管科室</el-button>
-                    </el-col>
-                    <el-col :offset="2" :span="2">
-                        <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>9" @click="xiangShow">乡级分管科室</el-button>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :offset="3" :span="23">
-                        <el-button type="success" class="fileButtom" size="small" @click="fileClick">附件</el-button>
-                    </el-col>
-                </el-row>
+                    </el-form>
+                    <el-row>
+                        <el-col :offset="3" :span="2">
+                            <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>2" @click="shengShow">省级分管科室</el-button>
+                        </el-col>
+                        <el-col :offset="2" :span="2">
+                            <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>4" @click="shiShow">市级分管科室</el-button>
+                        </el-col>
+                        <el-col :offset="2" :span="2">
+                            <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>6" @click="xianShow">县级分管科室</el-button>
+                        </el-col>
+                        <el-col :offset="2" :span="2">
+                            <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>9" @click="xiangShow">乡级分管科室</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :offset="3" :span="20">
+                            <el-button type="success" class="fileButtom" size="small" @click="fileClick">附件</el-button>
+                        </el-col>
+                    </el-row>
+                </el-scrollbar>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button v-show="shenbaoTrue" type="primary" @click="userbtn_save">保 存</el-button>
@@ -191,7 +193,7 @@
             <el-dialog :title="ssdwtit" :visible.sync="ssdwVisible" :before-close="userClose" width="80%">
                 <div class="user-list">
                     <el-form :inline="true" class="demo-form-inline">
-                       <el-form-item label="行政区划">
+                        <el-form-item label="行政区划">
                             <el-select v-model="search_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
                                 <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
                                 </el-option>
@@ -295,7 +297,7 @@ export default {
             pageNo2: 1,
             pageSize2: 6,
             totalCount2: 0,
-            search_xzqh:"",
+            search_xzqh: "",
             xianTit: "",
             shiTit: "",
             shengTit: "",
@@ -420,11 +422,11 @@ export default {
         editObj(val) {
             if (val) {
                 this.editForm = Object.assign({}, val);
-                
+
                 if (this.$refs.editForm) {
                     this.$refs.editForm.resetFields();
                 }
-                
+
                 if (val.fj) {
                     this.fileSrc = {
                         num: Math.random(),
@@ -515,7 +517,7 @@ export default {
         },
         btn_cancel() {
             this.newModalToggle = false;
-            this.search_xzqh = '';
+            this.search_xzqh = "";
             this.$emit("newToggle", this.newModalToggle);
         },
         userClose2() {
@@ -555,7 +557,6 @@ export default {
                                     pageSize: this.pageSize
                                 };
                                 this.$emit("getList", obj);
-                         
                             } else {
                                 this.$message({
                                     message: data.msg,
@@ -578,7 +579,6 @@ export default {
                                     pageSize: this.pageSize
                                 };
                                 this.$emit("getList", obj);
-                      
                             } else {
                                 this.$message({
                                     message: data.msg
@@ -599,10 +599,13 @@ export default {
             this.ssdwtit = "实施单位列表";
             let obj = {
                 pageNo: this.pageNo2,
-                pageSize: this.pageSize2,
+                pageSize: this.pageSize2
             };
-            level ? (obj.dwbm = this.$store.state.user.user.uUser.bmbm,this.search_xzqh = ""):"";
-            this.search_xzqh ? obj.by1 = this.search_xzqh:"";
+            level
+                ? ((obj.dwbm = this.$store.state.user.user.uUser.bmbm),
+                  (this.search_xzqh = ""))
+                : "";
+            this.search_xzqh ? (obj.by1 = this.search_xzqh) : "";
             searchUnit(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
@@ -694,28 +697,27 @@ export default {
             this.gpsModal = true;
             this.gpsTit = "地图选择";
             let gpsId = this.editForm.xmGps;
-            if(gpsId){
-                    window.sessionStorage.setItem("gpsId",gpsId);
-                    this.showGps={
-                        gpsId:gpsId,
-                        sfShow:true,
-                        num:Math.random()
-                    }
-                }else{
-                    window.sessionStorage.setItem("gpsId","");
-                    this.showGps={
-                        gpsId:"",
-                        sfShow:true,
-                        num:Math.random()
-                    }
-                }
+            if (gpsId) {
+                window.sessionStorage.setItem("gpsId", gpsId);
+                this.showGps = {
+                    gpsId: gpsId,
+                    sfShow: true,
+                    num: Math.random()
+                };
+            } else {
+                window.sessionStorage.setItem("gpsId", "");
+                this.showGps = {
+                    gpsId: "",
+                    sfShow: true,
+                    num: Math.random()
+                };
+            }
         },
         colseGps(val) {
             this.gpsModal = val.gpsToggle;
-            if(val.gpsId){
+            if (val.gpsId) {
                 this.editForm.xmGps = val.gpsId;
             }
-            
         },
         //附件
         colseTog(val) {
@@ -745,6 +747,20 @@ export default {
 </script>
 <style lang="scss">
 .projecOutlinModal {
+    .user-content {
+        height: 68vh;
+        overflow: hidden;
+        overflow-y: auto;
+        .page-component__scroll {
+            height: 100%;
+            .page-component__scroll .el-scrollbar__wrap {
+                overflow: auto;
+            }
+            .el-scrollbar__wrap {
+                overflow-x: hidden;
+            }
+        }
+    }
     .el-dialog__header {
         background: #307ecc;
         .el-dialog__title {

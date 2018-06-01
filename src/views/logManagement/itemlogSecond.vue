@@ -13,7 +13,7 @@
         </div>
         <div v-show="distlx==0" class="box">
             <el-row class="topform">
-                <h4 class="left-text">添加后信息</h4>
+                <h4 class="left-text">添加信息</h4>
                 <hr>
                 <detxmgk-new :xmgkList="addList"></detxmgk-new> 
             </el-row>
@@ -36,7 +36,7 @@
         </div>
         <div v-show="distlx==2" class="box">
               <el-row class="topform">
-                <h4 class="left-text">删除前信息</h4>
+                <h4 class="left-text">删除信息</h4>
                 <hr>
                 <detxmgk-new :xmgkList="delFrom"></detxmgk-new> 
             </el-row>
@@ -47,7 +47,7 @@
 <script>
 import { logfindById } from "@/api/logManagent/logManagent";
 import detxmgkNew from "../../components/detxmgk_new";
-const editstart = ()=> import("./editstart-detXmgk");
+const editstart = ()=> import("./itemditstart");
 export default {
     components: {
         detxmgkNew,
@@ -119,14 +119,20 @@ export default {
         padding: 20px 0 0 10px;
         box-sizing: border-box;
         .topform {
+            position: relative;
                 .el-form-item {
                         width: 100%;
                     }
                 }
                 .left-text {
                     width: 80px;
+                    height: 25px;
+                    text-align: center;
+                    background: #fff;
                     margin: 0 auto;
                     color:#3A95FF;
+                    position: absolute;
+                    left:48%;
                 }
         .czq{
             width: 50%;

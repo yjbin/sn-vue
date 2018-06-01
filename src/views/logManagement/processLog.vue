@@ -31,7 +31,7 @@
                 <el-row>
                     <el-col :span="12">
                         <div class="user-left">
-                            <span>日志列表</span>
+                            <span>进度日志列表</span>
                         </div>
                     </el-col>
                 </el-row>
@@ -69,7 +69,7 @@
 import { logQuery } from "@/api/logManagent/logManagent";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-import logSecond from "./logSecond";
+import logSecond from "./itemlogSecond";
 export default {
     components:{
         logSecond
