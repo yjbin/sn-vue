@@ -64,6 +64,9 @@ import itemLog from '@/views/logManagement/itemLog'
 import cashLog from "@/views/logManagement/cashLog"
 import approveLog from "@/views/logManagement/approveLog"
 import processLog from "@/views/logManagement/processLog"
+import acceptLog from "@/views/logManagement/acceptLog"
+import assessLog from "@/views/logManagement/assessLog"
+import benefitLog from "@/views/logManagement/benefitLog"
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -516,7 +519,38 @@ export let asyncRouterMap = [
           icon: '',
           rid: "-1"
         }
-      }]
+      },
+      {
+        path: 'acceptLog',
+        component: acceptLog,
+        name: 'acceptLog',
+        meta: {
+          title: '验收日志',
+          icon: '',
+          rid: "-1"
+        }
+      },
+      {
+        path: 'benefitLog',
+        component: benefitLog,
+        name: 'benefitLog',
+        meta: {
+          title: '效益日志',
+          icon: '',
+          rid: "-1"
+        }
+      },
+      {
+        path: 'assessLog',
+        component: assessLog,
+        name: 'assessLog',
+        meta: {
+          title: '考核日志',
+          icon: '',
+          rid: "-1"
+        }
+      }
+    ]
     }]
   }, {
     path: '/ideologicalBuilding',

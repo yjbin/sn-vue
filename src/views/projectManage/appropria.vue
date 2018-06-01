@@ -86,7 +86,7 @@
             </el-col>
             <el-col :span="9" :offset="2">
               <el-form-item label="拨付时间" prop="bfsj">
-                <el-date-picker type="datetime" v-model="bfzjFrom.bfsj" placeholder="拨付时间"></el-date-picker>
+                <el-date-picker type="datetime" v-model="bfzjFrom.bfsj" placeholder="拨付时间" value-format="timestamp"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>

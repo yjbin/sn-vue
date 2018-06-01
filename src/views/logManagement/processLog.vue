@@ -69,7 +69,7 @@
 import { logQuery } from "@/api/logManagent/logManagent";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-import logSecond from "./itemlogSecond";
+import logSecond from "./processLogDetails";
 export default {
     components:{
         logSecond
@@ -139,7 +139,7 @@ export default {
                 pageNo: this.pageNo,
                 // bmbm: this.$store.state.user.user.uUser.bmbm,
                 // xzqh: this.$store.state.user.user.uUser.xzqh,
-                table:"xmb"
+                table:"xmjd"
             };
             this.searchList.czlx ? (obj.czlx = this.searchList.czlx) : "";
             this.searchList.czr ? (obj.zjmc = this.searchList.czr) : "";
@@ -159,7 +159,7 @@ export default {
                 }
             });
         },
-        //编辑
+        //详情
         logDetail(row) {
             if (row) {
                 this.czlx = {

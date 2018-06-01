@@ -63,6 +63,16 @@ obj = [{
   label: '删除'
 }];
 dicMap.setItem("czlx", JSON.stringify(obj));
+//验收意见
+obj = [{
+  label: "同意",
+  value: "1"
+},
+{
+  label: "不同意",
+  value: "0"
+}];
+dicMap.setItem("ysyj", JSON.stringify(obj));
 import {
   dictionaries,
   xzqhDict,

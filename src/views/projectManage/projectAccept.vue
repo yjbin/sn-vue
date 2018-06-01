@@ -196,16 +196,7 @@ export default {
             xmjdList: [],
             xzqhoptions: [],
             bmbmoptions: [],
-            ysjgoptions: [
-                {
-                    label: "同意",
-                    value: "1"
-                },
-                {
-                    label: "不同意",
-                    value: "0"
-                }
-            ],
+            ysjgoptions: [],
             xmysFrom: {},
             seatch_nd: "",
             seatch_name: "",
@@ -492,6 +483,7 @@ export default {
         this.ndOptions = doCreate("ndTit");
         this.xzqhoptions = doCreate("xzqh");
         this.bmbmoptions = doCreate("bmbm");
+        this.ysjgoptions = doCreate('ysyj')
         this.getList();
         this.addUpdatePd = true;
         this.fileSrc = {

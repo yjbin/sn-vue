@@ -61,7 +61,7 @@
             <el-row>
                 <el-button class="fr mar10" size="mini" type="primary" @click="backBtn()">返回</el-button>
             </el-row>
-            <approve-second :czlx="czlx"></approve-second>
+            <accept-second :czlx="czlx"></accept-second>
         </div>
     </div>
 </template>
@@ -69,11 +69,10 @@
 import { logQuery } from "@/api/logManagent/logManagent";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-import approveSecond from "./approveSecond";
-import departmentVue from '../manage/department.vue';
+import acceptSecond from "./acceptlogSecond";
 export default {
     components:{
-        approveSecond
+        acceptSecond
     },
     data() {
         return {
@@ -140,7 +139,7 @@ export default {
                 pageNo: this.pageNo,
                 // bmbm: this.$store.state.user.user.uUser.bmbm,
                 // xzqh: this.$store.state.user.user.uUser.xzqh,
-                table:"zjbfjl"
+                table:"xmys"
             };
             this.searchList.czlx ? (obj.czlx = this.searchList.czlx) : "";
             this.searchList.czr ? (obj.zjmc = this.searchList.czr) : "";

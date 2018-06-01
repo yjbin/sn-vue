@@ -31,7 +31,7 @@
                 <el-row>
                     <el-col :span="12">
                         <div class="user-left">
-                            <span>拨付日志列表</span>
+                            <span>效益日志列表</span>
                         </div>
                     </el-col>
                 </el-row>
@@ -61,7 +61,7 @@
             <el-row>
                 <el-button class="fr mar10" size="mini" type="primary" @click="backBtn()">返回</el-button>
             </el-row>
-            <approve-second :czlx="czlx"></approve-second>
+            <log-second :czlx="czlx"></log-second>
         </div>
     </div>
 </template>
@@ -69,11 +69,10 @@
 import { logQuery } from "@/api/logManagent/logManagent";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
-import approveSecond from "./approveSecond";
-import departmentVue from '../manage/department.vue';
+import logSecond from "./benefitLogDetails";
 export default {
     components:{
-        approveSecond
+        logSecond
     },
     data() {
         return {
@@ -140,7 +139,7 @@ export default {
                 pageNo: this.pageNo,
                 // bmbm: this.$store.state.user.user.uUser.bmbm,
                 // xzqh: this.$store.state.user.user.uUser.xzqh,
-                table:"zjbfjl"
+                table:"xmxy"
             };
             this.searchList.czlx ? (obj.czlx = this.searchList.czlx) : "";
             this.searchList.czr ? (obj.zjmc = this.searchList.czr) : "";
@@ -160,7 +159,7 @@ export default {
                 }
             });
         },
-        //编辑
+        //详情
         logDetail(row) {
             if (row) {
                 this.czlx = {
