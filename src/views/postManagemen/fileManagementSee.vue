@@ -206,7 +206,7 @@ export default {
                 nd: this.seatch_nd,
                 name: this.seatch_name,
                 jsdw: this.$store.state.user.user.uUser.bmbm,
-                xzqh: this.$store.state.user.user.uUser.xzqh,
+                // xzqh: this.$store.state.user.user.uUser.xzqh,
                 read: this.seatch_fwzt
             };
             fileQuery(obj).then(res => {
