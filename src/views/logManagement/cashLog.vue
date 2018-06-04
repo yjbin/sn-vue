@@ -172,8 +172,7 @@ export default {
                     type:"warning",
                     message:"暂无此表格的信息!"
                 })
-            }
-            
+            }          
         },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;

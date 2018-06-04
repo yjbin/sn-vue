@@ -41,7 +41,7 @@
                 </el-col>
                 <el-col :span="9" :offset="2">
                     <el-form-item label="录入时间" prop="lrsj">
-                        <el-date-picker id="xdsysj" v-model="xmjdFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true"></el-date-picker>
+                        <el-date-picker id="xdsysj" v-model="xmjdFrom.lrsj" type="datetime" value-format="timestamp" placeholder="录入时间" :disabled="true"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>

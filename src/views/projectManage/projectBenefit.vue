@@ -138,7 +138,7 @@
                 </el-col>
                 <el-col :span="11">
                   <el-form-item label="录入时间" prop="lrsj">
-                    <el-date-picker v-model="xmxyFrom.lrsj" type="datetime" placeholder="录入时间" style="width:100%" :disabled="true"></el-date-picker>
+                    <el-date-picker v-model="xmxyFrom.lrsj" type="datetime" value-format="timestamp" placeholder="录入时间" style="width:100%" :disabled="true"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>

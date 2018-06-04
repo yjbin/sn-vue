@@ -77,7 +77,7 @@
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="录入时间">
-                                            <el-date-picker v-model.trim="formData.lrsj" type="datetime" placeholder="录入时间" disabled></el-date-picker>
+                                            <el-date-picker v-model.trim="formData.lrsj" type="datetime" value-format="timestamp" placeholder="录入时间" disabled></el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -191,7 +191,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="录入时间" prop="lrsj">
-                                <el-date-picker v-model="modelData.lrsj" type="datetime" placeholder="录入时间" disabled></el-date-picker>
+                                <el-date-picker v-model="modelData.lrsj" type="datetime" value-format="timestamp" placeholder="录入时间" disabled></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>

@@ -96,7 +96,7 @@
             </el-col>
             <el-col :span="9" :offset="2">
                 <el-form-item label="录入时间" prop="lrsj">
-                    <el-date-picker v-model="zjlyForm.lrsj" type="datetime" placeholder="录入时间" :disabled="true"></el-date-picker>
+                    <el-date-picker v-model="zjlyForm.lrsj" type="datetime" value-format="timestamp" placeholder="录入时间" :disabled="true"></el-date-picker>
                 </el-form-item>
 
             </el-col>
@@ -104,7 +104,7 @@
         <el-row>
             <el-col :span="9" :offset="2">
                 <el-form-item label="到位时间" prop="dwsj">
-                    <el-date-picker v-model="zjlyForm.dwsj" type="datetime" :editable="false" value-format="timestamp" placeholder="到位时间"></el-date-picker>
+                    <el-date-picker v-model="zjlyForm.dwsj" type="datetime"  :editable="false" value-format="timestamp" placeholder="到位时间"></el-date-picker>
                 </el-form-item>
             </el-col>
             <el-col :span="9" :offset="2">

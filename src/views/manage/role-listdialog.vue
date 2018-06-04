@@ -87,7 +87,7 @@
                       <span>有效开始日期：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData1" type="datetime" placeholder="有效开始日期"></el-date-picker>
+                      <el-date-picker v-model="pickerData1" type="datetime" value-format="timestamp" placeholder="有效开始日期"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -97,7 +97,7 @@
                       <span>有效截至日期：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData2" type="datetime" placeholder="有效截至日期"></el-date-picker>
+                      <el-date-picker v-model="pickerData2" type="datetime" value-format="timestamp" placeholder="有效截至日期"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -109,7 +109,7 @@
                       <span>密码失效日期：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData3" type="datetime" placeholder="密码失效日期"></el-date-picker>
+                      <el-date-picker v-model="pickerData3" type="datetime" value-format="timestamp" placeholder="密码失效日期"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -141,7 +141,7 @@
                       <span>最后登录时间：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData4" type="datetime" placeholder="最后登录时间"></el-date-picker>
+                      <el-date-picker v-model="pickerData4" type="datetime" value-format="timestamp" placeholder="最后登录时间"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -153,7 +153,7 @@
                       <span>解锁时间：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData5" type="datetime" placeholder="解锁时间"></el-date-picker>
+                      <el-date-picker v-model="pickerData5" type="datetime" value-format="timestamp" placeholder="解锁时间"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -175,7 +175,7 @@
                       <span>创建时间：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData6" type="datetime" placeholder="创建时间"></el-date-picker>
+                      <el-date-picker v-model="pickerData6" type="datetime" value-format="timestamp" placeholder="创建时间"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -322,7 +322,7 @@
                       <span>入职时间：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData8" type="datetime" placeholder="入职时间"></el-date-picker>
+                      <el-date-picker v-model="pickerData8" type="datetime" value-format="timestamp" placeholder="入职时间"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -334,7 +334,7 @@
                       <span>离职时间：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
-                      <el-date-picker v-model="pickerData9" type="datetime" placeholder="离职时间"></el-date-picker>
+                      <el-date-picker v-model="pickerData9" type="datetime" value-format="timestamp" placeholder="离职时间"></el-date-picker>
                     </el-col>
                   </el-row>
                 </el-col>

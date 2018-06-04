@@ -103,14 +103,14 @@
             </el-col>
             <el-col :span="9" :offset="2">
                 <el-form-item label="录入时间" prop="lrsj">
-                    <el-date-picker v-model="moneyFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true"></el-date-picker>
+                    <el-date-picker v-model="moneyFrom.lrsj" type="datetime" value-format="timestamp" placeholder="录入时间" :disabled="true"></el-date-picker>
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="20" :offset="2">
                 <el-form-item label="限定使用时间" prop="xdsysj">
-                    <el-date-picker v-model="moneyFrom.xdsysj" type="datetime" placeholder="限定使用时间"></el-date-picker>
+                    <el-date-picker v-model="moneyFrom.xdsysj" type="datetime" value-format="timestamp" placeholder="限定使用时间"></el-date-picker>
                 </el-form-item>
             </el-col>
         </el-row>

@@ -105,7 +105,7 @@
             </el-col>
             <el-col :span="9" :offset="2">
               <el-form-item label="录入时间" prop="lrsj">
-                <el-date-picker type="datetime" v-model="bfzjFrom.lrsj" placeholder="录入时间" :disabled="true"></el-date-picker>
+                <el-date-picker type="datetime" value-format="timestamp" v-model="bfzjFrom.lrsj" placeholder="录入时间" :disabled="true"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
