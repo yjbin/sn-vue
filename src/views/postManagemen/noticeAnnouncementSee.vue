@@ -202,6 +202,10 @@ export default {
                 // xzqh: this.$store.state.user.user.uUser.xzqh,
                 read: this.seatch_fwzt
             };
+            if(this.seatch_fwzt!=""){
+                obj.bmbm =  this.$store.state.user.user.uUser.bmbm;
+                obj.xzqh = this.$store.state.user.user.uUser.xzqh;
+            }
             noticeQuery(obj).then(res => {
                 let data = res.data;
                 if (data.success) {

@@ -1,9 +1,9 @@
 <template>
     <div class="projecOutlinModal">
-        <el-dialog :title="textTit " :visible.sync="newModal" width="60%" top="5vh" :before-close="userClose2" :close-on-click-modal="false">
+        <el-dialog :title="textTit " :visible.sync="newModal" width="75%" top="5vh" :before-close="userClose2" :close-on-click-modal="false">
             <div class="user-content">
                 <el-scrollbar class="page-component__scroll">
-                    <el-form :inline="true" class="demo-form-inline" :model="editForm" ref="editForm" label-width="80px" :rules="xmGsrules">
+                    <el-form :inline="true" class="demo-form-inline" :model="editForm" ref="editForm" label-width="110px" :rules="xmGsrules">
                         <el-row>
                             <el-col :span="11" :offset="1">
                                 <el-form-item label="项目名称" prop="xmmc">
@@ -79,32 +79,59 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="11" :offset="1">
-                                <el-form-item label="中央资金" prop="zyZj">
-                                    <el-input v-model.number="editForm.zyZj" placeholder="中央资金"></el-input>
+                                <el-form-item label="财政资金总额" prop="czZj">
+                                    <el-input v-model.number="editForm.czZj" placeholder="财政资金总额" :disabled="true"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
+
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="中央资金" prop="zyZj">
+                                    <el-input v-model.number="editForm.zyZj" placeholder="中央资金"></el-input>
+                                </el-form-item>
+                            </el-col>
                             <el-col :span="11" :offset="1">
                                 <el-form-item label="省级资金" prop="shengZj">
                                     <el-input v-model.number="editForm.shengZj" placeholder="省级资金"></el-input>
                                 </el-form-item>
                             </el-col>
+                        </el-row>
+                        <el-row>
+
                             <el-col :span="11" :offset="1">
                                 <el-form-item label="市级资金" prop="shiZj">
                                     <el-input v-model.number="editForm.shiZj" placeholder="市级资金"></el-input>
                                 </el-form-item>
                             </el-col>
-                        </el-row>
-                        <el-row>
                             <el-col :span="11" :offset="1">
                                 <el-form-item label="县级资金" prop="xianZj">
                                     <el-input v-model.number="editForm.xianZj" placeholder="县级资金"></el-input>
                                 </el-form-item>
                             </el-col>
+                        </el-row>
+                        <el-row>
+
                             <el-col :span="11" :offset="1">
                                 <el-form-item label="乡级资金" prop="xiangZj">
                                     <el-input v-model.number="editForm.xiangZj" placeholder="乡级资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="自筹资金" prop="zcZj">
+                                    <el-input v-model.number="editForm.zcZj" placeholder="自筹资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="其他资金" prop="qtZj">
+                                    <el-input v-model.number="editForm.qtZj" placeholder="其他资金"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="录入人" prop="lrr">
+                                    <el-input v-model="editForm.lrr" placeholder="录入人" :disabled="true"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -126,14 +153,7 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-row>
-                            <el-col :span="11" :offset="1">
-                                <el-form-item label="录入人" prop="lrr">
-                                    <el-input v-model="editForm.lrr" placeholder="录入人" :disabled="true"></el-input>
-                                </el-form-item>
-                            </el-col>
 
-                        </el-row>
                         <el-row>
                             <el-col :span="23" :offset="1">
                                 <el-form-item label="项目地址" prop="xmdz">
@@ -156,6 +176,29 @@
                             </el-col>
                         </el-row>
 
+                        <el-row>
+                            <el-col :offset="3" :span="20">
+                                <el-form-item>
+                                    <el-button type="success" class="fileButtom" size="small" @click="fileClick">附件</el-button>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="23" :offset="1">
+                                <el-form-item label="附件说明" prop="field2">
+                                    <el-input type="textarea" :autosize="{ minRows: 5}" v-model="editForm.field2"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="是否为重点项目">
+                                    <el-radio v-model="editForm.field1" label="1">是</el-radio>
+                                    <el-radio v-model="editForm.field1" label="0">否</el-radio>
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
                     </el-form>
                     <el-row>
                         <el-col :offset="3" :span="2">
@@ -171,11 +214,7 @@
                             <el-button type="primary" style="margin:0 6%" v-if="editForm.xzqh.length>9" @click="xiangShow">乡级分管科室</el-button>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col :offset="3" :span="20">
-                            <el-button type="success" class="fileButtom" size="small" @click="fileClick">附件</el-button>
-                        </el-col>
-                    </el-row>
+
                 </el-scrollbar>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -319,11 +358,12 @@ export default {
                 kssj: "",
                 jssj: "",
                 xmze: "",
-                zyZj: "",
-                shengZj: "",
-                shiZj: "",
-                xianZj: "",
-                xiangZj: "",
+                zyZj: 0,
+                shengZj: 0,
+                shiZj: 0,
+                xianZj: 0,
+                xiangZj: 0,
+                by1: 0,
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 // xzqh1: getDicTab("xzqh",this.$store.state.user.user.uUser.xzqh),
@@ -356,7 +396,9 @@ export default {
                 shengZj: [{ required: true, validator: validOfMoney }],
                 shiZj: [{ required: true, validator: validOfMoney }],
                 xianZj: [{ required: true, validator: validOfMoney }],
-                xiangZj: [{ required: true, validator: validOfMoney }]
+                xiangZj: [{ required: true, validator: validOfMoney }],
+                zcZj: [{ required: true, validator: validOfMoney }],
+                qtZj: [{ required: true, validator: validOfMoney }]
             },
             limitStartTime: {
                 disabledDate: time => {
@@ -394,6 +436,14 @@ export default {
                 // console.log(val,oldval)
                 if (val) {
                     this.editForm.xmze =
+                        Number(this.editForm.zyZj || 0) +
+                        Number(this.editForm.shengZj || 0) +
+                        Number(this.editForm.shiZj || 0) +
+                        Number(this.editForm.xianZj || 0) +
+                        Number(this.editForm.zcZj || 0) +
+                        Number(this.editForm.qtZj || 0) +
+                        Number(this.editForm.xiangZj || 0);
+                    this.editForm.czZj =
                         Number(this.editForm.zyZj || 0) +
                         Number(this.editForm.shengZj || 0) +
                         Number(this.editForm.shiZj || 0) +

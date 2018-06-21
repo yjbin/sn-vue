@@ -52,7 +52,7 @@
                         <span style="color:#409EFF;cursor: pointer" @click="ydsClick(scope.row)">{{scope.row.by2}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="address" label="操作" width="150">
+                <el-table-column prop="address" label="操作" width="200">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="fileEdit(scope.row)">编辑</el-button>
                         <el-button size="mini" type="danger" @click="listDel(scope.row)" :disabled="(scope.row.by3=='1'?true:false)">删除</el-button>

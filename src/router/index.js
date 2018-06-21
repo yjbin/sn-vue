@@ -67,6 +67,9 @@ import processLog from "@/views/logManagement/processLog"
 import acceptLog from "@/views/logManagement/acceptLog"
 import assessLog from "@/views/logManagement/assessLog"
 import benefitLog from "@/views/logManagement/benefitLog"
+//友情链接
+import blogroll from "@/views/myLinks/blogroll"
+
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -471,88 +474,108 @@ export let asyncRouterMap = [
         icon: '',
         rid: "-1"
       }
-    },{
-      path: '/logManagement',
-      redirect: '/logManagement/itemLog',
-      component: Inner_Layout,
-      meta: {
-        title: '日志管理',
-        icon: '',
-        rid: "-1"
-      },
-      children: [{
-        path: 'itemLog',
-        component: itemLog,
-        name: 'itemLog',
-        meta: {
-          title: '项目日志',
-          icon: '',
-          rid: "-1"
-        }
-      },
-      {
-        path: 'cashLog',
-        component: cashLog,
-        name: 'cashLog',
-        meta: {
-          title: '资金日志',
-          icon: '',
-          rid: "-1"
-        }
-      },
-      {
-        path: 'processLog',
-        component: processLog,
-        name: 'processLog',
-        meta: {
-          title: '进度日志',
-          icon: '',
-          rid: "-1"
-        }
-      },
-      {
-        path: 'approveLog',
-        component: approveLog,
-        name: 'approveLog',
-        meta: {
-          title: '拨付日志',
-          icon: '',
-          rid: "-1"
-        }
-      },
-      {
-        path: 'acceptLog',
-        component: acceptLog,
-        name: 'acceptLog',
-        meta: {
-          title: '验收日志',
-          icon: '',
-          rid: "-1"
-        }
-      },
-      {
-        path: 'benefitLog',
-        component: benefitLog,
-        name: 'benefitLog',
-        meta: {
-          title: '效益日志',
-          icon: '',
-          rid: "-1"
-        }
-      },
-      {
-        path: 'assessLog',
-        component: assessLog,
-        name: 'assessLog',
-        meta: {
-          title: '考核日志',
-          icon: '',
-          rid: "-1"
-        }
-      }
-    ]
     }]
   }, {
+    path: '/logManagement',
+    redirect: '/logManagement/itemLog',
+    component: Layout,
+    meta: {
+      title: '日志管理',
+      icon: ['rzgl.png', 'rzgl-c.png'],
+      rid: "-1"
+    },
+    children: [{
+      path: 'itemLog',
+      component: itemLog,
+      name: 'itemLog',
+      meta: {
+        title: '项目日志',
+        icon: '',
+        rid: "-1"
+      }
+    },
+    {
+      path: 'cashLog',
+      component: cashLog,
+      name: 'cashLog',
+      meta: {
+        title: '资金日志',
+        icon: '',
+        rid: "-1"
+      }
+    },
+    {
+      path: 'processLog',
+      component: processLog,
+      name: 'processLog',
+      meta: {
+        title: '进度日志',
+        icon: '',
+        rid: "-1"
+      }
+    },
+    {
+      path: 'approveLog',
+      component: approveLog,
+      name: 'approveLog',
+      meta: {
+        title: '拨付日志',
+        icon: '',
+        rid: "-1"
+      }
+    },
+    {
+      path: 'acceptLog',
+      component: acceptLog,
+      name: 'acceptLog',
+      meta: {
+        title: '验收日志',
+        icon: '',
+        rid: "-1"
+      }
+    },
+    {
+      path: 'benefitLog',
+      component: benefitLog,
+      name: 'benefitLog',
+      meta: {
+        title: '效益日志',
+        icon: '',
+        rid: "-1"
+      }
+    },
+    {
+      path: 'assessLog',
+      component: assessLog,
+      name: 'assessLog',
+      meta: {
+        title: '考核日志',
+        icon: '',
+        rid: "-1"
+      }
+    }
+  ]
+  },{
+    path: '/myLinks',
+    redirect: '/myLinks/blogroll',
+    component: Layout,
+    meta: {
+      title: '友情链接',
+      icon: ['yqlj.png', 'yqlj-c.png'],
+      rid: "-1"
+    },
+    children: [{
+      path: 'blogroll',
+      component: blogroll,
+      name: 'blogroll',
+      meta: {
+        title: '友情链接',
+        icon: '',
+        rid: "-1"
+      }
+    }
+  ]
+  },{
     path: '/ideologicalBuilding',
     component: Layout,
     redirect: '/ideologicalBuilding/theoryofArmed',

@@ -2,6 +2,18 @@ let dicMap = window.sessionStorage;
 let obj = {};
 
 
+//是否
+obj = [{
+  value: '',
+  label: '全部'
+}, {
+  value: '0',
+  label: '否'
+}, {
+  value: '1',
+  label: '是'
+}];
+dicMap.setItem("sf", JSON.stringify(obj));
 //发文状态
 obj = [{
   value: '',

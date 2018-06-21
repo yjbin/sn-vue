@@ -7,6 +7,24 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="是否为重点项目">
+                <el-select v-model="seatch_field1" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-option v-for="(item,index) in sfOptions" :key="index" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <!-- <el-form-item label="行政区划">
+                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search" @change="xzqhChange">
+                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="部门处室">
+                <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
+                    </el-option>
+                </el-select>
+            </el-form-item> -->
             <el-form-item label="项目名称">
                 <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
             </el-form-item>
@@ -63,6 +81,8 @@ export default {
     data() {
         return {
             xmgsList: [],
+            sfOptions: [],
+            seatch_field1:"",
             seatch_nd: "",
             seatch_name: "",
             newModal: false,
@@ -73,7 +93,11 @@ export default {
             pageSize: 10,
             totalCount: 1,
             ndOptions: [],
-            editObj: {}
+            editObj: {},
+            xzqhOptions: [],
+            bmbmOptions: [],
+            seatch_xzqh: "",
+            seatch_bmbm: ""
         };
     },
     methods: {
@@ -97,6 +121,9 @@ export default {
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name.trim()) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
+            this.seatch_field1 ? (obj.field1 = this.seatch_field1) : "";
+            // this.seatch_xzqh ? (obj.xzqh = this.seatch_xzqh) :(obj.xzqh = this.$store.state.user.user.uUser.xzqh);
+            // this.seatch_bmbm ? (obj.bmbm = this.seatch_bmbm) :""; 
             xmlbList(obj).then(res => {
                 this.xmgsList = res.data.data.elements;
                 this.totalCount = res.data.data.totalCount;
@@ -109,9 +136,43 @@ export default {
             this.editObj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                lrr: this.$store.state.user.user.uUser.nickname
+                lrr: this.$store.state.user.user.uUser.nickname,
+                zcZj:0,
+                zyZj: 0,
+                shengZj: 0,
+                shiZj: 0,
+                xianZj: 0,
+                xiangZj: 0,
+                qtZj:0,
+                field1:"0"
             };
             this.getNowDate();
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
+            });
         },
         changeModal(row) {
             this.newModal = true;
@@ -175,6 +236,8 @@ export default {
     mounted() {
         this.getList();
         this.ndOptions = doCreate("ndTit");
+        this.sfOptions = doCreate("sf");
+        this.intLoad();
     }
 };
 </script>

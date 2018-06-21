@@ -8,6 +8,24 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="是否为重点项目">
+                    <el-select v-model="seatch_field1" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in sfOptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- <el-form-item label="行政区划">
+                    <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search" @change="xzqhChange">
+                        <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="部门处室">
+                    <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
+                        </el-option>
+                    </el-select>
+                </el-form-item> -->
                 <el-form-item label="项目名称">
                     <el-input v-model.trim="searchMember.xmmc" @keyup.enter.native="search" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
                 </el-form-item>
@@ -54,6 +72,7 @@
 import { xmlbList } from "@/api/projectOutline";
 import { doCreate, getDicTab } from "@/utils/config";
 import { formatDate } from "@/utils/data";
+import { bmbmDict, xzqhDict } from "@/api/config";
 import appropria from "./appropria";
 export default {
     components: {
@@ -73,9 +92,15 @@ export default {
             pageSize: 10,
             totalCount: 1,
             propFrom: {
-                xmId: "",
+                xmId: ""
                 // num:""
-            }
+            },
+            xzqhOptions: [],
+            bmbmOptions: [],
+            seatch_xzqh: "",
+            seatch_bmbm: "",
+            sfOptions: [],
+            seatch_field1: ""
         };
     },
     methods: {
@@ -116,22 +141,52 @@ export default {
             };
             option
                 ? (option.xmmc ? (obj.xmmc = option.xmmc) : "",
-                  option.nd ? (obj.nd = option.nd) : "",
-                  option.bmbm ? (obj.bmbm = option.bmbm) : "")
+                  option.nd ? (obj.nd = option.nd) : "")
                 : "";
+            this.seatch_field1 ? (obj.field1 = this.seatch_field1) : "";
+            // this.seatch_xzqh
+            //     ? (obj.xzqh = this.seatch_xzqh)
+            //     : (obj.xzqh = this.$store.state.user.user.uUser.xzqh);
+            // this.seatch_bmbm ? (obj.bmbm = this.seatch_bmbm) : "";
             xmlbList(obj).then(res => {
                 let data = res.data.data.elements;
-                if(data.length){
+                if (data.length) {
                     data.forEach(function(item) {
-                    item.ljsdzj
-                        ? (item.ljsdzj = item.ljsdzj)
-                        : (item.ljsdzj = "0");
+                        item.ljsdzj
+                            ? (item.ljsdzj = item.ljsdzj)
+                            : (item.ljsdzj = "0");
                     });
                     this.tableData = data;
                     this.totalCount = res.data.data.totalCount;
-                }else{
+                } else {
                     this.tableData = [];
                     this.totalCount = 0;
+                }
+            });
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
                 }
             });
         },
@@ -150,6 +205,8 @@ export default {
     },
     mounted() {
         this.ndOptions = doCreate("ndTit");
+        this.intLoad();
+        this.sfOptions = doCreate("sf");
         (this.searchMember.bmbm = this.$store.state.user.user.uUser.bmbm),
             this.getList();
     }
@@ -172,7 +229,6 @@ export default {
                 margin: 10px 20px;
             }
         }
-       
     }
 }
 </style>

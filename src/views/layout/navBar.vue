@@ -4,9 +4,6 @@
       <img src="../../assets/images/logo.png" alt="">
     </span>
     <span class="headSelect">
-       <span style="margin-right:30px">
-        <img src="../../assets/images/user.png" alt="" style="margin-right:5px">&nbsp;欢迎您,{{username}}!
-      </span>
       <el-dropdown>
         <span class="el-dropdown-link">
           <img src="../../assets/images/layout.png" style="margin-right:5px" alt="">&nbsp;注销<i class="el-icon-arrow-down el-icon-caret-bottom" style="margin-left:10px"></i>
@@ -16,6 +13,10 @@
           <el-dropdown-item @click.native="out_btn">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+       <span style="margin-right:30px;float: right;">
+        <img src="../../assets/images/user.png" alt="" style="margin-right:5px">&nbsp;欢迎您,{{username}}!
+      </span>
+      
     </span>
     <div class="info">
       <el-dialog title="修改密码" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -162,7 +163,7 @@ export default {
   }
   .headSelect {
     float: right;
-    width: 300px;
+    width:400px;
     height: 80px;
     line-height: 80px;
     margin: 0 10px 0 0;
@@ -182,6 +183,8 @@ export default {
   .el-dropdown{
     color:#fff;
     height: 45px;
+    float: right;
+    margin-right:10px;
   }
   .el-dialog__header {
     background: #307ecc;

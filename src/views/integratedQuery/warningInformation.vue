@@ -230,8 +230,8 @@ export default {
     getList() {
       let _this= this;
       let obj = {
-        pageNo: this.pageNo,
-        pageSize: this.pageSize,
+        // pageNo: this.pageNo,
+        // pageSize: this.pageSize,
         bmbm: this.$store.state.user.user.uUser.bmbm,
         xzqh: this.$store.state.user.user.uUser.xzqh,
       };
@@ -244,6 +244,8 @@ export default {
          switch (this.searchList.yjlx) {
             case "0":
                     obj.yujing = "1";
+                    obj.pageNo = this.bingwarn.pageNo;
+                    obj.pageSize = this.bingwarn.pageSize;
                     appropRecord(obj).then(res => {
                         let data = res.data;
                         if (data.success) {
@@ -257,6 +259,8 @@ export default {
             break;
             case "1":
                     obj.yujing = "1";
+                    obj.pageNo = this.excesswarn.pageNo;
+                    obj.pageSize = this.excesswarn.pageSize;
                     areProQuery(obj).then(res => {
                         let data = res.data;
                         if (data.success) {
@@ -270,6 +274,8 @@ export default {
             break;
             case "2":
                     obj.chaoqi = "1";
+                    obj.pageNo = this.areProject.pageNo;
+                    obj.pageSize = this.areProject.pageSize;
                     areProQuery(obj).then(res => {
                         let data = res.data;
                         if (data.success) {
@@ -283,6 +289,8 @@ export default {
             break;
             case "3":
                      obj.chaoqi = "1";
+                     obj.pageNo = this.beyondMoney.pageNo;
+                    obj.pageSize = this.beyondMoney.pageSize;
                      bymoneySelect(obj).then(res => {
                         if(res.data.msg.data.length){
                             _this.beyondMoneyData = res.data.msg.data;

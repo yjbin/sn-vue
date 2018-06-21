@@ -11,6 +11,24 @@
                 <el-form-item label="项目名称">
                     <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
                 </el-form-item>
+                <el-form-item label="是否为重点项目">
+                    <el-select v-model="seatch_field1" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in sfOptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- <el-form-item label="行政区划">
+                    <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search" @change="xzqhChange">
+                        <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="部门处室">
+                    <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
+                        </el-option>
+                    </el-select>
+                </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
                 </el-form-item>
@@ -132,7 +150,7 @@
                     </el-col>
                     <el-col :span="9" :offset="2">
                         <el-form-item label="录入时间" prop="lrsj">
-                            <el-date-picker  value-format="timestamp" v-model="xmysFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
+                            <el-date-picker value-format="timestamp" v-model="xmysFrom.lrsj" type="datetime" placeholder="录入时间" :disabled="true" style="width:100%"></el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -184,6 +202,7 @@
 import { xmlbList } from "@/api/projectOutline";
 import { xmysSelect, xmysAdd, xmysUpdate, xmysDell } from "@/api/projectAccept";
 import { doCreate, getDicTab } from "@/utils/config";
+import { bmbmDict, xzqhDict } from "@/api/config";
 import { formatDate } from "@/utils/data";
 import accessoryModel from "@/components/accessoryModel";
 export default {
@@ -229,7 +248,13 @@ export default {
             accessoryModalInt: false,
             upShowhide: true,
             textTitFile: "",
-            fileSrc: ""
+            fileSrc: "",
+            xzqhOptions: [],
+            bmbmOptions: [],
+            seatch_xzqh: "",
+            seatch_bmbm: "",
+            sfOptions: [],
+            seatch_field1: ""
         };
     },
     methods: {
@@ -293,6 +318,11 @@ export default {
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
+            this.seatch_field1 ? (obj.field1 = this.seatch_field1) : "";
+            // this.seatch_xzqh
+            //     ? (obj.xzqh = this.seatch_xzqh)
+            //     : (obj.xzqh = this.$store.state.user.user.uUser.xzqh);
+            // this.seatch_bmbm ? (obj.bmbm = this.seatch_bmbm) : "";
             xmlbList(obj).then(res => {
                 let data = res.data.data.elements;
                 data.forEach(function(item) {
@@ -302,6 +332,32 @@ export default {
                 });
                 this.xmgsList = data;
                 this.totalCount = res.data.data.totalCount;
+            });
+        },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
             });
         },
         searchFun() {
@@ -483,8 +539,10 @@ export default {
         this.ndOptions = doCreate("ndTit");
         this.xzqhoptions = doCreate("xzqh");
         this.bmbmoptions = doCreate("bmbm");
-        this.ysjgoptions = doCreate('ysyj')
+        this.ysjgoptions = doCreate("ysyj");
         this.getList();
+        this.intLoad();
+        this.sfOptions = doCreate("sf");
         this.addUpdatePd = true;
         this.fileSrc = {
             num: Math.random(),
@@ -503,7 +561,7 @@ export default {
     }
     .capit-tit {
         background: #317ecc;
-      
+
         .user-left {
             span {
                 color: #fff;

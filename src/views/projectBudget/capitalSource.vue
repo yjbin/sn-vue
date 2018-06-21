@@ -313,36 +313,63 @@
                             <el-row>
                                 <el-col :span="11" :offset="1">
                                     <el-form-item label="项目总额" prop="xmze">
-                                        <el-input v-model="xmForm.xmze" placeholder="项目总额"></el-input>
+                                        <el-input v-model.number="xmForm.xmze" placeholder="项目总额" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="11">
-                                    <el-form-item label="中央资金" prop="zyZj">
-                                        <el-input v-model="xmForm.zyZj" placeholder="中央资金"></el-input>
+                                <el-col :span="11" :offset="1">
+                                    <el-form-item label="财政资金总额" prop="czZj">
+                                        <el-input v-model.number="xmForm.czZj" placeholder="财政资金总额" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
+
+                                <el-col :span="11" :offset="1">
+                                    <el-form-item label="中央资金" prop="zyZj">
+                                        <el-input v-model.number="xmForm.zyZj" placeholder="中央资金"></el-input>
+                                    </el-form-item>
+                                </el-col>
                                 <el-col :span="11" :offset="1">
                                     <el-form-item label="省级资金" prop="shengZj">
-                                        <el-input v-model="xmForm.shengZj" placeholder="省级资金" auto-complete='shengZj'></el-input>
+                                        <el-input v-model.number="xmForm.shengZj" placeholder="省级资金"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="11">
+                            </el-row>
+                            <el-row>
+
+                                <el-col :span="11" :offset="1">
                                     <el-form-item label="市级资金" prop="shiZj">
-                                        <el-input v-model="xmForm.shiZj" placeholder="市级资金" auto-complete='shiZj'></el-input>
+                                        <el-input v-model.number="xmForm.shiZj" placeholder="市级资金"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="11" :offset="1">
+                                    <el-form-item label="县级资金" prop="xianZj">
+                                        <el-input v-model.number="xmForm.xianZj" placeholder="县级资金"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+
+                                <el-col :span="11" :offset="1">
+                                    <el-form-item label="乡级资金" prop="xiangZj">
+                                        <el-input v-model.number="xmForm.xiangZj" placeholder="乡级资金"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="11" :offset="1">
+                                    <el-form-item label="自筹资金" prop="zcZj">
+                                        <el-input v-model.number="xmForm.zcZj" placeholder="自筹资金"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
                                 <el-col :span="11" :offset="1">
-                                    <el-form-item label="县级资金" prop="xianZj">
-                                        <el-input v-model="xmForm.xianZj" placeholder="县级资金"></el-input>
+                                    <el-form-item label="其他资金" prop="qtZj">
+                                        <el-input v-model.number="xmForm.qtZj" placeholder="其他资金"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="11">
-                                    <el-form-item label="乡级资金" prop="xiangZj">
-                                        <el-input v-model="xmForm.xiangZj" placeholder="乡级资金"></el-input>
+                                <el-col :span="11" :offset="1">
+                                    <el-form-item label="录入人" prop="lrr">
+                                        <el-input v-model="xmForm.lrr" placeholder="录入人" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -364,13 +391,7 @@
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row>
-                                <el-col :span="11" :offset="1">
-                                    <el-form-item label="录入人" prop="lrr">
-                                        <el-input v-model="xmForm.lrr" placeholder="录入人" :disabled="true"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
+
                             <el-row>
                                 <el-col :span="22" :offset="1">
                                     <el-form-item label="项目地址" prop="xmdz">
@@ -419,11 +440,27 @@
             </el-row> -->
                             <el-row>
                                 <el-col :span="11" :offset="3">
-                                    <el-form-item prop="xzqh">
+                                    <el-form-item>
                                         <el-button type="success" size="small" @click="fileClick">查看附件</el-button>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
+                            <el-row>
+                                <el-col :span="23" :offset="1">
+                                    <el-form-item label="附件说明">
+                                        <el-input type="textarea" :autosize="{ minRows: 5}" v-model="xmForm.field2"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                            <el-col :span="11" :offset="1">
+                                <el-form-item label="是否为重点项目">
+                                    <el-radio v-model="xmForm.field1" label="1">是</el-radio>
+                                    <el-radio v-model="xmForm.field1" label="0">否</el-radio>
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
                         </el-form>
                     </el-scrollbar>
                 </div>
@@ -497,6 +534,7 @@ export default {
             zjBmbm: "",
             zjFgcs: "",
             zjye: "",
+            sycj: "",
             dictTid: "新建",
             xmgjtit: "项目挂接",
             pageNo: 1,
@@ -744,6 +782,7 @@ export default {
                 this.zjBmbm = row.bmbm;
                 this.zjFgcs = row.fgcs;
                 this.zjye = row.fpzj - row.qrzj;
+                this.sycj = row.sycj;
             }
             let obj = {
                 pageSize: this.pageSize2,
@@ -751,7 +790,7 @@ export default {
                 weiguajie: 1,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
-                sycj: row.sycj,
+                sycj: this.sycj,
                 flag: "1"
             };
             xmlbList(obj).then(res => {

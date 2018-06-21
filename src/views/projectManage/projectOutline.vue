@@ -7,6 +7,24 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="是否为重点项目">
+                <el-select v-model="seatch_field1" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-option v-for="(item,index) in sfOptions" :key="index" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <!-- <el-form-item label="行政区划">
+                <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search" @change="xzqhChange">
+                    <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="部门处室">
+                <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                    <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
+                    </el-option>
+                </el-select>
+            </el-form-item> -->
             <el-form-item label="项目名称">
                 <el-input v-model.trim="seatch_name" @keyup.enter.native="searchFun" placeholder="名称..." prefix-icon="el-icon-search"></el-input>
             </el-form-item>
@@ -35,7 +53,7 @@
                 <el-table-column prop="xmze" label="项目总额(万元)" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="kssj" :formatter="formatterDatekssj" label="开始时间" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="jssj" :formatter="formatterDatejssj" label="结束时间" show-overflow-tooltip></el-table-column>
-                <el-table-column label="操作" width="150">
+                <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="changeModal(scope.row)">编辑</el-button>
                         <el-button size="mini" type="danger" @click="applyform(scope.row)">删除</el-button>
@@ -54,8 +72,9 @@
 // import projectOutlineModal from "./projectOutlineModal";
 import { xmlbList, xmmsDelete } from "@/api/projectOutline";
 import { doCreate, getDicTab } from "@/utils/config";
+import { bmbmDict, xzqhDict } from "@/api/config";
 import { formatDate } from "@/utils/data";
-const projectOutlineModal = ()=> import("./projectOutlineModal")
+const projectOutlineModal = () => import("./projectOutlineModal");
 export default {
     components: {
         projectOutlineModal
@@ -63,6 +82,7 @@ export default {
     data() {
         return {
             xmgsList: [],
+            seatch_field1: "",
             seatch_nd: "",
             seatch_name: "",
             newModal: false,
@@ -73,7 +93,12 @@ export default {
             pageSize: 10,
             totalCount: 1,
             ndOptions: [],
-            editObj: {}
+            editObj: {},
+            xzqhOptions: [],
+            bmbmOptions: [],
+            seatch_xzqh: "",
+            seatch_bmbm: "",
+            sfOptions: []
         };
     },
     methods: {
@@ -93,15 +118,20 @@ export default {
                 pageNo: this.pageNo,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
                 xmlx: "0",
-                xzqh:this.$store.state.user.user.uUser.xzqh
+                xzqh: this.$store.state.user.user.uUser.xzqh
             };
             this.seatch_name ? (obj.xmmc = this.seatch_name) : "";
             this.seatch_nd ? (obj.nd = this.seatch_nd) : "";
+            this.seatch_field1 ? (obj.field1 = this.seatch_field1) : "";
+            // this.seatch_xzqh
+            //     ? (obj.xzqh = this.seatch_xzqh)
+            //     : (obj.xzqh = this.$store.state.user.user.uUser.xzqh);
+            // this.seatch_bmbm ? (obj.bmbm = this.seatch_bmbm) : "";
             xmlbList(obj).then(res => {
-                if(res.data.data.elements.length){
+                if (res.data.data.elements.length) {
                     this.xmgsList = res.data.data.elements;
                     this.totalCount = res.data.data.totalCount;
-                }else{
+                } else {
                     this.xmgsList = [];
                     this.totalCount = 0;
                 }
@@ -113,7 +143,15 @@ export default {
             this.editObj = {
                 xzqh: this.$store.state.user.user.uUser.xzqh,
                 bmbm: this.$store.state.user.user.uUser.bmbm,
-                lrr: this.$store.state.user.user.uUser.nickname
+                lrr: this.$store.state.user.user.uUser.nickname,
+                zcZj: 0,
+                zyZj: 0,
+                shengZj: 0,
+                shiZj: 0,
+                xianZj: 0,
+                xiangZj: 0,
+                qtZj: 0,
+                field1:"0"
             };
             this.getNowDate();
         },
@@ -155,6 +193,32 @@ export default {
                     });
                 });
         },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
+            });
+        },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;
             return start + index + 1;
@@ -179,11 +243,13 @@ export default {
     mounted() {
         this.getList();
         this.ndOptions = doCreate("ndTit");
+        this.sfOptions = doCreate("sf");
+        this.intLoad();
     }
 };
 </script>
 <style lang="scss" scoped>
-.instiuTion{
+.instiuTion {
     .capit-tit {
         background: #317ecc;
 
@@ -197,7 +263,7 @@ export default {
             }
         }
     }
-    }
+}
 </style>
 
 

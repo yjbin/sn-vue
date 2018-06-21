@@ -73,36 +73,63 @@
             <el-row>
                 <el-col :span="11" :offset="1">
                     <el-form-item label="项目总额" prop="xmze">
-                        <el-input v-model="xmForm.xmze" placeholder="项目总额"></el-input>
+                        <el-input v-model.number="xmForm.xmze" placeholder="项目总额" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
+                    <el-form-item label="财政资金总额" prop="czZj">
+                        <el-input v-model.number="xmForm.czZj" placeholder="财政资金总额" :disabled="true"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+
+                <el-col :span="11" :offset="1">
                     <el-form-item label="中央资金" prop="zyZj">
-                        <el-input v-model="xmForm.zyZj" placeholder="中央资金"></el-input>
+                        <el-input v-model.number="xmForm.zyZj" placeholder="中央资金"></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="11" :offset="1">
+                <el-col :span="11">
                     <el-form-item label="省级资金" prop="shengZj">
-                        <el-input v-model="xmForm.shengZj" placeholder="省级资金" auto-complete='shengZj'></el-input>
+                        <el-input v-model.number="xmForm.shengZj" placeholder="省级资金"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+
+                <el-col :span="11" :offset="1">
+                    <el-form-item label="市级资金" prop="shiZj">
+                        <el-input v-model.number="xmForm.shiZj" placeholder="市级资金"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="市级资金" prop="shiZj">
-                        <el-input v-model="xmForm.shiZj" placeholder="市级资金" auto-complete='shiZj'></el-input>
+                    <el-form-item label="县级资金" prop="xianZj">
+                        <el-input v-model.number="xmForm.xianZj" placeholder="县级资金"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+
+                <el-col :span="11" :offset="1">
+                    <el-form-item label="乡级资金" prop="xiangZj">
+                        <el-input v-model.number="xmForm.xiangZj" placeholder="乡级资金"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="11">
+                    <el-form-item label="自筹资金" prop="zcZj">
+                        <el-input v-model.number="xmForm.zcZj" placeholder="自筹资金"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="11" :offset="1">
-                    <el-form-item label="县级资金" prop="xianZj">
-                        <el-input v-model="xmForm.xianZj" placeholder="县级资金"></el-input>
+                    <el-form-item label="其他资金" prop="qtZj">
+                        <el-input v-model.number="xmForm.qtZj" placeholder="其他资金"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
-                    <el-form-item label="乡级资金" prop="xiangZj">
-                        <el-input v-model="xmForm.xiangZj" placeholder="乡级资金"></el-input>
+                    <el-form-item label="录入人" prop="lrr">
+                        <el-input v-model="xmForm.lrr" placeholder="录入人" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -124,13 +151,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="11" :offset="1">
-                    <el-form-item label="录入人" prop="lrr">
-                        <el-input v-model="xmForm.lrr" placeholder="录入人" :disabled="true"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+
             <el-row>
                 <el-col :span="22" :offset="1">
                     <el-form-item label="项目地址" prop="xmdz">
@@ -184,6 +205,19 @@
                     </el-form-item>
                 </el-col>
             </el-row>
+            <el-row>
+                <el-col :span="22" :offset="1">
+                    <el-form-item label="附件说明">
+                        <el-input type="textarea" :autosize="{ minRows: 5}" v-model="xmForm.field2"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-col :span="11" :offset="1">
+                <el-form-item label="是否为重点项目">
+                    <el-radio v-model="xmForm.field1" label="1">是</el-radio>
+                    <el-radio v-model="xmForm.field1" label="0">否</el-radio>
+                </el-form-item>
+            </el-col>
         </el-form>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="upShowhide"></accessory-Model>
         <gps-Model :gpsModal="gpsModal" :gpsTit="gpsTit" @colseGps="colseGps" :showGps="showGps"></gps-Model>
@@ -229,7 +263,7 @@ export default {
             this.cylxoptions = doCreate("cylb");
             this.xzqhoptions = doCreate("xzqh");
             this.bmbmoptions = doCreate("bmbm");
-            
+
             if (val.fj) {
                 this.fileSrc = {
                     num: Math.random(),
@@ -268,29 +302,26 @@ export default {
             this.gpsModal = true;
             this.gpsTit = "地图选择";
             let gpsId = this.xmForm.xmGps;
-            if(gpsId){
-                    
-                    this.showGps={
-                        gpsId:gpsId,
-                        sfShow:false,
-                        num:Math.random()
-                    }
-                }else{
-                    
-                    this.showGps={
-                        gpsId:"",
-                        sfShow:true,
-                        num:Math.random()
-                    }
-                }
+            if (gpsId) {
+                this.showGps = {
+                    gpsId: gpsId,
+                    sfShow: false,
+                    num: Math.random()
+                };
+            } else {
+                this.showGps = {
+                    gpsId: "",
+                    sfShow: true,
+                    num: Math.random()
+                };
+            }
         },
         colseGps(val) {
             this.gpsModal = val.gpsToggle;
-            if(val.gpsId){
+            if (val.gpsId) {
                 this.xmForm.xmGps = val.gpsId;
             }
-            
-        },
+        }
     },
     mounted() {
         // treeQuery({ dicttype: "xmlb" }).then(res => {

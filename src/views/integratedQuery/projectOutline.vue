@@ -20,6 +20,28 @@
                 <el-form-item label="负责人">
                     <el-input v-model.trim="searchList.fzr" @keyup.enter.native="searchFun" placeholder="负责人..." prefix-icon="el-icon-search"></el-input>
                 </el-form-item>
+                <el-form-item label="是否为重点项目">
+                    <el-select v-model="seatch_field1" @keyup.enter.native="searchFun" placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in sfOptions" :key="index" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="行政区划">
+                    <!-- <el-select v-model="seatch_xzqh" filterable remote placeholder="请选择..." prefix-icon="el-icon-search" @change="xzqhChange" clearable>
+                        <el-option v-for="(item,index) in xzqhOptions" :key="index" :label="item.name" :value="item.bm">
+                        </el-option>
+                    </el-select> -->
+                    <el-input v-model="seatch_xzqh" placeholder="请选择" @focus="modelStatus('xzqh')" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="部门处室">
+                    <!-- <el-select v-model="seatch_bmbm" filterable remote placeholder="请选择..." prefix-icon="el-icon-search">
+                        <el-option v-for="(item,index) in bmbmOptions" :key="index" :label="item.dictname" :value="item.dictcode">
+                        </el-option>
+                    </el-select> -->
+                    <el-input v-model="seatch_bmbm" placeholder="请选择" @focus="modelStatus('bm')" clearable>
+                    </el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="medium" @click="searchFun">查询</el-button>
                 </el-form-item>
@@ -64,15 +86,35 @@
             </el-row>
             <pro-second :propFrom="propFrom" :xmgkList="xmgkList"></pro-second>
         </div>
+        <!-- 行政证区划弹框 -->
+        <el-dialog :title="model_Tit" :visible.sync="xzqh_model" width="50%" :before-close="xzqhClose">
+            <el-tree :data="xzqh_data" @node-click="nodeClick" default-expand-all :expand-on-click-node="false" :highlight-current="true">
+            </el-tree>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="xzqh_save">确定</el-button>
+                <el-button @click="xzqhClose">取 消</el-button>
+            </span>
+        </el-dialog>
+        <!-- 部门弹框 -->
+        <el-dialog :title="model_Tit" :visible.sync="bm_model" width="50%" :before-close="xzqhClose">
+            <el-tree :data="bm_data" @node-click="bmnodeClick" default-expand-all :expand-on-click-node="false" :highlight-current="true">
+            </el-tree>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="xzqh_save">确定</el-button>
+                <el-button @click="xzqhClose">取 消</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
 import { xmlbList } from "@/api/projectOutline";
 import { doCreate, getDicTab } from "@/utils/config";
+import { bmbmDict, xzqhDict } from "@/api/config";
 import { formatDate } from "@/utils/data";
 import { xmbfindById } from "@/api/projectOutline";
 import proSecond from "./projectOutline-sec";
-
+import { treeQuery } from "@/api/administrative";
+import { treeQueryBm } from "@/api/department";
 export default {
     components: {
         proSecond
@@ -81,6 +123,13 @@ export default {
         return {
             zjlyList: [],
             ndOptions: [],
+            sfOptions: [],
+            seatch_field1: "",
+            xzqhOptions: [],
+            bmbmOptions: [],
+            seatch_xzqh: "",
+            seatch_bmbm: "",
+            userXzqh: this.$store.state.user.user.uUser.xzqh,
             searchList: {
                 nd: "",
                 xmmc: "",
@@ -94,10 +143,94 @@ export default {
             pageSize: 10,
             totalCount: 1,
             xmgkList: {},
-            propFrom: {}
+            propFrom: {},
+            model_Tit: "",
+            xzqh_model: false,
+            bm_model: false,
+            xzqh_data: [],
+            bm_data: [],
+            bmbm: "",
+            xzqh: "",
+            bmbmName: "",
+            xzqhName: ""
         };
     },
+    watch: {
+        seatch_xzqh(val) {
+            if (!val) {
+                this.seatch_bmbm = "";
+                this.xzqh = "";
+                this.xzqhName = "";
+                this.bmbmName = "";
+                this.bmbm = "";
+            }
+        },
+        seatch_bmbm(val) {
+            if (!val) {
+                this.seatch_bmbm = "";
+                this.bmbmName = "";
+                this.bmbm = "";
+            }
+        }
+    },
     methods: {
+        modelStatus(data) {
+            let _this = this;
+            if (data) {
+                if (data == "xzqh") {
+                    this.xzqh_model = true;
+                    this.model_Tit = "行政区划";
+                    treeQuery({ bm: this.userXzqh }).then(res => {
+                        let data = res.data;
+                        if (data) {
+                            _this.xzqh_data = data;
+                            // _this.$refs.multipleTable.toggleRowSelection(_this.xzqh,true);
+                        }
+                    });
+                } else if (data == "bm") {
+                    if (this.seatch_xzqh) {
+                        this.bm_model = true;
+                        this.model_Tit = "部门";
+                        this.bmData();
+                    } else {
+                        this.$message({
+                            type: "warning",
+                            message: "请先选择行政区划"
+                        });
+                        return false;
+                    }
+                }
+            }
+        },
+        //查询部门树
+        bmData() {
+            treeQueryBm({ xzqh: this.xzqh }).then(res => {
+                let data = res.data;
+                if (data) {
+                    this.bm_data = data;
+                }
+            });
+        },
+        nodeClick(data) {
+            this.xzqh = data.bm;
+            this.xzqhName = data.name;
+            this.bmbmName = "";
+            this.bmbm = "";
+        },
+        bmnodeClick(data) {
+            this.bmbm = data.bm;
+            this.bmbmName = data.name;
+        },
+        xzqh_save() {
+            this.xzqh_model = false;
+            this.bm_model = false;
+            this.seatch_xzqh = this.xzqhName;
+            this.seatch_bmbm = this.bmbmName;
+        },
+        xzqhClose() {
+            this.xzqh_model = false;
+            this.bm_model = false;
+        },
         backBtn() {
             this.active = true;
         },
@@ -113,16 +246,20 @@ export default {
             let obj = {
                 pageSize: this.pageSize,
                 pageNo: this.pageNo,
-                bmbm: this.$store.state.user.user.uUser.bmbm,
-                xzqh: this.$store.state.user.user.uUser.xzqh,
+                // bmbm: this.$store.state.user.user.uUser.bmbm,
+                // xzqh: this.$store.state.user.user.uUser.xzqh,
                 xmlx: "0",
                 flag: "1"
             };
             this.searchList.nd ? (obj.nd = this.searchList.nd) : "";
-            this.searchList.zjjb ? (obj.zjjb = this.searchList.zjjb) : "";
-            this.searchList.zjxz ? (obj.zjxz = this.searchList.zjxz) : "";
-            this.searchList.zjmc ? (obj.zjmc = this.searchList.zjmc) : "";
-            this.searchList.sqwh ? (obj.sqwh = this.searchList.sqwh) : "";
+            this.searchList.xmmc ? (obj.xmmc = this.searchList.xmmc) : "";
+            this.searchList.xmbh ? (obj.xmbh = this.searchList.xmbh) : "";
+            this.searchList.ssdw ? (obj.ssdw = this.searchList.ssdw) : "";
+            this.searchList.fzr ? (obj.fzr = this.searchList.fzr) : "";
+            this.bmbm
+                ? (obj.xzqh = this.xzqh)
+                : (obj.xzqh = this.$store.state.user.user.uUser.xzqh);
+            this.bmbm ? (obj.bmbm = this.xzqh+"-"+this.bmbm) : "";
             xmlbList(obj).then(res => {
                 if (res.data.data.elements.length) {
                     this.zjlyList = res.data.data.elements;
@@ -156,6 +293,32 @@ export default {
                 }
             });
         },
+        xzqhChange(row) {
+            this.bmbmOptions = [];
+            if (row) {
+                let obj = {
+                    xzqh: row
+                };
+                bmbmDict(obj).then(res => {
+                    this.bmbmOptions = res.data;
+                    this.bmbmOptions.unshift({
+                        dictname: "全部",
+                        dictcode: ""
+                    });
+                });
+            }
+        },
+        intLoad() {
+            let obj = {
+                xzqh: this.$store.state.user.user.uUser.xzqh
+            };
+            xzqhDict(obj).then(res => {
+                if (res.data.length) {
+                    this.xzqhOptions = res.data;
+                    this.xzqhOptions.unshift({ name: "全部", bm: "" });
+                }
+            });
+        },
         indexMethod(index) {
             let start = (this.pageNo - 1) * this.pageSize;
             return start + index + 1;
@@ -176,11 +339,13 @@ export default {
     mounted() {
         this.getList();
         this.ndOptions = doCreate("ndTit");
+        this.sfOptions = doCreate("sf");
+        this.intLoad();
     }
 };
 </script>
 <style lang="scss" scoped>
-.instiuTion{
+.instiuTion {
     .capit-tit {
         background: #317ecc;
 
@@ -194,7 +359,15 @@ export default {
             }
         }
     }
-    }
+}
 </style>
-
-
+<style lang="scss">
+.instiuTion {
+    .el-dialog__header {
+        background: #307ecc;
+        .el-dialog__title {
+            color: #fff;
+        }
+    }
+}
+</style>

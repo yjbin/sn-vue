@@ -20,7 +20,7 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="xzqh_save">确定</el-button>
+                <el-button type="primary" @click="xzqh_save" v-show="activeToggle">确定</el-button>
                 <el-button @click="xzqhClose">取 消</el-button>
             </span>
         </el-dialog>
@@ -35,11 +35,13 @@ export default {
             newModalToggle: false,
             xzqhtreeData: [],
             bmtreeData: [],
-            xzqhBm: []
+            xzqhBm: [],
+            xzqh:""
         };
     },
     props: {
         xzqhModel: Boolean,
+        activeToggle: Boolean,
         modelTit: "",
         jsdwStr: {
             default: () => {}
@@ -63,23 +65,32 @@ export default {
             this.$emit("xzqhOrToggle", this.newModalToggle);
         },
         treeQueryxzqh() {
-            let xzqh = this.$store.state.user.user.uUser.xzqh;
+            let newXzqh = this.$store.state.user.user.uUser.xzqh;
             let length1, length2;
-            if (xzqh.length == 2 || xzqh.length == 4) {
-                length1 = xzqh.length + 2;
-                length2 = xzqh.length + 2;
-            } else if (xzqh.length == 6 || xzqh.length == 9) {
-                length1 = xzqh.length + 3;
-                length2 = xzqh.length + 3;
-            } else if (xzqh.length == 12) {
-                length1 = xzqh.length + 2;
-                length2 = xzqh.length + 2;
+            if(this.activeToggle==true){
+                newXzqh = this.$store.state.user.user.uUser.xzqh;
+            }else{
+                newXzqh = this.xzqh;
+            }
+            if (newXzqh.length == 2 || newXzqh.length == 4) {
+                length1 = newXzqh.length + 2;
+                length2 = newXzqh.length + 2;
+            } else if (newXzqh.length == 6 || newXzqh.length == 9) {
+                length1 = newXzqh.length + 3;
+                length2 = newXzqh.length + 3;
+            } else if (newXzqh.length == 12) {
+                length1 = newXzqh.length + 2;
+                length2 = newXzqh.length + 2;
             }
             let obj = {
-                xzqh: this.$store.state.user.user.uUser.xzqh,
                 length1: length1,
                 length2: length2
             };
+            if(this.activeToggle==true){
+                obj.xzqh = this.$store.state.user.user.uUser.xzqh;
+            }else{
+                obj.xzqh = this.xzqh;
+            }
             xzqhtreeQuery(obj).then(res => {
                 let data = res.data;
                 if (data) {
@@ -92,7 +103,6 @@ export default {
             this.treeQueryBm(row.bm);
         },
         treeQueryBm(rows) {
-
             let obj = {
                 xzqh: rows
             };
@@ -121,17 +131,21 @@ export default {
         jsdwStr: {
             handler: function(val) {
                 this.bmtreeData = [];
+                if(val.xzqh){
+                    this.xzqh = val.xzqh;
+                }
                 if (val.jsdw) {
                     this.xzqhBm = val.jsdw.split(",");
                 } else {
                     this.xzqhBm = [];
                 }
+                this.treeQueryxzqh();
             },
             deep: true
         }
     },
     mounted() {
-        this.treeQueryxzqh();
+        
         Array.prototype.indexOf = function(val) {
             for (var i = 0; i < this.length; i++) {
                 if (this[i] == val) return i;

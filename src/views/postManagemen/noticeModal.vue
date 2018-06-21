@@ -88,7 +88,7 @@
                 <el-button @click="btn_cancel">取 消</el-button>
             </span>
         </el-dialog>
-        <xzqhor-bm-modal :xzqhModel="xzqhModel" @xzqhOrToggle="xzqhOrToggle" @xzqhBm="xzqhBm" :modelTit="modelTit" :jsdwStr="jsdwStr"></xzqhor-bm-modal>
+        <xzqhor-bm-modal :xzqhModel="xzqhModel" @xzqhOrToggle="xzqhOrToggle" @xzqhBm="xzqhBm" :modelTit="modelTit" :jsdwStr="jsdwStr" :activeToggle="activeShow"></xzqhor-bm-modal>
         <accessory-Model :newModal="accessoryModalInt" @colseTog="colseTog" @chileFile="chileFile" :textTitFile="textTitFile" :fileSrc="fileSrc" :upShowhide="activeShow"></accessory-Model>
 
     </div>

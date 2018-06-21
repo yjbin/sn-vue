@@ -15,7 +15,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="xzqh">
-                        <el-select v-model="userForm.xzqh" placeholder="请选择相应单位" style="width:100%" :disabled="true">
+                        <el-select v-model="userForm.xzqh" placeholder="选择相应单位后自动填充" style="width:100%" :disabled="true">
                           <el-option v-for="(item,index) in xzqhoptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
                         </el-select>
@@ -31,7 +31,7 @@
                     </el-col>
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="bm">
-                        <el-select v-model="userForm.bm" placeholder="请选择相应单位" style="width:100%" :disabled="true">
+                        <el-select v-model="userForm.bm" placeholder="选择相应单位后自动填充" style="width:100%" :disabled="true">
                           <el-option v-for="(item,index) in bmbmoptions" :key="index" :label="item.label" :value="item.value">
                           </el-option>
                         </el-select>
@@ -50,37 +50,6 @@
                     <el-col :span="17" style="padding:0">
                       <el-form-item prop="name">
                         <el-input v-model.trim="userForm.name"></el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <el-col :span="11" :offset="1">
-                  <el-row :gutter="20" style="margin:0 0 10px 0">
-                    <el-col :span="7" style="padding:0">
-                      <span class="red">*</span>
-                      <span>性别：</span>
-                    </el-col>
-                    <el-col :span="17" style="padding:0">
-                      <el-form-item prop="sex">
-                        <el-select v-model="userForm.sex" placeholder="请选择">
-                          <el-option v-for="(item,index) in xboptions" :key="index" :label="item.label" :value="item.value">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="11" :offset="1">
-                  <el-row :gutter="20" style="margin:0 0 10px 0">
-                    <el-col :span="7" style="padding:0">
-                      <span class="red">*</span>
-                      <span>出生日期：</span>
-                    </el-col>
-                    <el-col :span="17" style="padding:0">
-                      <el-form-item prop="birthday">
-                        <el-date-picker v-model="userForm.birthday" type="date" placeholder="出生日期"></el-date-picker>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -138,7 +107,40 @@
                 <el-col :span="11" :offset="1">
                   <el-row :gutter="20" style="margin:0 0 10px 0">
                     <el-col :span="7" style="padding:0">
-                      <span class="red">*</span>
+                      <!-- <span class="red">*</span> -->
+                      <span>出生日期：</span>
+                    </el-col>
+                    <el-col :span="17" style="padding:0">
+                      <el-form-item prop="birthday">
+                        <el-date-picker v-model="userForm.birthday" type="date" placeholder="出生日期"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="11" :offset="1">
+                  <el-row :gutter="20" style="margin:0 0 10px 0">
+                    <el-col :span="7" style="padding:0">
+                      <!-- <span class="red">*</span> -->
+                      <span>性别：</span>
+                    </el-col>
+                    <el-col :span="17" style="padding:0">
+                      <el-form-item prop="sex">
+                        <el-select v-model="userForm.sex" placeholder="请选择">
+                          <el-option v-for="(item,index) in xboptions" :key="index" :label="item.label" :value="item.value">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                
+              </el-row>
+              
+              <el-row :gutter="20">
+                <el-col :span="11" :offset="1">
+                  <el-row :gutter="20" style="margin:0 0 10px 0">
+                    <el-col :span="7" style="padding:0">
+                      <!-- <span class="red">*</span> -->
                       <span>地址：</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">
@@ -151,7 +153,7 @@
                 <el-col :span="11" :offset="1">
                   <el-row :gutter="20" style="margin:0 0 10px 0">
                     <el-col :span="7" style="padding:0">
-                      <span class="red">*</span>
+                      <!-- <span class="red">*</span> -->
                       <span>GPS信息</span>
                     </el-col>
                     <el-col :span="17" style="padding:0">

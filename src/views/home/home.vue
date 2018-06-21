@@ -325,25 +325,32 @@ export default {
             });
             zjtjlineQuery(obj).then(res => {
                 let data = res.data;
+                let isTrue2 = true;
                 for (let j = 1; j <= 12; j++) {
+                    isTrue2 = true;
                     data.zjbf.map(i => {
                         if (j == Number(i.month)) {
                             this.zjbfData.push(i.total);
-                            return;
+                            isTrue2 = false;
                         }
                     });
-                    this.zjbfData.push("0");
+                    if(isTrue2==true){
+                        this.zjbfData.push("0");
+                    }
                 }
+                let isTrue = true;
                 for (let j = 1; j <= 12; j++) {
+                    isTrue = true;
                     data.zjdw.map(i => {
                         if (j == Number(i.month)) {
                             this.zjdwData.push(i.total);
-                            return;
+                            isTrue = false;
                         }
                     });
-                    this.zjdwData.push("0");
+                    if(isTrue ==true){
+                        this.zjdwData.push("0");
+                    }               
                 }
-
                 this.drawLine();
             });
         },
@@ -732,6 +739,7 @@ export default {
                 }
                 .homeBigboxTopLeftrightbody {
                     flex: 1;
+                    overflow: hidden;
                     .homeBigboxTopLeftrightbodydiv {
                         width: 42%;
                         height: 25%;

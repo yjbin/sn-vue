@@ -25,7 +25,7 @@
             <el-row>
                 <el-col :span="12">
                     <div class="user-left">
-                        <span>发文列表</span>
+                        <span>收文列表</span>
                     </div>
                 </el-col>
             </el-row>
@@ -147,11 +147,6 @@ export default {
                 let data = res.data;
                 if (data.success) {
                     this.ListQuery();
-                } else {
-                    this.$message({
-                        message: data.msg,
-                        type: "warning"
-                    });
                 }
             });
         },
@@ -206,9 +201,14 @@ export default {
                 nd: this.seatch_nd,
                 name: this.seatch_name,
                 jsdw: this.$store.state.user.user.uUser.bmbm,
+                // bmbm: this.$store.state.user.user.uUser.bmbm,
                 // xzqh: this.$store.state.user.user.uUser.xzqh,
                 read: this.seatch_fwzt
             };
+            if(this.seatch_fwzt!=""){
+                obj.bmbm =  this.$store.state.user.user.uUser.bmbm;
+                obj.xzqh = this.$store.state.user.user.uUser.xzqh;
+            }
             fileQuery(obj).then(res => {
                 let data = res.data;
                 if (data.success) {
