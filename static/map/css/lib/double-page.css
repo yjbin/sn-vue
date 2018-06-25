@@ -1,0 +1,220 @@
+/* Basic sample */
+
+body {
+    overflow: hidden;
+    background-color: #fcfcfc;
+    margin: 0;
+    padding: 0;
+}
+
+.flipbook-viewport {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.flipbook-viewport .container {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    margin: auto;
+}
+
+.flipbook-viewport .flipbook {
+    width: 1000px;
+    height: 720px;
+    left: -500px;
+    top: -200px;
+}
+
+.flipbook-viewport .page {
+    width: 500px;
+    height: 720px;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.flipbook .page {
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    -ms-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.flipbook-viewport .page img {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: 0;
+}
+
+.flipbook-viewport .shadow {
+    -webkit-transition: -webkit-box-shadow 0.5s;
+    -moz-transition: -moz-box-shadow 0.5s;
+    -o-transition: -webkit-box-shadow 0.5s;
+    -ms-transition: -ms-box-shadow 0.5s;
+
+    -webkit-box-shadow: 0 0 20px #ccc;
+    -moz-box-shadow: 0 0 20px #ccc;
+    -o-box-shadow: 0 0 20px #ccc;
+    -ms-box-shadow: 0 0 20px #ccc;
+    box-shadow: 0 0 20px #ccc;
+}
+
+.flipbook-viewport .double {
+    width: 1000px;
+    height: 720px;
+    background-size: 100% 100%;
+}
+
+.flipbook .img1 {
+    background-image: url("/styles/pics/1.jpg");
+}
+
+.flipbook .img2 {
+    background-image: url("/styles/pics/2h.jpg");
+}
+
+.flipbook .img3 {
+    background-image: url("/styles/pics/4h.jpg");
+}
+
+.flipbook .img4 {
+    background-image: url("/styles/pics/7h.jpg");
+}
+
+.flipbook .img5 {
+    background-image: url("/styles/pics/8.jpg");
+}
+
+.flipbook .even .right {
+    display: none;
+}
+
+.flipbook .odd .left {
+    display: none;
+}
+
+.flipbook .odd .right {
+    float: right;
+    width: 50%;
+}
+
+.flipbook .double span {
+    position: absolute;
+}
+
+/*权证号*/
+.top1 {
+    top: 172px;
+}
+
+.jc {
+    left: 89px;
+}
+
+.city {
+    left: 117px;
+}
+
+.xian {
+    left: 165px;
+}
+
+.xqzh {
+    left: 370px;
+}
+
+/*日期*/
+.top2 {
+    top: 534px;
+}
+
+.fzrqY {
+    left: 300px;
+}
+
+.fzrqM {
+    left: 360px;
+}
+
+.fzrqD {
+    left: 400px;
+}
+
+/*承包方*/
+.left1 {
+    left: 190px;
+}
+
+.fbfqc {
+    top: 67px;
+}
+
+.fbfdb {
+    top: 94px;
+}
+
+.fbfsfz {
+    top: 123px;
+}
+
+.htdm {
+    top: 180px;
+}
+
+.cbqx {
+    top: 222px;
+}
+
+.jtcyTab {
+    position: absolute;
+    width: 406px;
+    left: 51px;
+    top: 325px;
+}
+
+.jtcyTab tr {
+    position: relative;
+    height: 27px;
+}
+
+.jtcyTab tr td {
+    text-align: center;
+}
+
+.dkxq {
+    position: absolute;
+    width: 406px;
+    left: 51px;
+    top: 560px;
+}
+
+.dkxq tr, .dkxq1 tr {
+    position: relative;
+    height: 27px;
+}
+
+.dkxq tr td, .dkxq1 tr td {
+    text-align: center;
+}
+
+.dkxq ul, .dkxq1 ul {
+    margin: 0;
+}
+
+.dkxq li, .dkxq1 li {
+    font-size: 12px;
+}
+
+.dkxq1 {
+    position: absolute;
+    width: 406px;
+    top: 92px;
+    left: 55px;
+}

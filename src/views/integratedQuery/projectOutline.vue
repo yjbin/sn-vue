@@ -256,10 +256,11 @@ export default {
             this.searchList.xmbh ? (obj.xmbh = this.searchList.xmbh) : "";
             this.searchList.ssdw ? (obj.ssdw = this.searchList.ssdw) : "";
             this.searchList.fzr ? (obj.fzr = this.searchList.fzr) : "";
-            this.bmbm
+            this.xzqh
                 ? (obj.xzqh = this.xzqh)
                 : (obj.xzqh = this.$store.state.user.user.uUser.xzqh);
-            this.bmbm ? (obj.bmbm = this.xzqh+"-"+this.bmbm) : "";
+            (this.xzqh && this.bmbm) ? (obj.bmbm = this.xzqh+"-"+this.bmbm) : "";
+            this.seatch_field1 ? (obj.field1 = this.seatch_field1) : "";
             xmlbList(obj).then(res => {
                 if (res.data.data.elements.length) {
                     this.zjlyList = res.data.data.elements;

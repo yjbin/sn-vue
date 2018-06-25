@@ -392,6 +392,7 @@ export default {
                 jssj: [{ required: true, message: "不能为空" }],
                 xmdz: [{ required: true, message: "不能为空" }],
                 xmGps: [{ required: true, message: "不能为空" }],
+                field2: [{ required: true, message: "不能为空" }],
                 zyZj: [{ required: true, validator: validOfMoney }],
                 shengZj: [{ required: true, validator: validOfMoney }],
                 shiZj: [{ required: true, validator: validOfMoney }],
