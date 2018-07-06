@@ -12,11 +12,11 @@ module.exports = {
     assetsPublicPath: '/',//发布路径
     proxyTable: {
       '/api':{
-        target:"http://localhost:10000",
+        target:"http://localhost:10010",
         changeOrigin:true,//开启代理
         secure: false,
         pathRewrite:{ 
-          '^/api': ''
+          '^/api': '/api'
         } //重写路径
       }
     },
