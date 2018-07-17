@@ -23,12 +23,12 @@
                             <div class="login-content">
                                 <el-form :model="loginForm" ref="loginForm" :rules="rules">
                                     <el-form-item prop="username">
-                                        <el-input placeholder="用户名" v-model="loginForm.username" @focus="inputFocus" name="name">
+                                        <el-input placeholder="用户名" v-model.trim="loginForm.username" @focus="inputFocus" name="name">
                                             <i slot="prefix" class="el-input__icon person"></i>
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item prop="password" :class="{marginToggle:error}">
-                                        <el-input type="password" placeholder="密 码" v-model="loginForm.password" @keyup.enter.native="loginBtn" @focus="inputFocus" name="passwd">
+                                        <el-input type="password" placeholder="密 码" v-model.trim="loginForm.password" @keyup.enter.native="loginBtn" @focus="inputFocus" name="passwd">
                                             <i slot="prefix" class="el-input__icon password-icon"></i>
                                         </el-input>
                                         <p class="error" v-if="error">用户名和密码不正确</p>
